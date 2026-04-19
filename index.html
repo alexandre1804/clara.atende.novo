@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clara Atende — Sua Atendente com IA</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0f;
@@ -68,7 +68,7 @@
   }
 
   .logo {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 800;
     font-size: 1.2rem;
     letter-spacing: -0.02em;
@@ -142,7 +142,7 @@
   }
 
   h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 800;
     font-size: clamp(2.4rem, 7vw, 4.5rem);
     line-height: 1.05;
@@ -242,7 +242,7 @@
 
   .stat { text-align: center; }
   .stat-num {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.8rem;
     font-weight: 800;
     color: var(--accent);
@@ -269,7 +269,7 @@
   }
 
   .section-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     font-weight: 700;
     letter-spacing: -0.03em;
@@ -316,7 +316,7 @@
   }
 
   .feature-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1rem;
     margin-bottom: 8px;
@@ -379,7 +379,7 @@
   }
 
   .price-amount {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 3.5rem;
     font-weight: 800;
     letter-spacing: -0.04em;
@@ -445,7 +445,7 @@
   }
 
   .form-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -499,7 +499,7 @@
     border: none;
     border-radius: 12px;
     padding: 16px;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
@@ -532,7 +532,7 @@
   .success-msg.show { display: block; }
   .success-icon { font-size: 3rem; margin-bottom: 16px; }
   .success-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
     color: var(--accent);
@@ -800,7 +800,7 @@
   });
 
   // FORM SUBMIT
-  function enviarLead() {
+  async function enviarLead() {
     const nome = document.getElementById('nome').value.trim();
     const whatsapp = document.getElementById('whatsapp').value.trim();
     const negocio = document.getElementById('negocio').value.trim();
@@ -810,13 +810,24 @@
       return;
     }
 
-    // Aqui você pode integrar com qualquer CRM, planilha ou webhook
-    // Ex: fetch('SEU_WEBHOOK', { method: 'POST', body: JSON.stringify({ nome, whatsapp, negocio }) })
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbxjpm0xJBQZJGgB40l6FVjHHVBDzdIGaot5A0qEP5EA6TG_RbRvqvxbFYX-Tyl8qtUG/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, whatsapp, negocio })
+      });
+    } catch (err) {
+      console.log('Erro ao salvar lead:', err);
+    }
 
     document.getElementById('form-content').style.display = 'none';
     document.getElementById('success').classList.add('show');
 
-    // Abre WhatsApp da Lorvix com os dados preenchidos
     const msg = encodeURIComponent(`Olá! Me chamo ${nome} e tenho interesse na Clara Atende para o meu negócio: ${negocio}. WhatsApp: ${whatsapp}`);
     setTimeout(() => {
       window.open(`https://wa.me/5527988612054?text=${msg}`, '_blank');
