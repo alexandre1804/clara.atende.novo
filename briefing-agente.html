@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briefing — Agente IA WhatsApp · Lorvix</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('0tab_50eUTc4Hgu8g');</script>
 <style>
   :root {
     --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a26; --border: #2a2a3a;
@@ -373,53 +375,94 @@
     btn.textContent = 'Enviando...';
     btn.disabled = true;
 
-    // Salva no Supabase
-    const SUPABASE_URL = 'https://ioaweihjmpmvuuezcope.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvYXdlaWhqbXBtdnV1ZXpjb3BlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MTY0MDEsImV4cCI6MjA5MjE5MjQwMX0.flyGMSkTGy35qg7QiNb8V_e-hZRhkI6PO5bkf08rIGo';
-
     const tomSelecionado = document.querySelector('input[name="tom"]:checked');
     const agendaSelecionado = document.querySelector('input[name="agenda"]:checked');
-
-    const dados = {
-      nome,
-      whatsapp,
-      negocio: negocio + ' — Briefing Agente IA'
-    };
-
-    try {
-      await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
-        body: JSON.stringify(dados)
-      });
-    } catch(e) { console.log(e); }
-
-    // Monta mensagem WhatsApp completa
     const segmento = document.getElementById('segmento').value;
     const servicos = document.getElementById('servicos').value;
     const nomeAgente = document.getElementById('nome-agente').value;
     const horario = document.getElementById('horario').value;
+    const endereco = document.getElementById('endereco').value;
     const faq = document.getElementById('faq').value;
     const precos = document.getElementById('precos').value;
     const diferenciais = document.getElementById('diferenciais').value;
     const extras = document.getElementById('extras').value;
     const whatsappAlertas = document.getElementById('whatsapp-alertas').value;
+    const nunca = document.getElementById('nunca').value;
+    const duracao = document.getElementById('duracao').value;
+    const profissionais = document.getElementById('profissionais').value;
+    const agendaObs = document.getElementById('agenda-obs').value;
+    const msgHumano = document.getElementById('msg-humano').value;
+    const links = document.getElementById('links').value;
 
+    // Monta conteúdo completo do e-mail
+    let conteudo = `BRIEFING — AGENTE IA WHATSAPP\n`;
+    conteudo += `=====================================\n\n`;
+    conteudo += `DADOS DO CLIENTE\n`;
+    conteudo += `Nome: ${nome}\n`;
+    conteudo += `WhatsApp: ${whatsapp}\n`;
+    conteudo += `Negócio: ${negocio}\n`;
+    conteudo += `Segmento: ${segmento}\n`;
+    if (endereco) conteudo += `Endereço: ${endereco}\n`;
+    if (horario) conteudo += `Horário: ${horario}\n`;
+    conteudo += `\n=====================================\n\n`;
+
+    conteudo += `PERSONALIDADE DO AGENTE\n`;
+    if (nomeAgente) conteudo += `Nome do agente: ${nomeAgente}\n`;
+    if (tomSelecionado) conteudo += `Tom de voz: ${tomSelecionado.value}\n`;
+    if (nunca) conteudo += `Restrições: ${nunca}\n`;
+    conteudo += `\n=====================================\n\n`;
+
+    conteudo += `SERVIÇOS\n${servicos}\n`;
+    if (precos) conteudo += `\nPREÇOS\n${precos}\n`;
+    if (faq) conteudo += `\nFAQ\n${faq}\n`;
+    conteudo += `\n=====================================\n\n`;
+
+    if (agendaSelecionado) {
+      conteudo += `AGENDAMENTO\n`;
+      conteudo += `Tipo: ${agendaSelecionado.value}\n`;
+      if (duracao) conteudo += `Duração: ${duracao}\n`;
+      if (profissionais) conteudo += `Profissionais: ${profissionais}\n`;
+      if (agendaObs) conteudo += `Observações: ${agendaObs}\n`;
+      conteudo += `\n=====================================\n\n`;
+    }
+
+    conteudo += `ENCAMINHAMENTO HUMANO\n`;
+    if (whatsappAlertas) conteudo += `Alertas para: ${whatsappAlertas}\n`;
+    if (msgHumano) conteudo += `Mensagem ao cliente: ${msgHumano}\n`;
+    conteudo += `\n=====================================\n\n`;
+
+    if (diferenciais) conteudo += `DIFERENCIAIS\n${diferenciais}\n\n`;
+    if (links) conteudo += `LINKS\n${links}\n\n`;
+    if (extras) conteudo += `OBSERVAÇÕES EXTRAS\n${extras}\n`;
+
+    // Salva no Supabase
+    const SUPABASE_URL = 'https://ioaweihjmpmvuuezcope.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvYXdlaWhqbXBtdnV1ZXpjb3BlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MTY0MDEsImV4cCI6MjA5MjE5MjQwMX0.flyGMSkTGy35qg7QiNb8V_e-hZRhkI6PO5bkf08rIGo';
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ nome, whatsapp, negocio: negocio + ' — Briefing Agente IA' })
+      });
+    } catch(e) { console.log(e); }
+
+    // Envia e-mail via EmailJS
+    try {
+      await emailjs.send('service_yrlz7vn', 'template_r2i5e7y', {
+        to_email: 'lorvix.ia@gmail.com',
+        subject: `Novo Briefing — Agente IA | ${negocio}`,
+        from_name: nome,
+        from_whatsapp: whatsapp,
+        negocio: negocio,
+        conteudo: conteudo
+      });
+    } catch(e) { console.log('EmailJS erro:', e); }
+
+    // WhatsApp com resumo
     let msg = `🤖 *BRIEFING — AGENTE IA WHATSAPP*\n\n`;
-    msg += `👤 *Nome:* ${nome}\n`;
-    msg += `📱 *WhatsApp:* ${whatsapp}\n`;
-    msg += `🏪 *Negócio:* ${negocio}\n`;
-    msg += `📌 *Segmento:* ${segmento}\n`;
+    msg += `👤 *Nome:* ${nome}\n📱 *WhatsApp:* ${whatsapp}\n🏪 *Negócio:* ${negocio}\n📌 *Segmento:* ${segmento}\n`;
     if (horario) msg += `⏰ *Horário:* ${horario}\n`;
-    if (nomeAgente) msg += `🤖 *Nome do agente:* ${nomeAgente}\n`;
-    if (tomSelecionado) msg += `🎙️ *Tom de voz:* ${tomSelecionado.value}\n`;
-    msg += `\n📋 *Serviços:*\n${servicos}\n`;
-    if (precos) msg += `\n💰 *Preços:*\n${precos}\n`;
-    if (faq) msg += `\n❓ *FAQ:*\n${faq}\n`;
-    if (diferenciais) msg += `\n✨ *Diferenciais:*\n${diferenciais}\n`;
-    if (whatsappAlertas) msg += `\n🔔 *Alertas para:* ${whatsappAlertas}\n`;
-    if (agendaSelecionado) msg += `📅 *Agendamento:* ${agendaSelecionado.value}\n`;
-    if (extras) msg += `\n📝 *Extras:*\n${extras}\n`;
+    msg += `\n📧 _Briefing completo enviado para lorvix.ia@gmail.com_`;
 
     document.getElementById('form-area').style.display = 'none';
     document.getElementById('success').classList.add('show');

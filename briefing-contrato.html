@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briefing — Lorvix</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('0tab_50eUTc4Hgu8g');</script>
 <style>
   :root {
     --bg: #ededf5; --surface: #ffffff; --border: #d4d4e8;
@@ -359,7 +361,7 @@
     e.target.value = e.target.value.replace(/\D/g, '');
   });
 
-  function gerarContrato() {
+  async function gerarContrato() {
     const nome = document.getElementById('nome').value.trim();
     const negocio = document.getElementById('negocio').value.trim();
     const whatsapp = document.getElementById('whatsapp').value.trim();
@@ -380,7 +382,57 @@
     document.getElementById('c-data2').textContent = hoje;
     document.getElementById('c-assinatura').innerHTML = nome + '<br>Contratante';
 
-    document.getElementById('briefing-form').style.display = 'none';
+    // Monta conteúdo completo do e-mail
+    const segmento = document.getElementById('segmento').value;
+    const produto = document.getElementById('produto').value;
+    const publico = document.getElementById('publico').value;
+    const cores = document.getElementById('cores').value;
+    const referencias = document.getElementById('referencias').value;
+    const linkLogo = document.getElementById('link-logo').value;
+    const dominio = document.getElementById('dominio').value;
+    const obs = document.getElementById('obs').value;
+    const objetivoEl = document.querySelector('input[name="objetivo"]:checked');
+    const identidadeEl = document.querySelector('input[name="identidade"]:checked');
+    const textosEl = document.querySelector('input[name="textos"]:checked');
+    const prazoEl = document.querySelector('input[name="prazo"]:checked');
+    const checkoutEl = document.querySelector('input[name="checkout"]:checked');
+
+    let conteudo = `BRIEFING — LANDING PAGE\n`;
+    conteudo += `=====================================\n\n`;
+    conteudo += `DADOS DO CLIENTE\n`;
+    conteudo += `Nome: ${nome}\n`;
+    conteudo += `WhatsApp: ${document.getElementById('whatsapp').value}\n`;
+    conteudo += `E-mail: ${document.getElementById('email').value}\n`;
+    conteudo += `Negócio: ${negocio}\n`;
+    conteudo += `Segmento: ${segmento}\n\n`;
+    conteudo += `=====================================\n\n`;
+    if (objetivoEl) conteudo += `OBJETIVO: ${objetivoEl.value}\n`;
+    conteudo += `PRODUTO/SERVIÇO:\n${produto}\n\n`;
+    conteudo += `PÚBLICO-ALVO:\n${publico}\n\n`;
+    conteudo += `=====================================\n\n`;
+    conteudo += `IDENTIDADE VISUAL\n`;
+    if (identidadeEl) conteudo += `Status: ${identidadeEl.value}\n`;
+    if (cores) conteudo += `Cores: ${cores}\n`;
+    if (linkLogo) conteudo += `Link logo: ${linkLogo}\n`;
+    if (referencias) conteudo += `Referências: ${referencias}\n\n`;
+    conteudo += `=====================================\n\n`;
+    if (textosEl) conteudo += `TEXTOS: ${textosEl.value}\n`;
+    if (dominio) conteudo += `DOMÍNIO: ${dominio}\n`;
+    if (checkoutEl) conteudo += `CHECKOUT: ${checkoutEl.value}\n`;
+    if (prazoEl) conteudo += `PRAZO: ${prazoEl.value}\n`;
+    if (obs) conteudo += `\nOBSERVAÇÕES:\n${obs}\n`;
+
+    // Envia e-mail via EmailJS
+    try {
+      await emailjs.send('service_yrlz7vn', 'template_r2i5e7y', {
+        to_email: 'lorvix.ia@gmail.com',
+        subject: `Novo Briefing — Landing Page | ${negocio}`,
+        from_name: nome,
+        from_whatsapp: document.getElementById('whatsapp').value,
+        negocio: negocio,
+        conteudo: conteudo
+      });
+    } catch(e) { console.log('EmailJS erro:', e); }
     document.getElementById('success').classList.add('show');
     document.getElementById('contrato').classList.add('show');
 
