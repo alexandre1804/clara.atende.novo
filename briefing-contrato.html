@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing — Lorvix</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ededf5; --surface: #ffffff; --border: #d4d4e8;
+    --text: #08081a; --muted: #4a4a68;
+    --grad: linear-gradient(135deg, #0095d5, #7020cc);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; }
+  nav { background: white; border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+  .container { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .doc-tag { display: inline-block; background: rgba(0,149,213,0.1); color: #0095d5; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
+  .doc-title { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .doc-sub { color: var(--muted); font-size: 0.92rem; margin-bottom: 40px; }
+  .section { margin-bottom: 40px; }
+  .section-title { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .field { margin-bottom: 16px; }
+  label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+    width: 100%; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.93rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: #0095d5; background: white; }
+  textarea { resize: vertical; min-height: 100px; }
+  .radio-group, .check-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .radio-opt, .check-opt {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 8px 14px; cursor: pointer; font-size: 0.88rem; transition: all 0.2s;
+  }
+  .radio-opt:has(input:checked), .check-opt:has(input:checked) {
+    border-color: #0095d5; background: rgba(0,149,213,0.08); color: #0095d5; font-weight: 600;
+  }
+  .radio-opt input, .check-opt input { display: none; }
+  .info-box { background: rgba(0,149,213,0.08); border: 1px solid rgba(0,149,213,0.2); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; font-size: 0.88rem; color: var(--muted); }
+  .info-box strong { color: var(--text); }
+  .submit-btn { width: 100%; background: var(--grad); color: #fff; border: none; border-radius: 12px; padding: 16px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 8px; transition: all 0.25s; }
+  .submit-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+  .success { display: none; text-align: center; padding: 40px 20px; }
+  .success.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 16px; }
+  .success-title { font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+  footer { text-align: center; padding: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
+
+  /* CONTRATO */
+  .contrato { display: none; }
+  .contrato.show { display: block; }
+  .contrato-box { background: white; border: 1.5px solid var(--border); border-radius: 16px; padding: 40px 36px; margin-top: 40px; }
+  .contrato-title { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .contrato-sub { color: var(--muted); font-size: 0.84rem; margin-bottom: 28px; }
+  .contrato-section { margin-bottom: 24px; }
+  .contrato-section h3 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; color: var(--text); }
+  .contrato-section h3::before { content: ''; display: inline-block; width: 3px; height: 14px; background: var(--grad); border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+  .contrato-section p, .contrato-section li { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 6px; }
+  .contrato-section ul { margin-left: 20px; }
+  .highlight-box { background: rgba(112,32,204,0.06); border: 1px solid rgba(112,32,204,0.15); border-radius: 10px; padding: 14px 18px; margin: 12px 0; }
+  .highlight-box p { color: var(--text) !important; font-weight: 500; }
+  .assinaturas { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+  .assinatura-box { border-top: 2px solid var(--border); padding-top: 16px; }
+  .assinatura-label { font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
+  .print-btn { background: var(--grad); color: #fff; border: none; border-radius: 10px; padding: 12px 24px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; margin-top: 24px; transition: all 0.2s; }
+  .print-btn:hover { opacity: 0.85; }
+  @media print { nav, .print-btn, footer { display: none; } .contrato-box { border: none; padding: 0; } }
+  @media (max-width: 600px) { .contrato-box { padding: 28px 20px; } .assinaturas { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://lorvix.com.br" class="logo">Lorvix</a>
+  <span style="font-size:0.82rem; color:var(--muted);">Briefing de Projeto</span>
+</nav>
+
+<div class="container">
+
+  <!-- BRIEFING FORM -->
+  <div id="briefing-form">
+    <div class="doc-tag">Novo Projeto</div>
+    <div class="doc-title">Briefing da Landing Page</div>
+    <p class="doc-sub">Preencha com atenção — quanto mais detalhes você passar, melhor será o resultado final.</p>
+
+    <div class="info-box">
+      <strong>⏱️ Tempo estimado:</strong> 5 a 10 minutos. Suas respostas são usadas para criar uma página alinhada com seu negócio, público e objetivos.
+    </div>
+
+    <!-- DADOS DO CLIENTE -->
+    <div class="section">
+      <div class="section-title"><span>01</span> Seus dados</div>
+      <div class="field"><label>Nome completo</label><input type="text" id="nome" placeholder="Seu nome"></div>
+      <div class="field"><label>WhatsApp</label><input type="tel" id="whatsapp" placeholder="Ex: 27999991234"></div>
+      <div class="field"><label>E-mail</label><input type="email" id="email" placeholder="seu@email.com"></div>
+      <div class="field"><label>Nome do negócio / marca</label><input type="text" id="negocio" placeholder="Nome da sua empresa ou marca"></div>
+      <div class="field"><label>Segmento / ramo de atividade</label><input type="text" id="segmento" placeholder="Ex: salão de beleza, clínica, consultório, loja..."></div>
+    </div>
+
+    <!-- OBJETIVO -->
+    <div class="section">
+      <div class="section-title"><span>02</span> Objetivo da página</div>
+      <div class="field">
+        <label>O que você quer que o visitante faça ao entrar na página?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="objetivo" value="whatsapp"> 💬 Entrar em contato pelo WhatsApp</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="formulario"> 📋 Preencher um formulário</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="comprar"> 🛒 Comprar / contratar direto</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="agendar"> 📅 Agendar um horário</label>
+          <label class="radio-opt"><input type="radio" name="objetivo" value="outro"> 🔧 Outro</label>
+        </div>
+      </div>
+      <div class="field"><label>Descreva o produto ou serviço que será promovido na página</label><textarea id="produto" placeholder="O que você vende? Qual é o benefício principal para o cliente?"></textarea></div>
+      <div class="field"><label>Quem é o seu público-alvo?</label><textarea id="publico" placeholder="Idade, profissão, dores, desejos... quanto mais detalhes melhor"></textarea></div>
+    </div>
+
+    <!-- IDENTIDADE VISUAL -->
+    <div class="section">
+      <div class="section-title"><span>03</span> Identidade visual</div>
+      <div class="field">
+        <label>Você já tem identidade visual (logo, cores, fonte)?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="identidade" value="sim"> ✅ Sim, tenho logo e cores definidas</label>
+          <label class="radio-opt"><input type="radio" name="identidade" value="parcial"> 🟡 Tenho logo mas sem padrão de cores</label>
+          <label class="radio-opt"><input type="radio" name="identidade" value="nao"> ❌ Não tenho, pode criar</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Logo / arquivos da marca</label>
+        <div style="background:rgba(0,149,213,0.06); border:1.5px dashed rgba(0,149,213,0.3); border-radius:10px; padding:20px; text-align:center;">
+          <div style="font-size:2rem; margin-bottom:8px;">📎</div>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:12px;">Após enviar o briefing, você receberá uma mensagem no WhatsApp para enviar sua logo e outros arquivos.</p>
+          <p style="font-size:0.8rem; color:#0095d5; font-weight:600;">Formatos aceitos: PNG, JPG, SVG, PDF, AI</p>
+        </div>
+        <div style="margin-top:10px;">
+          <label style="text-transform:none; font-size:0.84rem; color:var(--muted);">Ou cole um link do Google Drive / Dropbox com seus arquivos:</label>
+          <input type="text" id="link-logo" placeholder="https://drive.google.com/..." style="margin-top:6px;">
+        </div>
+      </div>
+      <div class="field"><label>Cores da marca (se tiver)</label><input type="text" id="cores" placeholder="Ex: azul escuro e branco, verde e dourado..."></div>
+      <div class="field"><label>Tom de voz / personalidade da marca</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" value="profissional"> 👔 Profissional</label>
+          <label class="check-opt"><input type="checkbox" value="descontraido"> 😊 Descontraído</label>
+          <label class="check-opt"><input type="checkbox" value="moderno"> ✨ Moderno</label>
+          <label class="check-opt"><input type="checkbox" value="tradicional"> 🏛️ Tradicional</label>
+          <label class="check-opt"><input type="checkbox" value="luxo"> 💎 Sofisticado</label>
+          <label class="check-opt"><input type="checkbox" value="jovem"> 🔥 Jovem</label>
+        </div>
+      </div>
+      <div class="field"><label>Links de referência (sites que você gosta / quer se inspirar)</label><textarea id="referencias" placeholder="Cole links de páginas que você acha bonitas ou que quer usar como referência visual"></textarea></div>
+    </div>
+
+    <!-- CONTEÚDO -->
+    <div class="section">
+      <div class="section-title"><span>04</span> Conteúdo da página</div>
+      <div class="field"><label>Você tem textos prontos ou quer que eu crie?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="textos" value="prontos"> 📝 Tenho textos prontos</label>
+          <label class="radio-opt"><input type="radio" name="textos" value="criar"> ✍️ Quero que você crie</label>
+          <label class="radio-opt"><input type="radio" name="textos" value="parcial"> 🟡 Tenho alguns, você completa</label>
+        </div>
+      </div>
+      <div class="field"><label>Você tem fotos ou imagens para usar?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="fotos" value="sim"> ✅ Sim, vou enviar</label>
+          <label class="radio-opt"><input type="radio" name="fotos" value="nao"> ❌ Não, use imagens do banco</label>
+          <label class="radio-opt"><input type="radio" name="fotos" value="gerar"> 🤖 Quero imagens geradas por IA</label>
+        </div>
+      </div>
+      <div class="field"><label>Seções que devem aparecer na página</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" value="hero"> 🚀 Hero (título principal)</label>
+          <label class="check-opt"><input type="checkbox" value="beneficios"> ✅ Benefícios</label>
+          <label class="check-opt"><input type="checkbox" value="servicos"> 🛠️ Serviços</label>
+          <label class="check-opt"><input type="checkbox" value="depoimentos"> ⭐ Depoimentos</label>
+          <label class="check-opt"><input type="checkbox" value="faq"> ❓ FAQ</label>
+          <label class="check-opt"><input type="checkbox" value="preco"> 💰 Preços/Planos</label>
+          <label class="check-opt"><input type="checkbox" value="formulario"> 📋 Formulário</label>
+          <label class="check-opt"><input type="checkbox" value="video"> 🎥 Vídeo</label>
+          <label class="check-opt"><input type="checkbox" value="galeria"> 🖼️ Galeria</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÉCNICO -->
+    <div class="section">
+      <div class="section-title"><span>05</span> Informações técnicas</div>
+      <div class="field"><label>Você tem domínio próprio?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="dominio" value="sim"> ✅ Sim</label>
+          <label class="radio-opt"><input type="radio" name="dominio" value="nao"> ❌ Não, preciso de um</label>
+          <label class="radio-opt"><input type="radio" name="dominio" value="lorvix"> 🌐 Usar subdomínio da Lorvix</label>
+        </div>
+      </div>
+      <div class="field"><label>Domínio desejado (se tiver)</label><input type="text" id="dominio" placeholder="Ex: meusite.com.br"></div>
+      <div class="field"><label>Quer integração com checkout / pagamento?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="checkout" value="nao"> ❌ Não</label>
+          <label class="radio-opt"><input type="radio" name="checkout" value="stripe"> Stripe</label>
+          <label class="radio-opt"><input type="radio" name="checkout" value="mercadopago"> Mercado Pago</label>
+          <label class="radio-opt"><input type="radio" name="checkout" value="hotmart"> Hotmart/Kiwify</label>
+          <label class="radio-opt"><input type="radio" name="checkout" value="outro"> Outro</label>
+        </div>
+      </div>
+      <div class="field"><label>Quer integração com agente de atendimento IA no WhatsApp?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="agente" value="sim"> ✅ Sim, me conta mais</label>
+          <label class="radio-opt"><input type="radio" name="agente" value="nao"> ❌ Não por enquanto</label>
+          <label class="radio-opt"><input type="radio" name="agente" value="talvez"> 🤔 Talvez, quero saber o valor</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRAZO E ORÇAMENTO -->
+    <div class="section">
+      <div class="section-title"><span>06</span> Prazo e orçamento</div>
+      <div class="field"><label>Quando você precisa da página pronta?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="prazo" value="urgente"> 🔥 Urgente (até 3 dias)</label>
+          <label class="radio-opt"><input type="radio" name="prazo" value="semana"> 📅 Essa semana</label>
+          <label class="radio-opt"><input type="radio" name="prazo" value="quinzena"> 🗓️ Em 15 dias</label>
+          <label class="radio-opt"><input type="radio" name="prazo" value="mes"> ⏳ Sem pressa</label>
+        </div>
+      </div>
+      <div class="field"><label>Observações finais / algo que eu precise saber</label><textarea id="obs" placeholder="Qualquer detalhe importante que não foi coberto acima..."></textarea></div>
+    </div>
+
+    <button class="submit-btn" onclick="gerarContrato()">Gerar briefing e contrato →</button>
+  </div>
+
+  <!-- SUCESSO + CONTRATO -->
+  <div class="success" id="success">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Briefing recebido!</div>
+    <p style="color:var(--muted); font-size:0.9rem; margin-bottom:24px;">Seu contrato foi gerado abaixo. Revise, imprima ou salve como PDF.</p>
+  </div>
+
+  <div class="contrato" id="contrato">
+    <div class="contrato-box">
+      <div class="contrato-title">Contrato de Serviço</div>
+      <p class="contrato-sub">Desenvolvimento de Landing Page — Lorvix</p>
+
+      <div class="contrato-section">
+        <h3>1. Partes</h3>
+        <p><strong>Prestador:</strong> Carlos Alexandre de Araujo, CPF 115.911.647-45, Cariacica/ES — Lorvix (lorvix.com.br)</p>
+        <p><strong>Contratante:</strong> <span id="c-nome">___________________________</span>, identificado no briefing preenchido em <span id="c-data"></span>.</p>
+      </div>
+
+      <div class="contrato-section">
+        <h3>2. Objeto do contrato</h3>
+        <p>Desenvolvimento de landing page para o negócio <strong><span id="c-negocio">_______________</span></strong>, conforme especificações do briefing aprovado pelo contratante.</p>
+      </div>
+
+      <div class="contrato-section">
+        <h3>3. O que está incluído</h3>
+        <ul>
+          <li>Design personalizado e responsivo (mobile e desktop)</li>
+          <li>Desenvolvimento HTML/CSS/JS ou Next.js</li>
+          <li>Formulário de captura de leads com notificação via WhatsApp</li>
+          <li>Hospedagem por 12 meses no servidor Lorvix</li>
+          <li>Certificado SSL (HTTPS)</li>
+          <li>2 rodadas de revisão após entrega do rascunho</li>
+          <li>Entrega do arquivo fonte ao final do projeto</li>
+        </ul>
+      </div>
+
+      <div class="contrato-section">
+        <h3>4. O que NÃO está incluído</h3>
+        <ul>
+          <li>Criação de logotipo ou identidade visual (cobrado à parte)</li>
+          <li>Produção de fotos ou vídeos</li>
+          <li>Gestão de tráfego pago (Google Ads, Meta Ads)</li>
+          <li>Revisões além das 2 incluídas (R$80 por revisão adicional)</li>
+          <li>Integrações não especificadas no briefing</li>
+        </ul>
+      </div>
+
+      <div class="contrato-section">
+        <h3>5. Prazo de entrega</h3>
+        <p>O rascunho inicial será entregue em até <strong>5 dias úteis</strong> após a confirmação do pagamento e aprovação do briefing. Prazo urgente (até 3 dias) tem acréscimo de 30% no valor.</p>
+      </div>
+
+      <div class="contrato-section">
+        <h3>6. Valores e pagamento</h3>
+        <div class="highlight-box">
+          <p>💰 Valor total: R$ ____________</p>
+          <p>📅 Forma: 50% no início + 50% na entrega</p>
+          <p>💳 Pagamento via Pix, cartão ou boleto</p>
+        </div>
+        <p>O projeto só é iniciado após a confirmação do pagamento da primeira parcela.</p>
+      </div>
+
+      <div class="contrato-section">
+        <h3>7. Revisões</h3>
+        <p>Estão incluídas <strong>2 rodadas de revisão</strong> após a entrega do rascunho inicial. Cada revisão deve ser solicitada em até 5 dias úteis após o recebimento. Revisões extras custam R$80 cada.</p>
+        <p>Revisões são ajustes no escopo original. Mudanças de conceito, estrutura ou objetivo após aprovação do briefing são consideradas novo projeto.</p>
+      </div>
+
+      <div class="contrato-section">
+        <h3>8. Responsabilidades do contratante</h3>
+        <ul>
+          <li>Fornecer todos os materiais (textos, fotos, logo) em até 3 dias úteis após o início</li>
+          <li>Responder solicitações de aprovação em até 3 dias úteis</li>
+          <li>Atrasos causados pelo contratante não são responsabilidade da Lorvix</li>
+        </ul>
+      </div>
+
+      <div class="contrato-section">
+        <h3>9. Política de reembolso</h3>
+        <ul>
+          <li>Cancelamento antes do início: reembolso de 100% da primeira parcela</li>
+          <li>Cancelamento após entrega do rascunho: sem reembolso</li>
+          <li>A Lorvix se compromete a entregar o serviço conforme o briefing aprovado</li>
+        </ul>
+      </div>
+
+      <div class="contrato-section">
+        <h3>10. Propriedade e direitos</h3>
+        <p>Após o pagamento integral, todos os direitos sobre a página são transferidos ao contratante. A Lorvix pode utilizar o projeto como portfólio, salvo solicitação expressa de sigilo.</p>
+      </div>
+
+      <div class="contrato-section">
+        <h3>11. Foro</h3>
+        <p>Fica eleito o foro da comarca de Cariacica/ES para resolução de eventuais conflitos, com renúncia a qualquer outro.</p>
+      </div>
+
+      <div class="assinaturas">
+        <div class="assinatura-box">
+          <br><br>
+          <div class="assinatura-label">Carlos Alexandre de Araujo<br>CPF: 115.911.647-45 — Lorvix<br>Cariacica/ES</div>
+        </div>
+        <div class="assinatura-box">
+          <br><br>
+          <div class="assinatura-label" id="c-assinatura">Contratante<br>___________________________</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.78rem; color:var(--muted); margin-top:24px; text-align:center;">
+        Data: <span id="c-data2"></span> · Este documento tem validade jurídica quando assinado por ambas as partes.
+      </p>
+
+      <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 Lorvix — lorvix.com.br · lorvix.ia@gmail.com</footer>
+
+<script>
+  document.getElementById('whatsapp').addEventListener('input', function(e) {
+    e.target.value = e.target.value.replace(/\D/g, '');
+  });
+
+  function gerarContrato() {
+    const nome = document.getElementById('nome').value.trim();
+    const negocio = document.getElementById('negocio').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const segmento = document.getElementById('segmento').value.trim();
+    const produto = document.getElementById('produto').value.trim();
+    const linkLogo = document.getElementById('link-logo').value.trim();
+
+    if (!nome || !negocio) {
+      alert('Por favor preencha pelo menos seu nome e o nome do negócio.');
+      return;
+    }
+
+    const hoje = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+
+    document.getElementById('c-nome').textContent = nome;
+    document.getElementById('c-negocio').textContent = negocio;
+    document.getElementById('c-data').textContent = hoje;
+    document.getElementById('c-data2').textContent = hoje;
+    document.getElementById('c-assinatura').innerHTML = nome + '<br>Contratante';
+
+    document.getElementById('briefing-form').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+    document.getElementById('contrato').classList.add('show');
+
+    document.getElementById('contrato').scrollIntoView({ behavior: 'smooth' });
+
+    // Monta mensagem para o WhatsApp da Lorvix com os dados do briefing
+    const logoInfo = linkLogo ? `\nLink da logo: ${linkLogo}` : '\n⚠️ Logo não enviada ainda — por favor envie aqui no WhatsApp (PNG, JPG ou SVG).';
+    const msg = encodeURIComponent(
+      `Olá! Preenchi o briefing da landing page.\n\n` +
+      `👤 Nome: ${nome}\n` +
+      `🏪 Negócio: ${negocio}\n` +
+      `📌 Segmento: ${segmento}\n` +
+      `📝 Serviço/produto: ${produto}\n` +
+      logoInfo
+    );
+    setTimeout(() => {
+      window.open(`https://wa.me/5527988612054?text=${msg}`, '_blank');
+    }, 1500);
+  }
+</script>
+
+</body>
+</html>
