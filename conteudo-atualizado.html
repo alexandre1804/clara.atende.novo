@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>conteúdo.ai — Crie posts completos para redes sociais em segundos</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a26; --border: #2a2a3a;
+    --text: #f0f0f8; --muted: #6b6b88; --purple: #7c3aed; --pink: #ff4d6d;
+    --cyan: #06b6d4; --success: #10b981; --grad: linear-gradient(135deg, #7c3aed, #ff4d6d);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+  .orb { position: fixed; border-radius: 50%; filter: blur(130px); opacity: 0.1; pointer-events: none; z-index: 0; }
+  .orb1 { width: 500px; height: 500px; background: var(--purple); top: -100px; right: -100px; }
+  .orb2 { width: 400px; height: 400px; background: var(--pink); bottom: 100px; left: -100px; }
+  .orb3 { width: 300px; height: 300px; background: var(--cyan); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.05; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,15,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  .logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .logo-sub { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-top: -2px; -webkit-text-fill-color: var(--muted); }
+  .nav-cta { background: var(--grad); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+  .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+  .hero { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 60px; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); color: #a78bfa; padding: 6px 16px; border-radius: 100px; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 28px; animation: fadeUp 0.6s ease both; }
+  .badge-dot { width: 6px; height: 6px; background: var(--purple); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.5); } }
+  h1 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: clamp(2.2rem, 7vw, 4.2rem); line-height: 1.05; letter-spacing: -0.03em; max-width: 800px; margin-bottom: 20px; animation: fadeUp 0.6s 0.1s ease both; }
+  h1 span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: clamp(0.95rem, 2vw, 1.1rem); color: var(--muted); max-width: 580px; font-weight: 300; margin-bottom: 12px; animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-reforco { font-size: 0.88rem; color: #a78bfa; max-width: 480px; margin-bottom: 32px; animation: fadeUp 0.6s 0.25s ease both; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; animation: fadeUp 0.6s 0.3s ease both; }
+  .btn-grad { background: var(--grad); color: #fff; padding: 14px 28px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.25s; }
+  .btn-grad:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.3); }
+  .btn-outline { background: transparent; color: var(--text); padding: 14px 28px; border-radius: 10px; border: 1px solid var(--border); font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.25s; }
+  .btn-outline:hover { border-color: var(--purple); color: #a78bfa; }
+  .hero-micro { font-size: 0.76rem; color: var(--muted); margin-bottom: 0; animation: fadeUp 0.6s 0.35s ease both; }
+  .trust-bar { position: relative; z-index: 1; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 24px; }
+  .trust-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 28px; flex-wrap: wrap; justify-content: center; }
+  .trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.84rem; color: var(--muted); font-weight: 500; }
+  .trust-item em { color: var(--success); font-style: normal; }
+  .section { position: relative; z-index: 1; padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0 24px; position: relative; z-index: 1; }
+  .section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; font-weight: 600; }
+  .section-title { font-family: 'Outfit', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 16px; line-height: 1.1; }
+  .section-sub { color: var(--muted); font-size: 0.92rem; max-width: 560px; margin-bottom: 48px; line-height: 1.7; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; }
+  .card:hover { border-color: rgba(124,58,237,0.25); transform: translateY(-4px); }
+  .card-icon { font-size: 1.7rem; margin-bottom: 14px; display: block; }
+  .card-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+  .card-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+  .step { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; position: relative; overflow: hidden; transition: all 0.3s; }
+  .step:hover { border-color: rgba(124,58,237,0.25); transform: translateY(-4px); }
+  .step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); opacity: 0; transition: opacity 0.3s; }
+  .step:hover::before { opacity: 1; }
+  .step-num { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2.5rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 16px; }
+  .step-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+  .step-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+  .mini-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 14px; text-align: center; transition: all 0.3s; }
+  .mini-card:hover { border-color: rgba(124,58,237,0.3); transform: translateY(-2px); }
+  .mini-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+  .mini-label { font-size: 0.82rem; font-weight: 500; color: var(--muted); }
+  .credits-box { background: var(--surface); border: 1px solid rgba(124,58,237,0.25); border-radius: 16px; padding: 24px 28px; margin-bottom: 36px; }
+  .credits-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 16px; color: #a78bfa; }
+  .credits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .credit-item { display: flex; align-items: center; gap: 10px; font-size: 0.84rem; color: var(--muted); }
+  .credit-badge { background: rgba(124,58,237,0.15); color: #a78bfa; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.76rem; padding: 3px 10px; border-radius: 100px; flex-shrink: 0; }
+  .pricing-section { position: relative; z-index: 1; padding: 80px 24px; text-align: center; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+  .price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px 28px; position: relative; overflow: hidden; transition: all 0.3s; text-align: left; }
+  .price-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.3); }
+  .price-card.featured { border-color: rgba(124,58,237,0.4); background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(255,77,109,0.05)); }
+  .price-card.featured::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); }
+  .plan-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-bottom: 8px; }
+  .plan-badge.free { background: rgba(107,107,136,0.2); color: var(--muted); }
+  .plan-badge.basic { background: rgba(6,182,212,0.15); color: var(--cyan); }
+  .plan-badge.pro { background: rgba(124,58,237,0.2); color: #a78bfa; }
+  .plan-badge.agency { background: rgba(255,77,109,0.15); color: var(--pink); }
+  .plan-ideal { font-size: 0.76rem; color: var(--muted); margin-bottom: 14px; font-style: italic; }
+  .plan-name { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .plan-price { font-family: 'Outfit', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; }
+  .plan-price sup { font-size: 1rem; vertical-align: top; margin-top: 6px; font-weight: 600; }
+  .plan-period { font-size: 0.8rem; color: var(--muted); margin-bottom: 24px; }
+  .plan-features { list-style: none; margin-bottom: 28px; }
+  .plan-features li { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.84rem; color: var(--muted); }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features li span { color: var(--success); }
+  .plan-btn { display: block; width: 100%; padding: 14px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.9rem; text-align: center; text-decoration: none; transition: all 0.25s; cursor: pointer; border: none; }
+  .plan-btn.grad { background: var(--grad); color: #fff; }
+  .plan-btn.grad:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.3); }
+  .plan-btn.outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .plan-btn.outline:hover { border-color: rgba(124,58,237,0.4); background: rgba(124,58,237,0.05); }
+  .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .security-item { display: flex; align-items: flex-start; gap: 12px; }
+  .security-icon { width: 36px; height: 36px; background: rgba(16,185,129,0.12); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .sec-label { font-size: 0.86rem; font-weight: 600; margin-bottom: 2px; }
+  .sec-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .faq-section { position: relative; z-index: 1; padding: 80px 24px; max-width: 720px; margin: 0 auto; }
+  .faq-item { border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.3s; }
+  .faq-item.open { border-color: rgba(124,58,237,0.3); }
+  .faq-question { width: 100%; background: var(--surface); border: none; padding: 20px 24px; text-align: left; color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.93rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: background 0.2s; }
+  .faq-question:hover { background: var(--surface2); }
+  .faq-icon { width: 24px; height: 24px; background: rgba(124,58,237,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #a78bfa; font-size: 1rem; flex-shrink: 0; transition: transform 0.3s; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(124,58,237,0.25); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: var(--surface); }
+  .faq-answer-inner { padding: 0 24px 20px; font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+  .faq-item.open .faq-answer { max-height: 300px; }
+  .cta-final { position: relative; z-index: 1; padding: 80px 24px; text-align: center; }
+  .cta-card { max-width: 680px; margin: 0 auto; background: var(--surface); border: 1px solid rgba(124,58,237,0.3); border-radius: 24px; padding: 56px 40px; position: relative; overflow: hidden; }
+  .cta-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); }
+  .cta-title { font-family: 'Outfit', sans-serif; font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; line-height: 1.1; }
+  .cta-sub { color: var(--muted); font-size: 0.92rem; max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
+  .cta-micro { font-size: 0.74rem; color: var(--muted); margin-top: 14px; }
+  .form-section { position: relative; z-index: 1; padding: 40px 24px 80px; max-width: 560px; margin: 0 auto; text-align: center; }
+  .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px 36px; position: relative; overflow: hidden; }
+  .form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); }
+  .form-title { font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+  .form-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 24px; }
+  .input-group { margin-bottom: 14px; text-align: left; }
+  label { display: block; font-size: 0.73rem; font-weight: 500; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
+  input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 13px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+  input:focus { border-color: var(--purple); }
+  input::placeholder { color: var(--muted); }
+  .submit-btn { width: 100%; background: var(--grad); color: #fff; border: none; border-radius: 12px; padding: 15px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 8px; transition: all 0.25s; }
+  .submit-btn:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.3); }
+  .form-note { font-size: 0.73rem; color: var(--muted); margin-top: 14px; }
+  .success-msg { display: none; text-align: center; padding: 20px; }
+  .success-msg.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 16px; }
+  .success-title { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+  footer { position: relative; z-index: 1; text-align: center; padding: 32px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
+  .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: #a78bfa; }
+  footer strong { color: var(--text); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 600px) { .form-card, .price-card { padding: 28px 20px; } .cta-card { padding: 40px 24px; } .hero-btns { flex-direction: column; align-items: center; } }
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<nav>
+  <div>
+    <div class="logo">conteúdo.ai</div>
+    <div class="logo-sub">by Lorvix</div>
+  </div>
+  <a href="#planos" class="nav-cta">Ver planos →</a>
+</nav>
+
+<section class="hero">
+  <div class="badge"><span class="badge-dot"></span> Geração de Conteúdo com IA</div>
+  <h1>Crie posts completos para<br><span>redes sociais em segundos</span></h1>
+  <p class="hero-sub">Imagem, legenda e hashtags geradas com IA para pequenos negócios, autônomos e agências que precisam postar com frequência — sem depender de designer, agência ou horas pensando no que publicar.</p>
+  <p class="hero-reforco">✦ Mais agilidade para divulgar seu negócio, manter presença online e produzir conteúdo com mais consistência.</p>
+  <div class="hero-btns">
+    <a href="#form" class="btn-grad">Começar grátis →</a>
+    <a href="#planos" class="btn-outline">Ver planos</a>
+  </div>
+  <p class="hero-micro">Sem complicação. Sem perder tempo. Comece com o plano grátis e evolua quando precisar de mais créditos.</p>
+</section>
+
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><em>⚡</em> Criação rápida e prática</div>
+    <div class="trust-item"><em>✅</em> Conteúdo pronto para publicar</div>
+    <div class="trust-item"><em>💰</em> Planos acessíveis para diferentes perfis</div>
+    <div class="trust-item"><em>🔒</em> Dados protegidos e controle da conta</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="section-label">O que a Lorvix faz</div>
+  <div class="section-title">Uma forma mais rápida de criar<br>conteúdo para o seu negócio</div>
+  <p class="section-sub">A Lorvix ajuda você a produzir posts de forma mais simples e organizada. Em poucos passos, você gera imagem, legenda e hashtags para manter suas redes ativas e vender com mais constância.</p>
+  <div class="grid-4">
+    <div class="card"><span class="card-icon">⚡</span><div class="card-title">Gerar conteúdo com rapidez</div><p class="card-desc">Em segundos você tem um post completo, sem precisar pensar em cada detalhe do zero.</p></div>
+    <div class="card"><span class="card-icon">📅</span><div class="card-title">Manter frequência nas redes</div><p class="card-desc">Nunca mais fique sem saber o que postar. Banco de ideias e criação contínua.</p></div>
+    <div class="card"><span class="card-icon">🎯</span><div class="card-title">Reduzir esforço manual</div><p class="card-desc">Menos tempo operacional, mais foco no que realmente importa no seu negócio.</p></div>
+    <div class="card"><span class="card-icon">📢</span><div class="card-title">Divulgar com mais clareza</div><p class="card-desc">Posts alinhados com seu nicho, comunicando o valor certo para as pessoas certas.</p></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="section-label">Como funciona</div>
+  <div class="section-title">3 passos para ter<br>seu post pronto</div>
+  <div class="grid-3">
+    <div class="step"><div class="step-num">01</div><div class="step-title">Escolha o que deseja criar</div><p class="step-desc">Defina a rede social, o tema e o tipo de conteúdo — Feed, Story, Reels ou post para LinkedIn.</p></div>
+    <div class="step"><div class="step-num">02</div><div class="step-title">A IA monta o conteúdo</div><p class="step-desc">A plataforma gera imagem, legenda e hashtags rapidamente. Tudo pensado para o seu público e nicho.</p></div>
+    <div class="step"><div class="step-num">03</div><div class="step-title">Edite, baixe e publique</div><p class="step-desc">Revise, ajuste o que quiser e publique no Instagram, TikTok, Facebook ou LinkedIn.</p></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="section-label">Para quem é</div>
+  <div class="section-title">Feito para quem precisa<br>postar com frequência</div>
+  <div class="grid-3">
+    <div class="card"><span class="card-icon">🏪</span><div class="card-title">Pequenos negócios</div><p class="card-desc">Para quem quer presença digital sem depender de agência para cada postagem.</p></div>
+    <div class="card"><span class="card-icon">👤</span><div class="card-title">Autônomos e prestadores de serviço</div><p class="card-desc">Para quem precisa atrair clientes e divulgar ofertas com agilidade e sem complicação.</p></div>
+    <div class="card"><span class="card-icon">🏢</span><div class="card-title">Agências e social medias</div><p class="card-desc">Para quem quer ganhar velocidade no dia a dia e produzir mais com menos esforço operacional.</p></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="section-label">O que você consegue criar</div>
+  <div class="section-title">Conteúdo para todas<br>as principais redes</div>
+  <div class="grid-6">
+    <div class="mini-card"><span class="mini-icon">📸</span><div class="mini-label">Posts para Instagram</div></div>
+    <div class="mini-card"><span class="mini-icon">🎵</span><div class="mini-label">Conteúdo para TikTok</div></div>
+    <div class="mini-card"><span class="mini-icon">👍</span><div class="mini-label">Publicações para Facebook</div></div>
+    <div class="mini-card"><span class="mini-icon">💼</span><div class="mini-label">Materiais para LinkedIn</div></div>
+    <div class="mini-card"><span class="mini-icon">#️⃣</span><div class="mini-label">Legendas com hashtags</div></div>
+    <div class="mini-card"><span class="mini-icon">💡</span><div class="mini-label">Ideias para divulgação</div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="pricing-section reveal" id="planos">
+  <div class="section-label" style="text-align:center">Planos</div>
+  <div class="section-title" style="text-align:center; max-width:500px; margin: 0 auto 12px;">Comece grátis.<br>Escale quando quiser.</div>
+  <p style="color:var(--muted); font-size:0.86rem; max-width:500px; margin: 0 auto 28px; text-align:center;">Os créditos variam conforme o tipo de geração realizada na plataforma.</p>
+  <div class="credits-box" style="max-width:960px; margin: 0 auto 32px;">
+    <div class="credits-title">⚡ Quanto custa cada ação em créditos?</div>
+    <div class="credits-grid">
+      <div class="credit-item"><span class="credit-badge">1 crédito</span> Gerar só legenda/texto</div>
+      <div class="credit-item"><span class="credit-badge">3 créditos</span> Gerar só imagem</div>
+      <div class="credit-item"><span class="credit-badge">4 créditos</span> Post completo com imagem</div>
+      <div class="credit-item"><span class="credit-badge">5 créditos</span> Análise de perfil</div>
+    </div>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="plan-badge free">Grátis</div>
+      <div class="plan-ideal">Para conhecer a plataforma</div>
+      <div class="plan-name">Grátis</div>
+      <div class="plan-price">R$0</div>
+      <div class="plan-period">para sempre</div>
+      <ul class="plan-features">
+        <li><span>✓</span> 10 créditos por mês</li>
+        <li><span>✓</span> 1 análise de perfil</li>
+        <li><span>✓</span> Todas as redes sociais</li>
+        <li><span>✓</span> Banco de ideias</li>
+      </ul>
+      <a href="#form" class="plan-btn outline">Começar grátis</a>
+    </div>
+    <div class="price-card">
+      <div class="plan-badge basic">Básico</div>
+      <div class="plan-ideal">Para autônomos e pequenos negócios</div>
+      <div class="plan-name">Básico</div>
+      <div class="plan-price"><sup>R$</sup>49</div>
+      <div class="plan-period">por mês</div>
+      <ul class="plan-features">
+        <li><span>✓</span> 60 créditos por mês</li>
+        <li><span>✓</span> 5 análises de perfil</li>
+        <li><span>✓</span> Todas as redes sociais</li>
+        <li><span>✓</span> Banco de ideias</li>
+      </ul>
+      <a href="https://buy.stripe.com/test_fZu6oIcX79rUeKFdYj8N201" target="_blank" class="plan-btn grad">Assinar Básico</a>
+    </div>
+    <div class="price-card featured">
+      <div class="plan-badge pro">⭐ Mais popular</div>
+      <div class="plan-ideal">Para quem publica com regularidade</div>
+      <div class="plan-name">Pró</div>
+      <div class="plan-price"><sup>R$</sup>99</div>
+      <div class="plan-period">por mês</div>
+      <ul class="plan-features">
+        <li><span>✓</span> 200 créditos por mês</li>
+        <li><span>✓</span> 10 análises de perfil</li>
+        <li><span>✓</span> Análise de concorrente</li>
+        <li><span>✓</span> Todas as redes sociais</li>
+      </ul>
+      <a href="https://buy.stripe.com/test_9B6eVe9KV0Vo461g6r8N202" target="_blank" class="plan-btn grad">Assinar Pró</a>
+    </div>
+    <div class="price-card">
+      <div class="plan-badge agency">Agência</div>
+      <div class="plan-ideal">Para agências, equipes e múltiplos perfis</div>
+      <div class="plan-name">Agência</div>
+      <div class="plan-price"><sup>R$</sup>249</div>
+      <div class="plan-period">por mês</div>
+      <ul class="plan-features">
+        <li><span>✓</span> 600 créditos por mês</li>
+        <li><span>✓</span> 20 análises de perfil</li>
+        <li><span>✓</span> Análise de concorrente</li>
+        <li><span>✓</span> Suporte prioritário</li>
+      </ul>
+      <a href="https://buy.stripe.com/test_fZubJ25uF0Voaup5rN8N203" target="_blank" class="plan-btn grad">Assinar Agência</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="section reveal">
+  <div class="section-label">Segurança e controle</div>
+  <div class="section-title">Sua conta com mais<br>segurança e controle</div>
+  <p class="section-sub">A Lorvix foi pensada para oferecer uma experiência simples, com atenção à proteção dos dados e ao controle da sua conta.</p>
+  <div class="security-grid">
+    <div class="security-item"><div class="security-icon">🔐</div><div><div class="sec-label">Controle da conta</div><p class="sec-desc">Gerencie seu plano, créditos e dados a qualquer momento.</p></div></div>
+    <div class="security-item"><div class="security-icon">📋</div><div><div class="sec-label">Gestão dos planos</div><p class="sec-desc">Mude, cancele ou faça upgrade quando quiser, sem burocracia.</p></div></div>
+    <div class="security-item"><div class="security-icon">🛡️</div><div><div class="sec-label">Proteção de dados</div><p class="sec-desc">Dados criptografados e conformidade com a LGPD.</p></div></div>
+    <div class="security-item"><div class="security-icon">📊</div><div><div class="sec-label">Clareza no uso</div><p class="sec-desc">Acompanhe seus créditos e histórico de criação em tempo real.</p></div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="faq-section reveal" id="faq">
+  <div class="section-label" style="text-align:center">Dúvidas frequentes</div>
+  <div class="section-title" style="text-align:center; margin-bottom:40px;">Perguntas<br>& Respostas</div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">A Lorvix cria conteúdo para quais redes sociais?<span class="faq-icon">+</span></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Instagram, TikTok, Facebook e LinkedIn. Para cada rede você escolhe o formato ideal — Feed, Story, Reels ou post profissional.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Preciso saber design para usar?<span class="faq-icon">+</span></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Não. Você só informa o assunto, a rede social e o tom que quer. A IA cuida da imagem, da legenda e das hashtags. Zero conhecimento técnico necessário.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Como funcionam os créditos?<span class="faq-icon">+</span></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Créditos são a moeda da plataforma. Cada ação consome uma quantidade diferente: texto custa 1 crédito, só imagem custa 3, post completo custa 4 e análise de perfil custa 5 créditos.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Posso começar sem pagar?<span class="faq-icon">+</span></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Sim. O plano grátis oferece 10 créditos e 1 análise de perfil por mês, sem precisar de cartão. Você experimenta tudo e só assina se quiser mais.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Posso mudar de plano depois?<span class="faq-icon">+</span></button>
+    <div class="faq-answer"><div class="faq-answer-inner">Sim, a qualquer momento. Você pode fazer upgrade, downgrade ou cancelar direto pelo painel, sem fidelidade e sem multa.</div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">A Lorvix serve para pequenas empresas?<span class="faq-icon">+</span></button>
+    <div class="faq-answer"><div class="faq-answer-inner">É exatamente para isso que foi feita. Pequenos negócios, autônomos e prestadores de serviço que precisam de presença digital sem o custo de uma agência.</div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="cta-final reveal">
+  <div class="cta-card">
+    <div class="cta-title">Comece a criar conteúdo com<br>mais rapidez e menos esforço</div>
+    <p class="cta-sub">Se você quer divulgar melhor seu negócio, manter frequência nas redes e ganhar tempo no processo de criação, a Lorvix pode ajudar.</p>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+      <a href="#form" class="btn-grad">Começar grátis →</a>
+      <a href="#planos" class="btn-outline">Ver planos</a>
+    </div>
+    <p class="cta-micro">Experimente a plataforma e escolha o plano ideal para o seu momento.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<section class="form-section reveal" id="form">
+  <div class="form-card">
+    <div id="form-content">
+      <div class="form-title">Quer saber mais?</div>
+      <p class="form-sub">Deixa seu contato e nossa equipe te apresenta o conteúdo.ai.</p>
+      <div class="input-group"><label>Seu nome</label><input type="text" id="nome" placeholder="Como você se chama?" autocomplete="name"></div>
+      <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsapp" placeholder="Ex: 27999991234" autocomplete="tel"></div>
+      <div class="input-group"><label>Seu negócio</label><input type="text" id="negocio" placeholder="Ex: loja de roupas, agência, clínica..."></div>
+      <button class="submit-btn" onclick="enviarLead()">Quero conhecer o conteúdo.ai →</button>
+      <p class="form-note">🔒 Seus dados são usados apenas para entrar em contato. Sem spam.</p>
+    </div>
+    <div class="success-msg" id="success">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Recebemos seu contato!</div>
+      <p style="color: var(--muted); font-size: 0.9rem;">A equipe Lorvix vai entrar em contato em breve pelo WhatsApp!</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="#planos">Planos</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://wa.me/5527988612054" target="_blank">Contato</a>
+    <a href="#">Política de Privacidade</a>
+    <a href="#">Termos de Uso</a>
+  </div>
+  <strong>conteúdo.ai</strong> — Criação de conteúdo com IA para redes sociais · desenvolvido por <strong>Lorvix</strong><br>
+  <span style="font-size:0.72rem; margin-top:4px; display:block;">© 2026 Lorvix. Todos os direitos reservados.</span>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  document.getElementById('whatsapp').addEventListener('input', function(e) {
+    e.target.value = e.target.value.replace(/\D/g, '');
+  });
+
+  async function enviarLead() {
+    const nome = document.getElementById('nome').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const negocio = document.getElementById('negocio').value.trim();
+    if (!nome || !whatsapp) { alert('Por favor, preencha seu nome e WhatsApp.'); return; }
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = 'Enviando...'; btn.disabled = true;
+    const SUPABASE_URL = 'https://ioaweihjmpmvuuezcope.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvYXdlaWhqbXBtdnV1ZXpjb3BlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MTY0MDEsImV4cCI6MjA5MjE5MjQwMX0.flyGMSkTGy35qg7QiNb8V_e-hZRhkI6PO5bkf08rIGo';
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ nome, whatsapp, negocio })
+      });
+    } catch (err) { console.log('Erro:', err); }
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+    const msg = encodeURIComponent(`Olá! Me chamo ${nome} e tenho interesse no conteúdo.ai para o meu negócio: ${negocio}.`);
+    setTimeout(() => { window.open(`https://wa.me/5527988612054?text=${msg}`, '_blank'); }, 1000);
+  }
+</script>
+</body>
+</html>
