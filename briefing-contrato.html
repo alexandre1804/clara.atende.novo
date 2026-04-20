@@ -364,15 +364,15 @@
   async function gerarContrato() {
     const nome = document.getElementById('nome').value.trim();
     const negocio = document.getElementById('negocio').value.trim();
-    const whatsapp = document.getElementById('whatsapp').value.trim();
-    const segmento = document.getElementById('segmento').value.trim();
-    const produto = document.getElementById('produto').value.trim();
-    const linkLogo = document.getElementById('link-logo').value.trim();
 
     if (!nome || !negocio) {
       alert('Por favor preencha pelo menos seu nome e o nome do negócio.');
       return;
     }
+
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
 
     const hoje = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
 
@@ -382,9 +382,9 @@
     document.getElementById('c-data2').textContent = hoje;
     document.getElementById('c-assinatura').innerHTML = nome + '<br>Contratante';
 
-    // Monta conteúdo completo do e-mail
-    const segmento = document.getElementById('segmento').value;
+
     const produto = document.getElementById('produto').value;
+    const segmento = document.getElementById('segmento').value;
     const publico = document.getElementById('publico').value;
     const cores = document.getElementById('cores').value;
     const referencias = document.getElementById('referencias').value;
@@ -441,15 +441,19 @@
     // Monta mensagem para o WhatsApp da Lorvix com os dados do briefing
     const logoInfo = linkLogo ? `\nLink da logo: ${linkLogo}` : '\n⚠️ Logo não enviada ainda — por favor envie aqui no WhatsApp (PNG, JPG ou SVG).';
     const msg = encodeURIComponent(
-      `Olá! Preenchi o briefing da landing page.\n\n` +
+      `📋 *NOVO BRIEFING — LANDING PAGE*\n\n` +
       `👤 Nome: ${nome}\n` +
+      `📱 WhatsApp: ${document.getElementById('whatsapp').value}\n` +
       `🏪 Negócio: ${negocio}\n` +
-      `📌 Segmento: ${segmento}\n` +
-      `📝 Serviço/produto: ${produto}\n` +
-      logoInfo
+      `📌 Segmento: ${document.getElementById('segmento').value}\n` +
+      logoInfo +
+      `\n\n📧 _Briefing completo enviado para lorvix.ia@gmail.com_`
     );
+    btn.textContent = 'Gerar briefing e contrato →';
+    btn.disabled = false;
+    document.getElementById('briefing-form').style.display = 'none';
     setTimeout(() => {
-      window.open(`https://wa.me/5527988612054?text=${msg}`, '_blank');
+      window.open(`https://wa.me/5527996132344?text=${msg}`, '_blank');
     }, 1500);
   }
 </script>
