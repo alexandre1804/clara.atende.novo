@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing — Agente IA WhatsApp · Lorvix</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #111118; --surface2: #1a1a26; --border: #2a2a3a;
+    --text: #f0f0f8; --muted: #6b6b88;
+    --purple: #7c3aed; --pink: #ff4d6d; --cyan: #06b6d4; --success: #10b981;
+    --grad: linear-gradient(135deg, #7c3aed, #ff4d6d);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; }
+
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
+  .orb { position: fixed; border-radius: 50%; filter: blur(130px); opacity: 0.08; pointer-events: none; z-index: 0; }
+  .orb1 { width: 400px; height: 400px; background: var(--purple); top: -100px; right: -100px; }
+  .orb2 { width: 300px; height: 300px; background: var(--pink); bottom: 100px; left: -100px; }
+
+  nav { position: relative; z-index: 10; background: rgba(10,10,15,0.9); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(16px); }
+  .logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+  .nav-sub { font-size: 0.78rem; color: var(--muted); }
+
+  .container { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .doc-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); color: #a78bfa; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 14px; border-radius: 100px; margin-bottom: 16px; }
+  .doc-tag-dot { width: 6px; height: 6px; background: var(--purple); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.5); } }
+
+  .doc-title { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .doc-sub { color: var(--muted); font-size: 0.92rem; margin-bottom: 32px; max-width: 560px; line-height: 1.6; }
+
+  .info-box { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); border-radius: 12px; padding: 16px 20px; margin-bottom: 32px; font-size: 0.86rem; color: var(--muted); line-height: 1.6; }
+  .info-box strong { color: #a78bfa; }
+
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); opacity: 0; transition: opacity 0.3s; }
+  .section:focus-within::before { opacity: 1; }
+
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .section-num { width: 32px; height: 32px; background: rgba(124,58,237,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.85rem; color: #a78bfa; flex-shrink: 0; }
+  .section-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; }
+  .section-optional { font-size: 0.72rem; color: var(--muted); background: var(--surface2); padding: 2px 8px; border-radius: 100px; margin-left: auto; }
+
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .field-hint { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; font-style: italic; margin-top: -4px; }
+
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], textarea, select {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.92rem;
+    outline: none; transition: border-color 0.2s, background 0.2s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--purple); background: rgba(124,58,237,0.05); }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+  textarea { resize: vertical; min-height: 90px; }
+  select option { background: var(--surface2); color: var(--text); }
+
+  .radio-group, .check-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .radio-opt, .check-opt {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 14px; cursor: pointer; font-size: 0.84rem; transition: all 0.2s; color: var(--muted);
+  }
+  .radio-opt:has(input:checked), .check-opt:has(input:checked) {
+    border-color: rgba(124,58,237,0.5); background: rgba(124,58,237,0.12); color: #a78bfa; font-weight: 600;
+  }
+  .radio-opt input, .check-opt input { display: none; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .submit-btn { width: 100%; background: var(--grad); color: #fff; border: none; border-radius: 12px; padding: 16px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 24px; transition: all 0.25s; }
+  .submit-btn:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.3); }
+
+  .progress-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 100px; height: 4px; margin-bottom: 32px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--grad); border-radius: 100px; transition: width 0.3s; width: 0%; }
+
+  .success { display: none; text-align: center; padding: 60px 20px; }
+  .success.show { display: block; }
+  .success-icon { font-size: 4rem; margin-bottom: 20px; }
+  .success-title { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; }
+  .success-sub { color: var(--muted); font-size: 0.95rem; max-width: 400px; margin: 0 auto 32px; line-height: 1.6; }
+  .success-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: #000; padding: 14px 28px; border-radius: 12px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.25s; }
+  .success-btn:hover { background: #20bd59; transform: translateY(-2px); }
+
+  footer { position: relative; z-index: 1; text-align: center; padding: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
+
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } .section { padding: 20px; } }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<nav>
+  <a href="https://lorvix.com.br" class="logo">Lorvix</a>
+  <span class="nav-sub">Briefing — Agente IA WhatsApp</span>
+</nav>
+
+<div class="container">
+
+  <div id="form-area">
+    <div class="doc-tag"><span class="doc-tag-dot"></span> Novo Agente IA</div>
+    <div class="doc-title">Briefing do seu<br>Agente no WhatsApp</div>
+    <p class="doc-sub">Quanto mais você contar sobre seu negócio, mais personalizado e eficiente será o seu agente. Campos opcionais podem ser pulados — mas cada detalhe faz diferença.</p>
+
+    <div class="info-box">
+      <strong>🤖 Como funciona:</strong> Com base nas suas respostas, a equipe Lorvix monta o prompt e configura o agente para atender seus clientes automaticamente pelo WhatsApp — respondendo dúvidas, agendando horários e encaminhando para você quando necessário.
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <!-- 1. DADOS DO NEGÓCIO -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title">Sobre o seu negócio</div>
+      </div>
+
+      <div class="field">
+        <label>Seu nome</label>
+        <input type="text" id="nome" placeholder="Como você se chama?">
+      </div>
+      <div class="field">
+        <label>WhatsApp para contato</label>
+        <input type="tel" id="whatsapp" placeholder="Ex: 27999991234">
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Nome do negócio / marca</label>
+          <input type="text" id="negocio" placeholder="Nome da sua empresa">
+        </div>
+        <div class="field">
+          <label>Segmento</label>
+          <input type="text" id="segmento" placeholder="Ex: salão, clínica, loja...">
+        </div>
+      </div>
+      <div class="field">
+        <label>O que você vende ou oferece?</label>
+        <p class="field-hint">Descreva seus produtos ou serviços principais</p>
+        <textarea id="servicos" placeholder="Ex: corte de cabelo, coloração, manicure, pedicure. Atendo de segunda a sábado das 9h às 19h."></textarea>
+      </div>
+      <div class="field">
+        <label>Endereço ou cidade de atendimento</label>
+        <input type="text" id="endereco" placeholder="Rua, número, bairro, cidade — ou só a cidade se for online">
+      </div>
+      <div class="field">
+        <label>Horário de funcionamento</label>
+        <input type="text" id="horario" placeholder="Ex: Segunda a sexta das 8h às 18h, sábados das 9h às 13h">
+      </div>
+    </div>
+
+    <!-- 2. PERSONALIDADE DO AGENTE -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title">Como o agente deve se comportar</div>
+      </div>
+
+      <div class="field">
+        <label>Qual nome o agente vai usar?</label>
+        <p class="field-hint">Pode ser seu nome, o nome da empresa ou um nome criativo</p>
+        <input type="text" id="nome-agente" placeholder="Ex: Clara, Ana, Assistente do Salão Beleza...">
+      </div>
+      <div class="field">
+        <label>Tom de voz</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="tom" value="formal"> 👔 Formal e profissional</label>
+          <label class="radio-opt"><input type="radio" name="tom" value="amigavel"> 😊 Amigável e descontraído</label>
+          <label class="radio-opt"><input type="radio" name="tom" value="jovem"> 🔥 Jovem e moderno</label>
+          <label class="radio-opt"><input type="radio" name="tom" value="acolhedor"> 🤝 Acolhedor e empático</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>O agente deve usar emojis nas mensagens?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="emoji" value="sim"> ✅ Sim, bastante</label>
+          <label class="radio-opt"><input type="radio" name="emoji" value="pouco"> 🟡 Poucos, com moderação</label>
+          <label class="radio-opt"><input type="radio" name="emoji" value="nao"> ❌ Não, sem emojis</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Há algo que o agente NUNCA deve fazer ou dizer?</label>
+        <p class="field-hint">Ex: não falar de concorrentes, não dar descontos, não prometer prazos sem confirmar</p>
+        <textarea id="nunca" placeholder="Liste aqui restrições importantes..."></textarea>
+      </div>
+    </div>
+
+    <!-- 3. O QUE O AGENTE FAZ -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title">Funções do agente</div>
+      </div>
+
+      <div class="field">
+        <label>O que o agente deve fazer?</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" value="duvidas"> ❓ Responder dúvidas</label>
+          <label class="check-opt"><input type="checkbox" value="agendamento"> 📅 Fazer agendamentos</label>
+          <label class="check-opt"><input type="checkbox" value="orcamento"> 💰 Enviar orçamentos</label>
+          <label class="check-opt"><input type="checkbox" value="vendas"> 🛒 Vender produtos/serviços</label>
+          <label class="check-opt"><input type="checkbox" value="endereco"> 📍 Informar endereço e horário</label>
+          <label class="check-opt"><input type="checkbox" value="cardapio"> 🍽️ Apresentar cardápio/catálogo</label>
+          <label class="check-opt"><input type="checkbox" value="suporte"> 🛠️ Suporte pós-venda</label>
+          <label class="check-opt"><input type="checkbox" value="humano"> 👤 Encaminhar para humano</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Perguntas que seus clientes fazem com frequência</label>
+        <p class="field-hint">Escreva as perguntas mais comuns e as respostas que o agente deve dar</p>
+        <textarea id="faq" placeholder="Ex:&#10;Pergunta: Qual o valor do corte?&#10;Resposta: O corte feminino custa R$60 e o masculino R$40.&#10;&#10;Pergunta: Vocês trabalham aos domingos?&#10;Resposta: Não, atendemos de segunda a sábado."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Tabela de preços (se quiser que o agente informe)</label>
+        <p class="field-hint">Liste seus serviços e valores. Pode pular se preferir não divulgar preços pelo WhatsApp.</p>
+        <textarea id="precos" placeholder="Ex:&#10;Corte masculino: R$40&#10;Corte feminino: R$60&#10;Coloração: a partir de R$120&#10;Manicure: R$35"></textarea>
+      </div>
+    </div>
+
+    <!-- 4. AGENDAMENTO -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title">Agendamento</div>
+        <span class="section-optional">opcional</span>
+      </div>
+
+      <div class="field">
+        <label>O agente vai fazer agendamentos?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="agenda" value="sim"> ✅ Sim</label>
+          <label class="radio-opt"><input type="radio" name="agenda" value="nao"> ❌ Não</label>
+          <label class="radio-opt"><input type="radio" name="agenda" value="encaminhar"> 🔄 Encaminha para mim e eu confirmo</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Duração média de cada atendimento</label>
+        <input type="text" id="duracao" placeholder="Ex: 30 minutos, 1 hora, 2 horas...">
+      </div>
+      <div class="field">
+        <label>Há profissionais específicos para cada serviço?</label>
+        <p class="field-hint">Se sim, liste os nomes e o que cada um faz</p>
+        <textarea id="profissionais" placeholder="Ex:&#10;Ana — corte e coloração&#10;Maria — manicure e pedicure&#10;João — barba e bigode"></textarea>
+      </div>
+      <div class="field">
+        <label>Informações extras sobre o agendamento</label>
+        <textarea id="agenda-obs" placeholder="Ex: Confirmar 1 dia antes, cobrar 50% de sinal, não aceitar cancelamento com menos de 2h de antecedência..."></textarea>
+      </div>
+    </div>
+
+    <!-- 5. ENCAMINHAMENTO HUMANO -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title">Quando acionar atendimento humano</div>
+        <span class="section-optional">opcional</span>
+      </div>
+
+      <div class="field">
+        <label>Em quais situações o agente deve chamar você?</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" value="comprar"> 💰 Cliente quer fechar compra</label>
+          <label class="check-opt"><input type="checkbox" value="reclamacao"> 😤 Reclamação ou insatisfação</label>
+          <label class="check-opt"><input type="checkbox" value="duvida-complexa"> 🤔 Dúvida que o agente não sabe responder</label>
+          <label class="check-opt"><input type="checkbox" value="orcamento-especial"> 📋 Orçamento especial ou personalizado</label>
+          <label class="check-opt"><input type="checkbox" value="pedido-humano"> 👤 Cliente pediu falar com humano</label>
+          <label class="check-opt"><input type="checkbox" value="urgencia"> 🚨 Urgência ou emergência</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Número do WhatsApp que receberá os alertas</label>
+        <input type="tel" id="whatsapp-alertas" placeholder="Ex: 27999991234">
+      </div>
+      <div class="field">
+        <label>Mensagem que o agente deve enviar ao cliente ao acionar humano</label>
+        <p class="field-hint">Deixe em branco para usar a padrão</p>
+        <input type="text" id="msg-humano" placeholder="Ex: Perfeito! Um de nossos atendentes entrará em contato em breve. 😊">
+      </div>
+    </div>
+
+    <!-- 6. INFORMAÇÕES EXTRAS -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-title">Informações extras do negócio</div>
+        <span class="section-optional">opcional</span>
+      </div>
+
+      <div class="field">
+        <label>Diferenciais do seu negócio</label>
+        <p class="field-hint">O que faz seu negócio ser melhor ou diferente da concorrência?</p>
+        <textarea id="diferenciais" placeholder="Ex: 10 anos de experiência, produtos importados, estacionamento gratuito, atendimento personalizado..."></textarea>
+      </div>
+      <div class="field">
+        <label>Formas de pagamento aceitas</label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" value="pix"> 📱 Pix</label>
+          <label class="check-opt"><input type="checkbox" value="cartao-credito"> 💳 Cartão de crédito</label>
+          <label class="check-opt"><input type="checkbox" value="cartao-debito"> 💳 Cartão de débito</label>
+          <label class="check-opt"><input type="checkbox" value="dinheiro"> 💵 Dinheiro</label>
+          <label class="check-opt"><input type="checkbox" value="boleto"> 📄 Boleto</label>
+          <label class="check-opt"><input type="checkbox" value="transferencia"> 🏦 Transferência</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Link do Instagram, site ou cardápio digital</label>
+        <input type="url" id="links" placeholder="https://instagram.com/seunegocio">
+      </div>
+      <div class="field">
+        <label>Algo mais que o agente deve saber sobre seu negócio?</label>
+        <textarea id="extras" placeholder="Qualquer informação importante que não foi coberta acima..."></textarea>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="enviarBriefing()">Enviar briefing →</button>
+  </div>
+
+  <!-- SUCESSO -->
+  <div class="success" id="success">
+    <div class="success-icon">🤖</div>
+    <div class="success-title">Briefing enviado!</div>
+    <p class="success-sub">A equipe Lorvix recebeu todas as informações e vai montar o seu agente personalizado. Em breve entraremos em contato pelo WhatsApp.</p>
+    <a href="https://wa.me/5527988612054" target="_blank" class="success-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Falar com a Lorvix
+    </a>
+  </div>
+
+</div>
+
+<footer>© 2026 Lorvix · lorvix.com.br · lorvix.ia@gmail.com</footer>
+
+<script>
+  // Máscara WhatsApp
+  ['whatsapp','whatsapp-alertas'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,''));
+  });
+
+  // Barra de progresso
+  const campos = document.querySelectorAll('input, textarea, select');
+  campos.forEach(c => c.addEventListener('input', atualizarProgresso));
+
+  function atualizarProgresso() {
+    const obrigatorios = ['nome','whatsapp','negocio','segmento','servicos'];
+    const preenchidos = obrigatorios.filter(id => {
+      const el = document.getElementById(id);
+      return el && el.value.trim().length > 0;
+    }).length;
+    document.getElementById('progress').style.width = (preenchidos / obrigatorios.length * 100) + '%';
+  }
+
+  async function enviarBriefing() {
+    const nome = document.getElementById('nome').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const negocio = document.getElementById('negocio').value.trim();
+
+    if (!nome || !whatsapp || !negocio) {
+      alert('Por favor preencha pelo menos seu nome, WhatsApp e nome do negócio.');
+      return;
+    }
+
+    const btn = document.querySelector('.submit-btn');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    // Salva no Supabase
+    const SUPABASE_URL = 'https://ioaweihjmpmvuuezcope.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlvYXdlaWhqbXBtdnV1ZXpjb3BlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MTY0MDEsImV4cCI6MjA5MjE5MjQwMX0.flyGMSkTGy35qg7QiNb8V_e-hZRhkI6PO5bkf08rIGo';
+
+    const tomSelecionado = document.querySelector('input[name="tom"]:checked');
+    const agendaSelecionado = document.querySelector('input[name="agenda"]:checked');
+
+    const dados = {
+      nome,
+      whatsapp,
+      negocio: negocio + ' — Briefing Agente IA'
+    };
+
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify(dados)
+      });
+    } catch(e) { console.log(e); }
+
+    // Monta mensagem WhatsApp completa
+    const segmento = document.getElementById('segmento').value;
+    const servicos = document.getElementById('servicos').value;
+    const nomeAgente = document.getElementById('nome-agente').value;
+    const horario = document.getElementById('horario').value;
+    const faq = document.getElementById('faq').value;
+    const precos = document.getElementById('precos').value;
+    const diferenciais = document.getElementById('diferenciais').value;
+    const extras = document.getElementById('extras').value;
+    const whatsappAlertas = document.getElementById('whatsapp-alertas').value;
+
+    let msg = `🤖 *BRIEFING — AGENTE IA WHATSAPP*\n\n`;
+    msg += `👤 *Nome:* ${nome}\n`;
+    msg += `📱 *WhatsApp:* ${whatsapp}\n`;
+    msg += `🏪 *Negócio:* ${negocio}\n`;
+    msg += `📌 *Segmento:* ${segmento}\n`;
+    if (horario) msg += `⏰ *Horário:* ${horario}\n`;
+    if (nomeAgente) msg += `🤖 *Nome do agente:* ${nomeAgente}\n`;
+    if (tomSelecionado) msg += `🎙️ *Tom de voz:* ${tomSelecionado.value}\n`;
+    msg += `\n📋 *Serviços:*\n${servicos}\n`;
+    if (precos) msg += `\n💰 *Preços:*\n${precos}\n`;
+    if (faq) msg += `\n❓ *FAQ:*\n${faq}\n`;
+    if (diferenciais) msg += `\n✨ *Diferenciais:*\n${diferenciais}\n`;
+    if (whatsappAlertas) msg += `\n🔔 *Alertas para:* ${whatsappAlertas}\n`;
+    if (agendaSelecionado) msg += `📅 *Agendamento:* ${agendaSelecionado.value}\n`;
+    if (extras) msg += `\n📝 *Extras:*\n${extras}\n`;
+
+    document.getElementById('form-area').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+
+    setTimeout(() => {
+      window.open(`https://wa.me/5527988612054?text=${encodeURIComponent(msg)}`, '_blank');
+    }, 1000);
+  }
+</script>
+</body>
+</html>
