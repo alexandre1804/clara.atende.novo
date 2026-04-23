@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorvix — Tecnologia que transforma negócios</title>
+<meta name="description" content="IA no WhatsApp, landing pages de alta conversão e sistema de agendamento para clínicas, salões e barbearias. Lorvix — tecnologia que trabalha por você.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #FAF8FF;
+    --bg-2:      #F0EAFF;
+    --bg-3:      #EDE4FF;
+    --surface:   #FFFFFF;
+    --surface-2: #F6F2FF;
+    --border:    #E2D9F3;
+    --border-2:  #C9B8F0;
+    --text:      #1A0F3C;
+    --text-dim:  #4A3B6B;
+    --muted:     #8B79AA;
+    --faint:     #C4B5D6;
+
+    --purple:       #7C3AED;
+    --purple-mid:   #9333EA;
+    --purple-light: #A78BFA;
+    --purple-pale:  #EDE9FE;
+    --purple-glow:  rgba(124,58,237,0.18);
+
+    --grad:      linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
+    --grad-text: linear-gradient(110deg, #7C3AED 0%, #C084FC 100%);
+    --grad-btn:  linear-gradient(135deg, #7C3AED 0%, #9333EA 100%);
+    --grad-soft: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(168,85,247,0.06));
+
+    --shadow-sm: 0 2px 8px rgba(124,58,237,0.08);
+    --shadow-md: 0 8px 28px rgba(124,58,237,0.12);
+    --shadow-lg: 0 20px 60px rgba(124,58,237,0.16);
+
+    --sidebar-w:  240px;
+    --sidebar-bg: #13082E;
+    --radius:     14px;
+    --radius-lg:  22px;
+    --ease:       cubic-bezier(.22,.61,.36,1);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  ::selection { background: var(--purple-pale); color: var(--purple); }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── AMBIENT BG ── */
+  .ambient {
+    position: fixed; inset: 0; z-index: -1;
+    pointer-events: none; overflow: hidden;
+  }
+  .ambient::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(124,58,237,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(124,58,237,0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
+  }
+  .orb { position: absolute; border-radius: 50%; filter: blur(100px); will-change: transform; }
+  .orb-1 { top:-8%; left:-5%; width:560px; height:560px; background: radial-gradient(circle, rgba(167,139,250,0.35), transparent 70%); animation: orbF1 22s ease-in-out infinite; }
+  .orb-2 { top:40%; right:-8%; width:480px; height:480px; background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%); animation: orbF2 28s ease-in-out infinite; }
+  .orb-3 { bottom:-10%; left:30%; width:440px; height:440px; background: radial-gradient(circle, rgba(192,132,252,0.22), transparent 70%); animation: orbF3 32s ease-in-out infinite; }
+  @keyframes orbF1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,50px) scale(1.1)} }
+  @keyframes orbF2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,40px) scale(0.9)} }
+  @keyframes orbF3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-60px) scale(1.1)} }
+
+  /* ── LOGO MARK ── */
+  .logo-mark {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; flex-shrink: 0;
+  }
+  .logo-mark svg { width: 100%; height: 100%; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed; top:0; left:0; bottom:0; width: var(--sidebar-w);
+    background: var(--sidebar-bg);
+    display: flex; flex-direction: column; z-index: 200;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.3s var(--ease);
+  }
+  .sidebar-logo {
+    padding: 24px 20px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-logo-text {
+    font-family: 'Outfit', sans-serif; font-weight: 800;
+    font-size: 1.3rem; letter-spacing: 0.12em;
+    color: #fff;
+  }
+  .sidebar-nav { flex:1; overflow-y:auto; padding: 14px 0; }
+  .sidebar-nav::-webkit-scrollbar { width:3px; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  .sidebar-section {
+    padding: 14px 20px 6px;
+    font-size: 0.63rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.3);
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 20px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none; font-size: 0.87rem; font-weight: 500;
+    transition: all 0.2s; cursor: pointer;
+    border: none; background: transparent;
+    width: 100%; text-align: left; position: relative;
+  }
+  .sidebar-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
+  .sidebar-item.active { color: #fff; }
+  .sidebar-item::before {
+    content: ''; position: absolute; left:0; top:10%; bottom:10%;
+    width: 2px; background: var(--grad); border-radius: 0 2px 2px 0;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .sidebar-item:hover::before, .sidebar-item.active::before { opacity: 1; }
+  .sidebar-item .item-icon { width:16px; height:16px; stroke:currentColor; stroke-width:1.8; fill:none; flex-shrink:0; }
+  .chevron { margin-left:auto; width:12px; height:12px; stroke:currentColor; stroke-width:2; fill:none; transition:transform 0.25s; opacity:.5; }
+  .sidebar-item.open .chevron { transform: rotate(90deg); }
+
+  .submenu { max-height:0; overflow:hidden; transition:max-height 0.4s var(--ease); }
+  .submenu.open { max-height:400px; }
+  .submenu-item {
+    display: flex; align-items: center;
+    padding: 7px 20px 7px 46px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none; font-size: 0.82rem;
+    transition: all 0.2s; position: relative;
+  }
+  .submenu-item::before {
+    content: ''; position:absolute; left:32px;
+    width:5px; height:5px; border-radius:50%;
+    background: rgba(167,139,250,0.5);
+    transition: all 0.2s;
+  }
+  .submenu-item:hover { color:#fff; padding-left:50px; }
+  .submenu-item:hover::before { background: var(--purple-light); box-shadow: 0 0 8px var(--purple-light); }
+
+  .sidebar-footer { padding: 16px 18px; border-top: 1px solid rgba(255,255,255,0.07); }
+  .sidebar-wa-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; background: var(--grad-btn); color: #fff;
+    border: none; padding: 12px; border-radius: 11px;
+    font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.25s var(--ease); position: relative; overflow: hidden;
+  }
+  .sidebar-wa-btn::before {
+    content: ''; position:absolute; inset:0;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: translateX(-100%); transition: transform 0.6s;
+  }
+  .sidebar-wa-btn:hover::before { transform: translateX(100%); }
+  .sidebar-wa-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.4); }
+
+  /* ── MAIN ── */
+  .main-content { margin-left: var(--sidebar-w); position: relative; }
+
+  /* ── MOBILE TOPBAR ── */
+  .mobile-topbar {
+    display: none; position:fixed; top:0; left:0; right:0; z-index:150;
+    height:58px; background: rgba(250,248,255,0.92);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    align-items:center; justify-content:space-between;
+    padding: 0 20px; border-bottom: 1px solid var(--border);
+  }
+  .mobile-logo { display:flex; align-items:center; gap:10px; }
+  .mobile-logo-text {
+    font-family: 'Outfit', sans-serif; font-weight: 800;
+    font-size: 1.1rem; letter-spacing: 0.1em; color: var(--text);
+  }
+  .hamburger { background:transparent; border:none; cursor:pointer; display:flex; flex-direction:column; gap:5px; padding:6px; }
+  .hamburger span { display:block; width:22px; height:2px; background:var(--text); border-radius:2px; transition:all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity:0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(19,8,46,0.5); z-index:190; backdrop-filter:blur(3px); }
+  .sidebar-overlay.show { display:block; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; padding: 110px 52px 80px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    max-width: 1320px; margin: 0 auto;
+  }
+  .hero-content { position:relative; z-index:2; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--purple-pale); border: 1px solid var(--border-2);
+    color: var(--purple); padding: 7px 16px 7px 12px; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 600; margin-bottom: 28px;
+    opacity:0; animation: fadeUp 0.8s 0.1s var(--ease) forwards;
+  }
+  .pill-dot { width:7px; height:7px; background:var(--purple); border-radius:50%; animation: pulseDot 2s infinite; }
+  @keyframes pulseDot { 0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.5)} 50%{box-shadow:0 0 0 6px rgba(124,58,237,0)} }
+
+  h1.hero-title {
+    font-family: 'Outfit', sans-serif; font-weight: 800;
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
+    line-height: 1.02; letter-spacing: -0.035em;
+    margin-bottom: 24px; color: var(--text);
+    opacity:0; animation: fadeUp 0.9s 0.2s var(--ease) forwards;
+  }
+  h1.hero-title .grad-word {
+    background: var(--grad-text);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 1.4vw, 1.15rem); color: var(--text-dim);
+    max-width: 520px; font-weight: 400; margin-bottom: 36px; line-height: 1.65;
+    opacity:0; animation: fadeUp 0.8s 0.4s var(--ease) forwards;
+  }
+  .hero-sub strong { color: var(--text); font-weight: 600; }
+
+  .hero-btns {
+    display:flex; gap:12px; flex-wrap:wrap; margin-bottom: 48px;
+    opacity:0; animation: fadeUp 0.8s 0.55s var(--ease) forwards;
+  }
+
+  .btn-primary {
+    position:relative; background: var(--grad-btn); color:#fff;
+    padding: 15px 28px; border-radius: 12px;
+    font-family:'Outfit',sans-serif; font-weight:700; font-size:0.97rem;
+    text-decoration:none; border:none; cursor:pointer;
+    display:inline-flex; align-items:center; gap:10px;
+    transition: all 0.3s var(--ease); overflow:hidden;
+    box-shadow: 0 8px 24px -6px rgba(124,58,237,0.45), 0 0 0 1px rgba(255,255,255,0.15) inset;
+  }
+  .btn-primary::before {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.28), transparent 80%);
+    transform: translateX(-100%); transition: transform 0.7s var(--ease);
+  }
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px -6px rgba(124,58,237,0.55); }
+  .btn-primary .arrow { transition: transform 0.3s var(--ease); }
+  .btn-primary:hover .arrow { transform: translateX(4px); }
+
+  .btn-outline {
+    background: var(--surface); color: var(--text);
+    padding: 15px 26px; border-radius: 12px;
+    border: 1.5px solid var(--border-2);
+    font-family:'Outfit',sans-serif; font-weight:600; font-size:0.97rem;
+    text-decoration:none; cursor:pointer;
+    display:inline-flex; align-items:center; gap:10px;
+    transition: all 0.25s var(--ease);
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-outline:hover { border-color: var(--purple); color: var(--purple); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+  .hero-trust {
+    display:flex; align-items:center; gap:14px;
+    opacity:0; animation: fadeUp 0.8s 0.7s var(--ease) forwards;
+  }
+  .trust-avatars { display:flex; }
+  .trust-avatars div {
+    width:36px; height:36px; border-radius:50%; border:2px solid var(--surface);
+    margin-left:-8px; background:var(--grad-btn);
+    display:grid; place-items:center;
+    font-family:'Outfit',sans-serif; font-weight:700; font-size:0.72rem; color:#fff;
+  }
+  .trust-avatars div:first-child { margin-left:0; }
+  .trust-avatars div:nth-child(2) { background:linear-gradient(135deg,#A855F7,#7C3AED); }
+  .trust-avatars div:nth-child(3) { background:linear-gradient(135deg,#C084FC,#9333EA); }
+  .trust-text { font-size:0.82rem; color:var(--muted); line-height:1.4; }
+  .trust-text strong { color:var(--text); }
+
+  /* ── HERO VISUAL ── */
+  .hero-visual {
+    position:relative; opacity:0;
+    animation: fadeUp 1s 0.35s var(--ease) forwards;
+    padding: 32px 44px;
+  }
+  .chat-mockup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px; padding: 22px;
+    box-shadow: var(--shadow-lg);
+    transform: rotateY(-5deg) rotateX(3deg);
+    animation: mockFloat 8s ease-in-out infinite;
+  }
+  @keyframes mockFloat {
+    0%,100%{ transform:rotateY(-5deg) rotateX(3deg) translateY(0); }
+    50%{ transform:rotateY(-4deg) rotateX(2deg) translateY(-8px); }
+  }
+  .chat-header {
+    display:flex; align-items:center; gap:14px;
+    padding: 4px 4px 16px; border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+  .chat-meta { display:flex; flex-direction:column; gap:4px; line-height:1.1; }
+  .chat-avatar {
+    width:44px; height:44px; border-radius:50%;
+    background: var(--grad-btn); display:grid; place-items:center;
+    color:#fff; font-family:'Outfit',sans-serif; font-weight:800; font-size:1rem;
+    position:relative; flex-shrink:0;
+  }
+  .chat-avatar::after {
+    content:''; position:absolute; right:-1px; bottom:-1px;
+    width:13px; height:13px; background:#22c55e; border-radius:50%;
+    border:2px solid var(--surface);
+    animation: pulseDot 2s infinite;
+  }
+  .chat-meta strong { display:block; color:var(--text); font-family:'Outfit',sans-serif; font-weight:700; font-size:0.95rem; }
+  .chat-meta span { font-size:0.76rem; color:#22c55e; font-weight:500; }
+  .chat-messages { display:flex; flex-direction:column; gap:10px; min-height:280px; }
+  .msg {
+    max-width:82%; padding:10px 14px; border-radius:16px;
+    font-size:0.87rem; line-height:1.45;
+    opacity:0; animation:msgIn 0.5s var(--ease) forwards;
+  }
+  .msg.user { background:var(--surface-2); border:1px solid var(--border); color:var(--text); align-self:flex-start; border-bottom-left-radius:4px; }
+  .msg.bot { background:var(--grad-btn); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; box-shadow:0 6px 16px -4px rgba(124,58,237,0.4); }
+  .msg.bot strong { font-weight:700; }
+  .msg-1{animation-delay:1.2s} .msg-2{animation-delay:2s} .msg-3{animation-delay:2.8s} .msg-4{animation-delay:3.6s} .msg-5{animation-delay:4.4s}
+  @keyframes msgIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .typing {
+    display:inline-flex; gap:4px; padding:10px 14px;
+    background:var(--surface-2); border:1px solid var(--border); border-radius:16px; border-bottom-left-radius:4px;
+    align-self:flex-start; opacity:0;
+    animation:msgIn 0.3s 3.2s forwards, typingOut 0.3s 3.5s forwards;
+  }
+  .typing span { width:6px; height:6px; background:var(--muted); border-radius:50%; animation:dot 1.2s infinite ease-in-out; }
+  .typing span:nth-child(2){animation-delay:.15s} .typing span:nth-child(3){animation-delay:.3s}
+  @keyframes dot { 0%,60%,100%{transform:translateY(0);opacity:.5} 30%{transform:translateY(-6px);opacity:1} }
+  @keyframes typingOut { to{opacity:0;padding:0;margin:0} }
+
+  .hero-floating {
+    position:absolute; background:var(--surface);
+    border:1px solid var(--border); border-radius:14px;
+    padding:14px 16px; display:flex; align-items:center; gap:12px;
+    box-shadow: var(--shadow-md); z-index:5; white-space:nowrap;
+    animation: floatCard 6s ease-in-out infinite;
+  }
+  .hero-floating.f1 { top:-22px; left:-36px; animation-delay:0s; }
+  .hero-floating.f2 { bottom:-22px; right:-36px; animation-delay:3s; }
+  @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .hero-floating .fIcon {
+    width:36px; height:36px; border-radius:10px;
+    display:grid; place-items:center; flex-shrink:0;
+    background:var(--purple-pale);
+  }
+  .hero-floating .fIcon svg { width:18px; height:18px; stroke:var(--purple); stroke-width:2; fill:none; }
+  .hero-floating .fText strong { display:block; color:var(--text); font-family:'Outfit',sans-serif; font-size:0.85rem; font-weight:700; }
+  .hero-floating .fText span { font-size:0.72rem; color:var(--muted); }
+
+  /* ── MARQUEE ── */
+  .marquee-section {
+    padding: 32px 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .marquee-label { text-align:center; font-size:0.7rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; font-weight:600; }
+  .marquee { display:flex; overflow:hidden; mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent); -webkit-mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent); }
+  .marquee-track { display:flex; gap:52px; animation:marqueeScroll 30s linear infinite; flex-shrink:0; padding-right:52px; align-items:center; }
+  @keyframes marqueeScroll { to { transform: translateX(-50%); } }
+  .marquee-item { display:flex; align-items:center; gap:9px; color:var(--text-dim); font-family:'Outfit',sans-serif; font-weight:600; font-size:1rem; white-space:nowrap; }
+  .marquee-item .dot { width:6px; height:6px; background:var(--purple-light); border-radius:50%; }
+
+  /* ── SECTIONS ── */
+  .section { padding:110px 52px; max-width:1320px; margin:0 auto; }
+  .section-head { text-align:center; max-width:720px; margin:0 auto 64px; }
+  .section-head.left { text-align:left; margin:0 0 64px; }
+  .section-label {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 14px; border:1px solid var(--border-2); border-radius:100px;
+    font-size:0.7rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--purple); margin-bottom:16px; font-weight:700;
+    background:var(--purple-pale);
+  }
+  .section-label::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--purple); }
+  .section-title {
+    font-family:'Outfit',sans-serif; font-size:clamp(2rem,4vw,3.2rem);
+    font-weight:700; letter-spacing:-.035em; line-height:1.06; color:var(--text);
+    text-wrap:balance;
+  }
+  .section-title em { font-style:normal; background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .section-sub { font-size:1.05rem; color:var(--text-dim); margin-top:18px; text-wrap:pretty; }
+  .section-head:not(.left) .section-sub { max-width:580px; margin-left:auto; margin-right:auto; }
+
+  /* ── KPI ── */
+  .kpi-wrap { max-width:1320px; margin:0 auto; padding:0 52px 100px; }
+  .kpi-grid {
+    display:grid; grid-template-columns:repeat(4,1fr);
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius-lg); overflow:hidden;
+    box-shadow:var(--shadow-sm); position:relative;
+  }
+  .kpi-grid::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--grad);
+  }
+  .kpi { padding:36px 28px; text-align:center; border-right:1px solid var(--border); }
+  .kpi:last-child { border-right:none; }
+  .kpi-num {
+    font-family:'Outfit',sans-serif; font-size:clamp(1.8rem,3vw,2.6rem);
+    font-weight:800; background:var(--grad-text);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    line-height:1; letter-spacing:-.03em;
+  }
+  .kpi-label { font-size:0.82rem; color:var(--muted); margin-top:10px; font-weight:500; }
+
+  /* ── SERVIÇOS ── */
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .service-card {
+    position:relative; background:var(--surface);
+    border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:36px 32px;
+    transition:all 0.35s var(--ease); text-decoration:none; color:inherit;
+    display:flex; flex-direction:column; overflow:hidden;
+    box-shadow:var(--shadow-sm);
+  }
+  .service-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--grad); opacity:0; transition:opacity 0.3s;
+  }
+  .service-card:hover { transform:translateY(-8px); border-color:var(--border-2); box-shadow:var(--shadow-lg); }
+  .service-card:hover::before { opacity:1; }
+  .service-icon {
+    width:52px; height:52px; border-radius:14px;
+    display:grid; place-items:center; margin-bottom:22px;
+    background:var(--purple-pale); border:1px solid var(--border);
+    transition:all 0.3s;
+  }
+  .service-icon svg { width:24px; height:24px; stroke:var(--purple); stroke-width:1.6; fill:none; }
+  .service-card:hover .service-icon { background:var(--grad-btn); border-color:transparent; transform:rotate(-6deg) scale(1.08); }
+  .service-card:hover .service-icon svg { stroke:#fff; }
+  .service-title { font-family:'Outfit',sans-serif; font-weight:700; font-size:1.2rem; margin-bottom:10px; color:var(--text); }
+  .service-desc { font-size:0.92rem; color:var(--text-dim); line-height:1.65; margin-bottom:22px; flex:1; }
+  .service-link { display:inline-flex; align-items:center; gap:6px; font-size:0.85rem; font-weight:700; color:var(--purple); font-family:'Outfit',sans-serif; }
+  .service-link svg { width:14px; height:14px; stroke:currentColor; stroke-width:2.5; fill:none; transition:transform 0.3s var(--ease); }
+  .service-card:hover .service-link svg { transform:translateX(4px); }
+
+  /* ── SISTEMAS TABS ── */
+  .sistemas-section { padding:110px 52px; max-width:1320px; margin:0 auto; }
+  .tabs-wrapper { overflow-x:auto; margin-bottom:28px; padding-bottom:4px; }
+  .tabs-wrapper::-webkit-scrollbar { height:3px; }
+  .tabs-wrapper::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+  .tabs-list { display:flex; gap:8px; list-style:none; min-width:max-content; }
+  .tab-btn {
+    padding:10px 22px; border-radius:11px; border:1.5px solid var(--border);
+    background:var(--surface); color:var(--text-dim);
+    font-family:'Outfit',sans-serif; font-weight:600; font-size:0.85rem;
+    cursor:pointer; transition:all 0.25s var(--ease); white-space:nowrap;
+    box-shadow:var(--shadow-sm);
+  }
+  .tab-btn:hover { color:var(--purple); border-color:var(--border-2); }
+  .tab-btn.active { background:var(--grad-btn); border-color:transparent; color:#fff; box-shadow:0 8px 22px -6px rgba(124,58,237,0.45); }
+  .tabs-select {
+    display:none; width:100%; background:var(--surface);
+    border:1.5px solid var(--border); border-radius:11px;
+    padding:13px 16px; color:var(--text); font-family:'DM Sans',sans-serif;
+    font-size:0.95rem; outline:none; margin-bottom:24px; -webkit-appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%238B79AA' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat:no-repeat; background-position:right 16px center; padding-right:44px;
+  }
+  .tab-panel { display:none; animation:tabIn 0.4s var(--ease); }
+  .tab-panel.active { display:block; }
+  @keyframes tabIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  .sistema-card {
+    background:var(--surface); border:1.5px solid var(--border);
+    border-radius:24px; padding:48px; position:relative; overflow:hidden;
+    box-shadow:var(--shadow-md);
+  }
+  .sistema-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad);
+  }
+  .sistema-card::after {
+    content:''; position:absolute; top:-40px; right:-40px;
+    width:280px; height:280px;
+    background:radial-gradient(circle, rgba(167,139,250,0.12), transparent 65%);
+    pointer-events:none;
+  }
+  .sistema-header { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:20px; flex-wrap:wrap; }
+  .sistema-title { font-family:'Outfit',sans-serif; font-size:clamp(1.5rem,3vw,2.2rem); font-weight:800; letter-spacing:-.03em; color:var(--text); line-height:1.1; }
+  .badge-disponivel {
+    display:inline-flex; align-items:center; gap:7px;
+    padding:6px 14px; border-radius:100px; font-size:0.7rem; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; white-space:nowrap;
+    background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); color:#16a34a;
+  }
+  .badge-disponivel::before { content:''; width:6px; height:6px; background:#22c55e; border-radius:50%; animation:pulseDot 2s infinite; }
+  .sistema-desc { font-size:1rem; color:var(--text-dim); line-height:1.75; margin-bottom:32px; max-width:720px; }
+  .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-bottom:36px; }
+  .feature-item {
+    background:var(--surface-2); border:1px solid var(--border); border-radius:11px;
+    padding:13px 16px; display:flex; align-items:center; gap:12px;
+    font-size:0.88rem; font-weight:500; color:var(--text);
+    transition:all 0.2s var(--ease);
+  }
+  .feature-item:hover { border-color:var(--border-2); background:var(--purple-pale); transform:translateX(4px); }
+  .feature-check { width:18px; height:18px; border-radius:50%; background:var(--grad-btn); display:grid; place-items:center; flex-shrink:0; }
+  .feature-check svg { width:10px; height:10px; stroke:#fff; stroke-width:3; fill:none; }
+
+  /* ── BENTO / WHY ── */
+  .bento { display:grid; grid-template-columns:repeat(12,1fr); gap:16px; grid-auto-rows:minmax(160px,auto); }
+  .bento-card {
+    background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
+    padding:28px; overflow:hidden; transition:all 0.3s var(--ease); box-shadow:var(--shadow-sm);
+  }
+  .bento-card:hover { transform:translateY(-4px); border-color:var(--border-2); box-shadow:var(--shadow-md); }
+  .bento-card h3 { font-family:'Outfit',sans-serif; font-weight:700; font-size:1.1rem; color:var(--text); margin-bottom:8px; }
+  .bento-card p { font-size:0.9rem; color:var(--text-dim); line-height:1.6; }
+  .bento-icon { width:44px; height:44px; border-radius:12px; display:grid; place-items:center; margin-bottom:16px; background:var(--purple-pale); border:1px solid var(--border); }
+  .bento-icon svg { width:20px; height:20px; stroke:var(--purple); stroke-width:1.8; fill:none; }
+  .b-1{grid-column:span 6} .b-2{grid-column:span 3} .b-3{grid-column:span 3}
+  .b-4{grid-column:span 4} .b-5{grid-column:span 4} .b-6{grid-column:span 4}
+  .bento-chart { position:relative; height:140px; margin-top:18px; display:flex; align-items:flex-end; gap:8px; }
+  .bar { flex:1; background:var(--grad); border-radius:6px 6px 0 0; transform-origin:bottom; animation:barGrow 1.2s var(--ease) forwards; transform:scaleY(0); opacity:0.8; }
+  @keyframes barGrow { to{transform:scaleY(1)} }
+
+  /* ── PROCESSO ── */
+  .process-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; position:relative; }
+  .process-grid::before {
+    content:''; position:absolute; top:31px; left:10%; right:10%; height:1px;
+    background:linear-gradient(90deg,transparent,var(--border),var(--border),transparent);
+  }
+  .process-step { text-align:center; }
+  .step-num {
+    width:62px; height:62px; border-radius:50%; margin:0 auto 22px;
+    background:var(--surface); border:1.5px solid var(--border);
+    display:grid; place-items:center;
+    font-family:'Outfit',sans-serif; font-weight:800; font-size:1.3rem; color:var(--purple);
+    position:relative; z-index:1; transition:all 0.3s; box-shadow:var(--shadow-sm);
+  }
+  .process-step:hover .step-num { background:var(--grad-btn); color:#fff; border-color:transparent; box-shadow:var(--shadow-md); }
+  .process-step h4 { font-family:'Outfit',sans-serif; font-weight:700; font-size:1.05rem; color:var(--text); margin-bottom:8px; }
+  .process-step p { font-size:0.9rem; color:var(--text-dim); line-height:1.6; }
+
+  /* ── DEPOIMENTOS ── */
+  .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .testi-card {
+    background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
+    padding:28px; display:flex; flex-direction:column; transition:all 0.3s var(--ease); box-shadow:var(--shadow-sm);
+  }
+  .testi-card:hover { transform:translateY(-4px); border-color:var(--border-2); box-shadow:var(--shadow-md); }
+  .testi-stars { display:flex; gap:2px; margin-bottom:16px; color:#F59E0B; }
+  .testi-stars svg { width:14px; height:14px; fill:currentColor; }
+  .testi-quote { font-size:0.95rem; color:var(--text-dim); line-height:1.65; margin-bottom:22px; flex:1; text-wrap:pretty; }
+  .testi-author { display:flex; align-items:center; gap:12px; padding-top:18px; border-top:1px solid var(--border); }
+  .testi-avatar {
+    width:40px; height:40px; border-radius:50%; background:var(--grad-btn);
+    display:grid; place-items:center; color:#fff;
+    font-family:'Outfit',sans-serif; font-weight:700; font-size:0.9rem; flex-shrink:0;
+  }
+  .testi-avatar.a2 { background:linear-gradient(135deg,#A855F7,#7C3AED); }
+  .testi-avatar.a3 { background:linear-gradient(135deg,#C084FC,#9333EA); }
+  .testi-meta strong { display:block; font-family:'Outfit',sans-serif; font-size:0.92rem; color:var(--text); }
+  .testi-meta span { font-size:0.78rem; color:var(--muted); }
+
+  /* ── CTA ── */
+  .cta-section { padding:100px 24px; text-align:center; }
+  .cta-card {
+    max-width:900px; margin:0 auto;
+    background:linear-gradient(145deg,#F3EEFF,#EDE4FF,#F8F5FF);
+    border:1.5px solid var(--border-2); border-radius:28px; padding:72px 48px;
+    position:relative; overflow:hidden; box-shadow:var(--shadow-lg);
+  }
+  .cta-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad);
+  }
+  .cta-card::after {
+    content:''; position:absolute; bottom:-60px; right:-60px;
+    width:320px; height:320px;
+    background:radial-gradient(circle,rgba(124,58,237,0.15),transparent 65%);
+    pointer-events:none;
+  }
+  .cta-title { font-family:'Outfit',sans-serif; font-size:clamp(2rem,4.5vw,3.2rem); font-weight:800; letter-spacing:-.035em; margin-bottom:18px; line-height:1.06; color:var(--text); text-wrap:balance; }
+  .cta-title em { font-style:normal; background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .cta-sub { color:var(--text-dim); font-size:1.1rem; margin-bottom:36px; max-width:580px; margin-left:auto; margin-right:auto; text-wrap:pretty; }
+  .cta-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+  .cta-footnote { margin-top:24px; font-size:0.82rem; color:var(--muted); display:inline-flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+  .cta-footnote span { display:inline-flex; align-items:center; gap:7px; }
+  .cta-footnote svg { width:14px; height:14px; stroke:#22c55e; stroke-width:2.5; fill:none; }
+
+  /* ── FORM ── */
+  .form-section { padding:100px 24px; max-width:620px; margin:0 auto; }
+  .form-card {
+    background:var(--surface); border:1.5px solid var(--border);
+    border-radius:24px; padding:48px 42px; position:relative; overflow:hidden; box-shadow:var(--shadow-md);
+  }
+  .form-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad); }
+  .form-title { font-family:'Outfit',sans-serif; font-size:1.75rem; font-weight:700; letter-spacing:-.02em; margin-bottom:8px; color:var(--text); }
+  .form-sub { color:var(--text-dim); font-size:0.95rem; margin-bottom:30px; }
+  .input-group { margin-bottom:18px; text-align:left; }
+  label { display:block; font-size:0.72rem; font-weight:700; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+  input, select {
+    width:100%; background:var(--surface-2); border:1.5px solid var(--border);
+    border-radius:11px; padding:14px 16px; color:var(--text);
+    font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none;
+    transition:all 0.2s; -webkit-appearance:none;
+  }
+  input:focus, select:focus { border-color:var(--purple); background:var(--purple-pale); box-shadow:0 0 0 3px rgba(124,58,237,0.1); }
+  input::placeholder { color:var(--faint); }
+  select { background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%238B79AA' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>"); background-repeat:no-repeat; background-position:right 16px center; padding-right:44px; }
+  .submit-btn {
+    width:100%; background:var(--grad-btn); color:#fff; border:none; border-radius:12px;
+    padding:16px; font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem;
+    cursor:pointer; margin-top:10px; transition:all 0.25s var(--ease);
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    box-shadow:0 8px 24px -6px rgba(124,58,237,0.45); overflow:hidden; position:relative;
+  }
+  .submit-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,0.28),transparent 80%); transform:translateX(-100%); transition:transform 0.7s var(--ease); }
+  .submit-btn:hover::before { transform:translateX(100%); }
+  .submit-btn:hover { transform:translateY(-2px); box-shadow:0 12px 30px -6px rgba(124,58,237,0.55); }
+  .form-note { font-size:0.78rem; color:var(--muted); margin-top:16px; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .form-note svg { width:14px; height:14px; stroke:currentColor; stroke-width:2; fill:none; }
+  .success-msg { display:none; text-align:center; padding:20px; }
+  .success-msg.show { display:block; }
+  .success-icon { width:64px; height:64px; margin:0 auto 18px; border-radius:50%; background:var(--grad-btn); display:grid; place-items:center; color:#fff; animation:successPop 0.6s var(--ease); }
+  .success-icon svg { width:28px; height:28px; stroke:currentColor; stroke-width:3; fill:none; }
+  @keyframes successPop { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+  .success-title { font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700; color:var(--text); margin-bottom:8px; }
+
+  /* ── FAQ ── */
+  .faq-section { padding:100px 24px; max-width:820px; margin:0 auto; }
+  .faq-item { border:1.5px solid var(--border); border-radius:14px; margin-bottom:10px; overflow:hidden; transition:all 0.3s; background:var(--surface); box-shadow:var(--shadow-sm); }
+  .faq-item.open { border-color:var(--border-2); background:var(--purple-pale); }
+  .faq-question { width:100%; background:transparent; border:none; padding:22px 26px; text-align:left; color:var(--text); font-family:'Outfit',sans-serif; font-weight:600; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background 0.2s; }
+  .faq-icon { width:28px; height:28px; background:var(--purple-pale); border:1px solid var(--border-2); border-radius:50%; display:grid; place-items:center; color:var(--purple); flex-shrink:0; transition:all 0.3s; }
+  .faq-icon svg { width:12px; height:12px; stroke:currentColor; stroke-width:2.5; fill:none; }
+  .faq-item.open .faq-icon { background:var(--grad-btn); border-color:transparent; color:#fff; transform:rotate(45deg); }
+  .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.4s var(--ease); }
+  .faq-answer-inner { padding:4px 26px 26px; font-size:0.92rem; color:var(--text-dim); line-height:1.7; }
+  .faq-answer-inner p { margin:0 0 12px; }
+  .faq-answer-inner p:last-child { margin-bottom:0; }
+  .faq-answer-inner strong { color:var(--text); font-weight:600; }
+  .faq-answer-inner ul, .faq-answer-inner ol { margin:0 0 14px; padding-left:22px; }
+  .faq-answer-inner li { margin-bottom:8px; }
+  .faq-answer-inner li::marker { color:var(--purple); }
+  .faq-answer-inner a { color:var(--purple); }
+  .faq-item.open .faq-answer { max-height:1400px; }
+
+  /* ── SOBRE ── */
+  .about-card {
+    background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
+    padding:48px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center; box-shadow:var(--shadow-sm);
+  }
+  .about-meta { display:flex; flex-direction:column; gap:14px; }
+  .about-meta-row {
+    display:flex; align-items:center; gap:14px; padding:14px 16px;
+    background:var(--surface-2); border:1px solid var(--border); border-radius:12px; transition:all 0.2s;
+  }
+  .about-meta-row:hover { border-color:var(--border-2); background:var(--purple-pale); }
+  .about-meta-row .ico { width:38px; height:38px; border-radius:10px; background:var(--purple-pale); display:grid; place-items:center; flex-shrink:0; }
+  .about-meta-row .ico svg { width:16px; height:16px; stroke:var(--purple); stroke-width:1.8; fill:none; }
+  .about-meta-row .txt { font-size:0.88rem; color:var(--text-dim); }
+  .about-meta-row .txt strong { display:block; color:var(--text); font-family:'Outfit',sans-serif; font-weight:600; margin-bottom:2px; }
+  .about-meta-row a { color:var(--purple); text-decoration:none; }
+
+  /* ── PRIVACY ── */
+  .privacy-section { padding:100px 24px 80px; }
+  .privacy-inner {
+    max-width:880px; margin:0 auto;
+    background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
+    padding:56px; position:relative; overflow:hidden; box-shadow:var(--shadow-sm);
+  }
+  .privacy-inner::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad); }
+  .privacy-updated { font-size:0.82rem; color:var(--muted); margin-top:14px; padding:10px 14px; background:var(--purple-pale); border:1px solid var(--border-2); border-radius:10px; display:inline-block; }
+  .privacy-content { color:var(--text-dim); font-size:0.95rem; line-height:1.78; }
+  .privacy-content h3 { font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700; color:var(--text); margin:36px 0 14px; padding-top:24px; border-top:1px solid var(--border); }
+  .privacy-content h3:first-child { padding-top:0; border-top:none; margin-top:0; }
+  .privacy-content p { margin:0 0 14px; text-wrap:pretty; }
+  .privacy-content strong { color:var(--text); font-weight:600; }
+  .privacy-content a { color:var(--purple); text-decoration:none; border-bottom:1px solid rgba(124,58,237,0.3); }
+  .privacy-content ul { margin:0 0 18px; padding-left:22px; }
+  .privacy-content li { margin-bottom:10px; }
+  .privacy-content li::marker { color:var(--purple); }
+  .privacy-contact { background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:20px 22px 20px 42px !important; margin-top:18px !important; list-style:none; }
+
+  /* ── FOOTER ── */
+  footer { padding:60px 24px 40px; border-top:1px solid var(--border); color:var(--muted); font-size:0.85rem; background:var(--surface); }
+  .footer-inner { max-width:1320px; margin:0 auto; display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+  .footer-brand { font-family:'Outfit',sans-serif; font-size:1.1rem; color:var(--text); font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:10px; letter-spacing:.06em; }
+  .footer-tag { color:var(--muted); font-size:0.88rem; margin-bottom:18px; max-width:340px; }
+  footer h5 { font-family:'Outfit',sans-serif; color:var(--text); font-size:0.9rem; margin-bottom:14px; font-weight:700; }
+  footer a { color:var(--muted); text-decoration:none; font-size:0.88rem; display:block; padding:5px 0; transition:color 0.2s; }
+  footer a:hover { color:var(--purple); }
+  .footer-bottom { max-width:1320px; margin:0 auto; padding-top:24px; border-top:1px solid var(--border); text-align:center; font-size:0.8rem; color:var(--faint); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-children > * { opacity:0; transform:translateY(28px); transition:opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .reveal-children.visible > * { opacity:1; transform:translateY(0); }
+  .reveal-children.visible > *:nth-child(1){transition-delay:0s}
+  .reveal-children.visible > *:nth-child(2){transition-delay:.09s}
+  .reveal-children.visible > *:nth-child(3){transition-delay:.18s}
+  .reveal-children.visible > *:nth-child(4){transition-delay:.27s}
+  .reveal-children.visible > *:nth-child(5){transition-delay:.36s}
+  .reveal-children.visible > *:nth-child(6){transition-delay:.45s}
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width:1100px) {
+    .hero { grid-template-columns:1fr; gap:80px; }
+    .hero-visual { max-width:500px; margin:0 auto; }
+    .kpi-grid { grid-template-columns:repeat(2,1fr); }
+    .kpi:nth-child(2){ border-right:none; }
+    .kpi:nth-child(1),.kpi:nth-child(2){ border-bottom:1px solid var(--border); }
+    .services-grid { grid-template-columns:1fr; }
+    .bento .b-1{grid-column:span 12} .bento .b-2,.bento .b-3{grid-column:span 6}
+    .bento .b-4,.bento .b-5,.bento .b-6{grid-column:span 12}
+    .process-grid { grid-template-columns:repeat(2,1fr); }
+    .process-grid::before { display:none; }
+    .testi-grid { grid-template-columns:1fr; }
+    .about-card { grid-template-columns:1fr; padding:32px; }
+    .footer-inner { grid-template-columns:1fr 1fr; }
+  }
+
+  @media (max-width:768px) {
+    .sidebar { transform:translateX(-100%); width:280px; }
+    .sidebar.open { transform:translateX(0); }
+    .mobile-topbar { display:flex; }
+    .main-content { margin-left:0; padding-top:58px; }
+    .hero { padding:50px 20px 60px; gap:60px; }
+    .section,.sistemas-section { padding:80px 20px; }
+    .kpi-wrap { padding:0 20px 80px; }
+    .tabs-list { display:none; } .tabs-select { display:block; }
+    .sistema-card { padding:28px 20px; }
+    .features-grid { grid-template-columns:1fr 1fr; }
+    .form-card { padding:32px 22px; }
+    .cta-card { padding:48px 24px; }
+    .form-section,.faq-section,.privacy-section { padding:80px 20px; }
+    .privacy-inner { padding:32px 22px; }
+    .hero-floating.f1,.hero-floating.f2 { display:none; }
+    .footer-inner { grid-template-columns:1fr; gap:28px; }
+    .about-card { padding:24px; gap:24px; }
+    .testi-grid { grid-template-columns:1fr; }
+    .process-grid { grid-template-columns:1fr; }
+    .bento .b-2,.bento .b-3 { grid-column:span 12; }
+  }
+
+  @media (prefers-reduced-motion:reduce) {
+    *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body id="topo">
+
+<div class="ambient">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 36 36" fill="none">
+        <path d="M4 10l10 8-10 8" stroke="url(#lg1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 10l10 8-10 8" stroke="url(#lg2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="lg1" x1="4" y1="10" x2="14" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#A78BFA"/><stop offset="1" stop-color="#7C3AED"/></linearGradient>
+          <linearGradient id="lg2" x1="16" y1="10" x2="26" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#C084FC"/><stop offset="1" stop-color="#9333EA"/></linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <span class="sidebar-logo-text">LORVIX</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Navegar</div>
+    <a href="#topo" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg> Início
+    </a>
+    <a href="#servicos" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5L18.2 22 12 17.5 5.8 22l2.4-8.1L2 9.4h7.6z"/></svg> Soluções
+    </a>
+    <button class="sidebar-item" id="sistemasToggle" onclick="toggleSistemas()">
+      <svg class="item-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Sistemas
+      <svg class="chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <div class="submenu" id="sistemasSubmenu">
+      <a href="#tab-ia" class="submenu-item" onclick="switchTabById('ia');closeSidebar()">Agente IA 24h</a>
+      <a href="#tab-agendamento" class="submenu-item" onclick="switchTabById('agendamento');closeSidebar()">Agendamento</a>
+      <a href="#tab-landing" class="submenu-item" onclick="switchTabById('landing');closeSidebar()">Landing Pages</a>
+    </div>
+    <a href="#processo" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Como funciona
+    </a>
+    <a href="#depoimentos" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Depoimentos
+    </a>
+    <a href="#faq" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114.5 1.5c-.7.7-2 1-2 2.5M12 17h.01"/></svg> Perguntas frequentes
+    </a>
+    <a href="#sobre" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg> Sobre
+    </a>
+    <a href="#privacidade" class="sidebar-item" onclick="closeSidebar()">
+      <svg class="item-icon" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4z"/></svg> Privacidade
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="https://wa.me/5527988612054?text=Olá!%20Quero%20conhecer%20as%20soluções%20da%20Lorvix." target="_blank" class="sidebar-wa-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Falar agora
+    </a>
+  </div>
+</aside>
+
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar">
+  <div class="mobile-logo">
+    <div class="logo-mark" style="width:28px;height:28px;">
+      <svg viewBox="0 0 36 36" fill="none"><path d="M4 10l10 8-10 8" stroke="url(#mlg1)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 10l10 8-10 8" stroke="url(#mlg2)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="mlg1" x1="4" y1="10" x2="14" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#A78BFA"/><stop offset="1" stop-color="#7C3AED"/></linearGradient><linearGradient id="mlg2" x1="16" y1="10" x2="26" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#C084FC"/><stop offset="1" stop-color="#9333EA"/></linearGradient></defs></svg>
+    </div>
+    <span class="mobile-logo-text">LORVIX</span>
+  </div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<div class="main-content">
+
+<!-- HERO -->
+<section class="hero" id="topo" data-screen-label="01 Hero">
+  <div class="hero-content">
+    <div class="pill"><span class="pill-dot"></span> Tecnologia para negócios que querem crescer</div>
+    <h1 class="hero-title">
+      Sua empresa<br>
+      <span class="grad-word">mais inteligente,</span><br>
+      mais presente.
+    </h1>
+    <p class="hero-sub">
+      A Lorvix entrega <strong>IA no WhatsApp, landing pages que convertem</strong> e sistemas de agendamento para clínicas, salões e barbearias — tudo configurado e suportado por nós.
+    </p>
+    <div class="hero-btns">
+      <a href="https://wa.me/5527988612054?text=Quero%20uma%20demonstração%20gratuita%20da%20Lorvix." target="_blank" class="btn-primary">
+        Quero uma demonstração grátis
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#servicos" class="btn-outline">
+        Ver soluções
+      </a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-avatars"><div>CA</div><div>MR</div><div>LS</div></div>
+      <div class="trust-text"><strong>Negócios que já automatizaram</strong><br>Barbearias · Clínicas · Salões de Beleza</div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-floating f1">
+      <div class="fIcon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="fText"><strong>Agendamento confirmado</strong><span>Hoje · 14:30</span></div>
+    </div>
+
+    <div class="chat-mockup">
+      <div class="chat-header">
+        <div class="chat-avatar">C</div>
+        <div class="chat-meta">
+          <strong>Clara · Lorvix IA</strong>
+          <span>● Online agora</span>
+        </div>
+      </div>
+      <div class="chat-messages">
+        <div class="msg user msg-1">Oi, vocês atendem hoje? Queria fazer as unhas.</div>
+        <div class="msg bot msg-2">Olá! 👋 Sim, temos horários disponíveis. Que tal <strong>14h ou 16h30</strong>? Qual fica melhor?</div>
+        <div class="msg user msg-3">16h30 perfeito!</div>
+        <div class="typing"><span></span><span></span><span></span></div>
+        <div class="msg bot msg-4">Reservado! 💜 <strong>16h30 com a Ana</strong>. Vou te mandar um lembrete 1h antes. Seu nome?</div>
+        <div class="msg user msg-5">Larissa Mendes</div>
+      </div>
+    </div>
+
+    <div class="hero-floating f2">
+      <div class="fIcon"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <div class="fText"><strong>+R$ 3.200 esta semana</strong><span>Agendamentos via IA</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-label">Soluções que transformam negócios</div>
+  <div class="marquee">
+    <div class="marquee-track">
+      <div class="marquee-item"><span class="dot"></span>Atendimento IA 24h</div>
+      <div class="marquee-item"><span class="dot"></span>Landing Pages Premium</div>
+      <div class="marquee-item"><span class="dot"></span>Agendamento para Clínicas</div>
+      <div class="marquee-item"><span class="dot"></span>Salões de Beleza</div>
+      <div class="marquee-item"><span class="dot"></span>Barbearias</div>
+      <div class="marquee-item"><span class="dot"></span>WhatsApp com IA</div>
+      <div class="marquee-item"><span class="dot"></span>Alta Conversão</div>
+      <div class="marquee-item"><span class="dot"></span>Suporte Incluso</div>
+      <!-- dup -->
+      <div class="marquee-item"><span class="dot"></span>Atendimento IA 24h</div>
+      <div class="marquee-item"><span class="dot"></span>Landing Pages Premium</div>
+      <div class="marquee-item"><span class="dot"></span>Agendamento para Clínicas</div>
+      <div class="marquee-item"><span class="dot"></span>Salões de Beleza</div>
+      <div class="marquee-item"><span class="dot"></span>Barbearias</div>
+      <div class="marquee-item"><span class="dot"></span>WhatsApp com IA</div>
+      <div class="marquee-item"><span class="dot"></span>Alta Conversão</div>
+      <div class="marquee-item"><span class="dot"></span>Suporte Incluso</div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-wrap reveal">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-num" data-count="24" data-suffix="/7">24/7</div><div class="kpi-label">IA atendendo sem parar</div></div>
+    <div class="kpi"><div class="kpi-num" data-count="3" data-suffix="s">3s</div><div class="kpi-label">Tempo médio de resposta</div></div>
+    <div class="kpi"><div class="kpi-num" data-count="80" data-suffix="%">80%</div><div class="kpi-label">Menos tempo no celular</div></div>
+    <div class="kpi"><div class="kpi-num" data-count="7" data-suffix=" dias">7 dias</div><div class="kpi-label">Para sua solução ir ao ar</div></div>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<section class="section" id="servicos" data-screen-label="02 Soluções">
+  <div class="section-head reveal">
+    <div class="section-label">Nossas soluções</div>
+    <h2 class="section-title">Três soluções. <em>Um objetivo:</em><br>seu negócio crescendo.</h2>
+    <p class="section-sub">Cada produto foi pensado para eliminar uma dor real — cliente sem resposta, site que não converte, agenda desorganizada.</p>
+  </div>
+  <div class="services-grid reveal-children">
+    <a href="#sistemas" onclick="switchTabById('ia')" class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 15s1.5 1 4 1 4-1 4-1M12 1v4"/></svg></div>
+      <div class="service-title">Atendimento IA 24h</div>
+      <p class="service-desc">Uma IA treinada com o DNA do seu negócio responde clientes, agenda horários e envia orçamentos pelo WhatsApp — sem você precisar estar online.</p>
+      <span class="service-link">Conhecer a Clara <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </a>
+    <a href="#sistemas" onclick="switchTabById('landing')" class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8M12 18v2M3 9h18"/></svg></div>
+      <div class="service-title">Landing Pages Premium</div>
+      <p class="service-desc">Páginas com copy de alta conversão, design premium e entrega em até 7 dias. Formulário integrado, domínio próprio e hospedagem inclusa.</p>
+      <span class="service-link">Solicitar orçamento <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </a>
+    <a href="#sistemas" onclick="switchTabById('agendamento')" class="service-card">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+      <div class="service-title">Sistema de Agendamento</div>
+      <p class="service-desc">Solução completa para clínicas, salões e barbearias: agendamento online, ficha digital, lembretes automáticos e controle na palma da mão.</p>
+      <span class="service-link">Ver sistema <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </a>
+  </div>
+</section>
+
+<!-- SISTEMAS -->
+<section class="sistemas-section" id="sistemas" data-screen-label="03 Sistemas">
+  <div class="section-head reveal">
+    <div class="section-label">Detalhes de cada solução</div>
+    <h2 class="section-title">Feito para <em>o seu negócio</em>.</h2>
+    <p class="section-sub">Cada solução entregue, configurada e suportada por nós — sem você precisar contratar TI.</p>
+  </div>
+
+  <div class="tabs-wrapper reveal">
+    <ul class="tabs-list" id="tabsList">
+      <li><button class="tab-btn active" onclick="switchTab('ia',this)">Atendimento IA 24h</button></li>
+      <li><button class="tab-btn" onclick="switchTab('landing',this)">Landing Pages</button></li>
+      <li><button class="tab-btn" onclick="switchTab('agendamento',this)">Sistema de Agendamento</button></li>
+    </ul>
+  </div>
+  <select class="tabs-select" onchange="switchTab(this.value)">
+    <option value="ia">Atendimento IA 24h</option>
+    <option value="landing">Landing Pages</option>
+    <option value="agendamento">Sistema de Agendamento</option>
+  </select>
+
+  <!-- ABA IA -->
+  <div class="tab-panel active" id="tab-ia">
+    <div class="sistema-card" id="ia-section">
+      <div class="sistema-header">
+        <div class="sistema-title">Clara Atende — IA 24h no WhatsApp</div>
+        <span class="badge-disponivel">Disponível agora</span>
+      </div>
+      <p class="sistema-desc">Uma atendente virtual <strong>treinada com o DNA do seu negócio</strong>. Responde dúvidas, informa valores, agenda horários, envia orçamentos e só te chama quando o cliente está pronto pra fechar. Enquanto você dorme, ela trabalha.</p>
+      <div class="features-grid">
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Resposta em 3 segundos, 24/7</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agendamento automático integrado</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Envia orçamento com PDF</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Encaminha para humano na hora certa</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>API oficial WhatsApp (sem risco de ban)</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Suporte e ajustes ilimitados 1º mês</div>
+      </div>
+      <a href="https://wa.me/5527988612054?text=Quero%20contratar%20a%20Clara%20Atende%20IA." target="_blank" class="btn-primary">
+        Ativar minha IA agora
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ABA LANDING -->
+  <div class="tab-panel" id="tab-landing">
+    <div class="sistema-card" id="landing-section">
+      <div class="sistema-header">
+        <div class="sistema-title">Landing Pages de Alta Conversão</div>
+        <span class="badge-disponivel">Disponível agora</span>
+      </div>
+      <p class="sistema-desc"><strong>Design premium que transforma visitante em lead</strong> — e lead em cliente. Copy estratégica, estrutura de conversão, formulário integrado, domínio próprio e hospedagem inclusa. Entrega em até 7 dias úteis.</p>
+      <div class="features-grid">
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Copy de alta conversão inclusa</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Design premium personalizado</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Domínio + hospedagem inclusa</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Integração WhatsApp e formulário</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Google Analytics + Pixel Meta</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Entrega em até 7 dias úteis</div>
+      </div>
+      <a href="https://wa.me/5527988612054?text=Quero%20uma%20landing%20page%20profissional%20da%20Lorvix." target="_blank" class="btn-primary">
+        Solicitar minha landing page
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ABA AGENDAMENTO -->
+  <div class="tab-panel" id="tab-agendamento">
+    <div class="sistema-card" id="agendamento-section">
+      <div class="sistema-header">
+        <div class="sistema-title">Sistema de Agendamento</div>
+        <span class="badge-disponivel">Disponível agora</span>
+      </div>
+      <p class="sistema-desc">Para <strong>clínicas, salões de beleza e barbearias</strong> que querem acabar com a agenda no WhatsApp e a caderneta de papel. Agendamento online, confirmações automáticas, ficha digital e gestão completa — no celular ou computador.</p>
+      <div class="features-grid">
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agendamento online 24h</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Confirmação e lembrete automático</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Ficha/anamnese digital do cliente</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agenda por profissional</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Histórico completo do cliente</div>
+        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Relatório diário de atendimentos</div>
+      </div>
+      <a href="https://wa.me/5527988612054?text=Quero%20o%20sistema%20de%20agendamento%20da%20Lorvix." target="_blank" class="btn-primary">
+        Quero meu sistema de agendamento
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE LORVIX -->
+<section class="section" id="por-que" data-screen-label="04 Diferenciais">
+  <div class="section-head reveal">
+    <div class="section-label">Por que Lorvix</div>
+    <h2 class="section-title">O que nos torna <em>diferentes</em>.</h2>
+    <p class="section-sub">Não vendemos software. Entregamos resultados — configurados, hospedados e suportados por nós.</p>
+  </div>
+  <div class="bento reveal-children">
+    <div class="bento-card b-1">
+      <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M14 7h7v7"/></svg></div>
+      <h3>Crescimento visível semana a semana</h3>
+      <p>Acompanhe em tempo real quantos clientes chegaram pela IA, quantos agendamentos foram fechados e quanto isso representa em faturamento.</p>
+      <div class="bento-chart">
+        <div class="bar" style="height:38%;animation-delay:.1s"></div>
+        <div class="bar" style="height:52%;animation-delay:.2s"></div>
+        <div class="bar" style="height:46%;animation-delay:.3s"></div>
+        <div class="bar" style="height:68%;animation-delay:.4s"></div>
+        <div class="bar" style="height:62%;animation-delay:.5s"></div>
+        <div class="bar" style="height:82%;animation-delay:.6s"></div>
+        <div class="bar" style="height:76%;animation-delay:.7s"></div>
+        <div class="bar" style="height:100%;animation-delay:.8s"></div>
+      </div>
+    </div>
+    <div class="bento-card b-2">
+      <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div>
+      <h3>No ar em 7 dias</h3>
+      <p>Briefing, configuração e go-live. Sem projeto de meses, sem burocracia.</p>
+    </div>
+    <div class="bento-card b-3">
+      <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3>Dados seguros</h3>
+      <p>LGPD, criptografia e hospedagem brasileira. Seus dados nunca saem do país.</p>
+    </div>
+    <div class="bento-card b-4">
+      <div class="bento-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 014-4h6a4 4 0 014 4v2"/></svg></div>
+      <h3>Suporte humano real</h3>
+      <p>Sem ticket. Sem bot de suporte. Você manda mensagem, um humano responde — em menos de 2 horas nos dias úteis.</p>
+    </div>
+    <div class="bento-card b-5">
+      <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+      <h3>Preço justo, ROI real</h3>
+      <p>Mensalidade menor que o custo de meia atendente. Sem fidelidade, sem multa — funciona ou você cancela.</p>
+    </div>
+    <div class="bento-card b-6">
+      <div class="bento-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg></div>
+      <h3>Feito para converter</h3>
+      <p>Cada detalhe — copy, fluxo, timing — é otimizado para transformar contato em cliente pagante.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section class="section" id="processo" data-screen-label="05 Como funciona">
+  <div class="section-head reveal">
+    <div class="section-label">Como funciona</div>
+    <h2 class="section-title">Do primeiro contato ao<br><em>go-live em 7 dias.</em></h2>
+  </div>
+  <div class="process-grid reveal-children">
+    <div class="process-step">
+      <div class="step-num">1</div>
+      <h4>Conversa inicial</h4>
+      <p>15 min no WhatsApp para entender seu negócio, suas dores e o que faz mais sentido pra você.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">2</div>
+      <h4>Configuração</h4>
+      <p>Treinamos a IA (ou montamos o sistema) com o tom da sua marca, seus processos e seus preços.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">3</div>
+      <h4>Testes & ajustes</h4>
+      <p>Você testa, aponta o que mudar, a gente refina até ficar exatamente como você quer.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">4</div>
+      <h4>Go-live & suporte</h4>
+      <p>No ar. Suporte humano sempre disponível para evoluir com você a partir daí.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="section" id="depoimentos" data-screen-label="06 Depoimentos">
+  <div class="section-head reveal">
+    <div class="section-label">Resultados reais</div>
+    <h2 class="section-title">Negócios que <em>deixaram a IA trabalhar</em>.</h2>
+  </div>
+  <div class="testi-grid reveal-children">
+    <div class="testi-card">
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg></div>
+      <p class="testi-quote">"Minha barbearia antes só agendava quando eu estava ali respondendo. Agora a Clara responde de madrugada, domingo, feriado. Minha agenda da semana fecha sozinha."</p>
+      <div class="testi-author"><div class="testi-avatar">MR</div><div class="testi-meta"><strong>Marcos Ribeiro</strong><span>Barbearia Stilo · Cariacica/ES</span></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg></div>
+      <p class="testi-quote">"Passava mais tempo respondendo 'quanto é a limpeza de pele?' do que atendendo. A IA filtra e me manda só quem está pronto pra marcar. Ganhei 3h do meu dia de volta."</p>
+      <div class="testi-author"><div class="testi-avatar a2">LS</div><div class="testi-meta"><strong>Larissa Souza</strong><span>Clínica Pura Beleza · Vitória/ES</span></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9"/></svg></div>
+      <p class="testi-quote">"A landing page que a Lorvix fez triplicou os contatos pelo Instagram em menos de 30 dias. Copy direta, design impecável. Vale cada centavo."</p>
+      <div class="testi-author"><div class="testi-avatar a3">CA</div><div class="testi-meta"><strong>Camila Alves</strong><span>Studio CA Estética · Serra/ES</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal" data-screen-label="07 CTA">
+  <div class="cta-card">
+    <h2 class="cta-title">Pronta para transformar<br><em>sua presença digital?</em></h2>
+    <p class="cta-sub">A Lorvix instala, configura, hospeda e suporta. Você só vê o resultado. Conversa sem compromisso.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/5527988612054?text=Quero%20conhecer%20as%20soluções%20da%20Lorvix." target="_blank" class="btn-primary">
+        Falar com especialista
+        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contato" class="btn-outline">Receber proposta por e-mail</a>
+    </div>
+    <div class="cta-footnote">
+      <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Sem fidelidade</span>
+      <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Sem taxa de ativação</span>
+      <span><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Cancela quando quiser</span>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section reveal" id="contato" data-screen-label="08 Contato">
+  <div class="form-card">
+    <div id="form-content">
+      <div class="form-title">Receba uma proposta</div>
+      <p class="form-sub">Conta pra gente e te enviamos a proposta ideal pelo WhatsApp em até 1h útil.</p>
+      <div class="input-group"><label>Seu nome</label><input type="text" id="nome" placeholder="Como podemos te chamar?" autocomplete="name"></div>
+      <div class="input-group"><label>WhatsApp</label><input type="tel" id="whatsapp" placeholder="(27) 99999-1234" autocomplete="tel"></div>
+      <div class="input-group">
+        <label>Qual solução te interessa?</label>
+        <select id="negocio">
+          <option value="" disabled selected>Selecione uma opção</option>
+          <option value="Atendimento IA 24h (Clara Atende)">Atendimento IA 24h — Clara Atende</option>
+          <option value="Landing Page Premium">Landing Page Premium</option>
+          <option value="Sistema de Agendamento para Clínica">Agendamento — Clínica</option>
+          <option value="Sistema de Agendamento para Salão de Beleza">Agendamento — Salão de Beleza</option>
+          <option value="Sistema de Agendamento para Barbearia">Agendamento — Barbearia</option>
+          <option value="Mais de uma solução">Mais de uma solução</option>
+          <option value="Outro / Ainda não sei">Outro / Ainda não sei</option>
+        </select>
+      </div>
+      <button class="submit-btn" onclick="enviarLead()">
+        Quero minha proposta <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="form-note"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Seus dados são usados só pra esse contato. Sem spam.</p>
+    </div>
+    <div class="success-msg" id="success">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="success-title">Proposta a caminho!</div>
+      <p style="color:var(--text-dim);font-size:.95rem">Em até 1h útil a equipe Lorvix vai te chamar no WhatsApp com uma proposta personalizada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section reveal" id="faq" data-screen-label="09 FAQ">
+  <div class="section-head" style="text-align:center;margin-bottom:40px;">
+    <div class="section-label">Dúvidas frequentes</div>
+    <h2 class="section-title">Perguntas <em>respondidas</em>.</h2>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">O que é a Lorvix?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><p>A Lorvix é uma empresa de tecnologia especializada em <strong>automação comercial e inteligência artificial para pequenos e médios negócios</strong>. Atuamos em três frentes: IA no WhatsApp, landing pages de alta conversão e sistemas de agendamento para clínicas, salões e barbearias. Tudo instalado, configurado e suportado por nós.</p></div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Preciso saber tecnologia para usar?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><p><strong>Zero.</strong> A Lorvix cuida de tudo: instalação, configuração, integração e treinamento. Fazemos uma sessão ao vivo explicando como usar, e o suporte está sempre disponível. Se você consegue mandar áudio no WhatsApp, consegue usar qualquer solução Lorvix.</p></div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Quanto tempo até estar funcionando?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><ul><li><strong>IA Clara Atende:</strong> 48 a 72 horas após briefing aprovado.</li><li><strong>Landing Page:</strong> 3 a 7 dias úteis.</li><li><strong>Sistema de Agendamento:</strong> 5 a 10 dias úteis.</li></ul><p>Você acompanha cada etapa em tempo real por um grupo no WhatsApp.</p></div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Tem fidelidade ou multa de cancelamento?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><p><strong>Nunca.</strong> Você cancela quando quiser, direto pelo WhatsApp, com 30 dias de aviso. Sem multa, sem taxa, sem burocracia. Nossa filosofia: se funcionar, você fica. Se não funcionar, a culpa é nossa de fazer dar certo.</p></div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">A IA funciona no meu WhatsApp Business?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><p>Sim. Usamos a <strong>API oficial homologada pela Meta</strong> — sem gambiarra, sem extensão, sem risco de ban. Você mantém seu número, histórico e contatos. A Clara entra como atendente no seu WhatsApp atual e funciona ao lado de você.</p></div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Meus dados e os dos clientes ficam seguros?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><p>Sim. Operamos em total conformidade com a <strong>LGPD</strong>. Criptografia em trânsito (TLS) e em repouso (AES-256), servidores certificados ISO 27001 no Brasil, backups diários e controle de acesso por função. Seus dados nunca são vendidos ou compartilhados. Veja nossa <a href="#privacidade">Política de Privacidade</a> para detalhes completos.</p></div></div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">Quanto custa?<span class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></button>
+    <div class="faq-answer"><div class="faq-answer-inner"><p>O valor varia conforme a solução e o porte do seu negócio. Como referência: a <strong>Clara IA</strong> começa com mensalidade menor que o custo de meia atendente. A <strong>Landing Page</strong> tem valor único de implantação + mensalidade simbólica de hospedagem. O <strong>Sistema de Agendamento</strong> tem planos escaláveis por número de usuários.<br><br>Para um orçamento exato, fala com a gente no WhatsApp — em 15 min você tem proposta personalizada.</p></div></div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="section reveal" id="sobre" data-screen-label="10 Sobre">
+  <div class="section-head left">
+    <div class="section-label">Quem somos</div>
+    <h2 class="section-title">Tecnologia feita por quem <em>entende de negócio</em>.</h2>
+  </div>
+  <div class="about-card">
+    <div>
+      <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:22px;text-wrap:pretty;">
+        A Lorvix nasceu de uma frustração real: <strong style="color:var(--text)">pequenos negócios perdem clientes todo dia</strong> por não conseguirem responder no tempo certo, por não terem uma página que converte, por gerenciarem agenda no papel.
+      </p>
+      <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;text-wrap:pretty;">
+        Nossa missão é entregar o oposto: soluções <strong style="color:var(--text)">configuradas, hospedadas e suportadas por nós</strong>, feitas pra quem trabalha no balcão. Você cuida do seu cliente. A tecnologia cuida do resto.
+      </p>
+    </div>
+    <div class="about-meta">
+      <div class="about-meta-row">
+        <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"/></svg></div>
+        <div class="txt"><strong>Carlos Alexandre de Araujo</strong>Fundador · Cariacica/ES</div>
+      </div>
+      <div class="about-meta-row">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7L22 7"/></svg></div>
+        <div class="txt"><strong>E-mail</strong><a href="/cdn-cgi/l/email-protection#7e12110c08170650171f3e19131f1712501d1113"><span class="__cf_email__" data-cfemail="533f3c21253a2b7d3a3213343e323a3f7d303c3e">[email&#160;protected]</span></a></div>
+      </div>
+      <div class="about-meta-row">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.1-8.7A2 2 0 014 2h3a2 2 0 012 1.7c.1 1 .3 1.9.7 2.8a2 2 0 01-.5 2.1L8 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c.9.4 1.9.6 2.8.7A2 2 0 0122 16.9z"/></svg></div>
+        <div class="txt"><strong>WhatsApp</strong><a href="https://wa.me/5527988612054" target="_blank">(27) 98861-2054</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACIDADE -->
+<section class="privacy-section reveal" id="privacidade" data-screen-label="11 Privacidade">
+  <div class="privacy-inner">
+    <div class="section-head left" style="margin-bottom:32px;">
+      <div class="section-label">Transparência total</div>
+      <h2 class="section-title">Política de <em>privacidade</em>.</h2>
+      <p class="privacy-updated">Última atualização: 23 de abril de 2026 · Em conformidade com a LGPD — Lei nº 13.709/2018</p>
+    </div>
+    <article class="privacy-content">
+      <h3>1. Quem somos</h3>
+      <p>A <strong>Lorvix Tecnologia</strong> é uma empresa brasileira especializada em automação comercial e IA para pequenos e médios negócios. Para fins de LGPD, atuamos como <strong>controladora</strong> dos dados coletados neste site e como <strong>operadora</strong> dos dados confiados por nossos clientes para operação dos sistemas.</p>
+      <h3>2. Quais dados coletamos</h3>
+      <ul>
+        <li><strong>Dados de identificação:</strong> nome, e-mail, WhatsApp, nome do negócio, segmento.</li>
+        <li><strong>Dados de contato:</strong> informações fornecidas em formulários, WhatsApp ou e-mail.</li>
+        <li><strong>Dados de navegação:</strong> IP, navegador, páginas visitadas (via cookies e analytics).</li>
+        <li><strong>Dados operacionais:</strong> agendamentos, conversas com clientes finais e configurações do sistema contratado.</li>
+      </ul>
+      <h3>3. Para que usamos seus dados</h3>
+      <ul>
+        <li>Responder contatos e enviar propostas solicitadas.</li>
+        <li>Executar os serviços contratados.</li>
+        <li>Cumprir obrigações contratuais, fiscais e legais.</li>
+        <li>Melhorar a experiência no site e nossos produtos.</li>
+        <li>Enviar comunicações relevantes — sempre com opção de descadastro.</li>
+      </ul>
+      <p><strong>Nunca vendemos, alugamos ou compartilhamos seus dados com terceiros para fins comerciais.</strong></p>
+      <h3>4. Segurança e armazenamento</h3>
+      <ul>
+        <li>Criptografia em trânsito (HTTPS/TLS 1.3) e em repouso (AES-256).</li>
+        <li>Servidores certificados ISO 27001 no Brasil.</li>
+        <li>Backups diários automáticos com retenção mínima de 30 dias.</li>
+        <li>Controle de acesso por função e registros de auditoria completos.</li>
+      </ul>
+      <h3>5. Seus direitos como titular (LGPD)</h3>
+      <p>Você tem direito a confirmar, acessar, corrigir, eliminar, portar seus dados e revogar consentimento a qualquer momento. Para exercer esses direitos, entre em contato pelo e-mail <a href="/cdn-cgi/l/email-protection#375b5845415e4f195e5677505a565e5b1954585a"><span class="__cf_email__" data-cfemail="b3dfdcc1c5dacb9ddad2f3d4ded2dadf9dd0dcde">[email&#160;protected]</span></a>. Respondemos em até 15 dias úteis.</p>
+      <h3>6. Retenção de dados</h3>
+      <ul>
+        <li>Leads não convertidos: até 24 meses após o último contato.</li>
+        <li>Clientes ativos: durante o contrato + 5 anos (prazo fiscal).</li>
+        <li>Dados de navegação: até 12 meses.</li>
+      </ul>
+      <h3>7. Contato e DPO</h3>
+      <ul class="privacy-contact">
+        <li><strong>E-mail:</strong> <a href="/cdn-cgi/l/email-protection#e78b8895918e9fc98e86a7808a868e8bc984888a"><span class="__cf_email__" data-cfemail="05696a77736c7d2b6c64456268646c692b666a68">[email&#160;protected]</span></a></li>
+        <li><strong>WhatsApp:</strong> <a href="https://wa.me/5527988612054" target="_blank">(27) 98861-2054</a></li>
+        <li><strong>Responsável:</strong> Carlos Alexandre de Araujo — Fundador & DPO</li>
+        <li><strong>Localização:</strong> Cariacica — Espírito Santo, Brasil</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <div class="logo-mark" style="width:24px;height:24px;">
+          <svg viewBox="0 0 36 36" fill="none"><path d="M4 10l10 8-10 8" stroke="url(#flg1)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 10l10 8-10 8" stroke="url(#flg2)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="flg1" x1="4" y1="10" x2="14" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#A78BFA"/><stop offset="1" stop-color="#7C3AED"/></linearGradient><linearGradient id="flg2" x1="16" y1="10" x2="26" y2="26" gradientUnits="userSpaceOnUse"><stop stop-color="#C084FC"/><stop offset="1" stop-color="#9333EA"/></linearGradient></defs></svg>
+        </div>
+        LORVIX
+      </div>
+      <p class="footer-tag">Tecnologia que trabalha por você. IA, landing pages e agendamento para negócios que querem crescer.</p>
+    </div>
+    <div>
+      <h5>Soluções</h5>
+      <a href="#sistemas" onclick="switchTabById('ia')">Atendimento IA 24h</a>
+      <a href="#sistemas" onclick="switchTabById('landing')">Landing Pages</a>
+      <a href="#sistemas" onclick="switchTabById('agendamento')">Sistema de Agendamento</a>
+    </div>
+    <div>
+      <h5>Empresa</h5>
+      <a href="#sobre">Sobre a Lorvix</a>
+      <a href="#faq">Perguntas frequentes</a>
+      <a href="#privacidade">Política de privacidade</a>
+    </div>
+    <div>
+      <h5>Contato</h5>
+      <a href="/cdn-cgi/l/email-protection#066a6974706f7e286f6746616b676f6a2865696b"><span class="__cf_email__" data-cfemail="2e42415c58475600474f6e49434f4742004d4143">[email&#160;protected]</span></a>
+      <a href="https://wa.me/5527988612054" target="_blank">(27) 98861-2054</a>
+      <a href="#sobre">Cariacica — ES</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Lorvix · Todos os direitos reservados · CNPJ em breve</div>
+</footer>
+
+</div><!-- /main-content -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ── SIDEBAR ──
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+    document.getElementById('hamburgerBtn').classList.toggle('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+    const hb = document.getElementById('hamburgerBtn');
+    if (hb) hb.classList.remove('open');
+  }
+  function toggleSistemas() {
+    document.getElementById('sistemasToggle').classList.toggle('open');
+    document.getElementById('sistemasSubmenu').classList.toggle('open');
+  }
+
+  // ── TABS ──
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const panel = document.getElementById('tab-' + id);
+    if (panel) panel.classList.add('active');
+    if (btn) btn.classList.add('active');
+    else {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+      });
+    }
+    const sel = document.querySelector('.tabs-select');
+    if (sel && sel.value !== id) sel.value = id;
+  }
+  function switchTabById(id) {
+    switchTab(id, null);
+    setTimeout(() => {
+      const el = document.getElementById('sistemas');
+      if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 40; window.scrollTo({top: y, behavior: 'smooth'}); }
+    }, 50);
+  }
+
+  // ── FAQ ──
+  function toggleFaq(btn) { btn.parentElement.classList.toggle('open'); }
+
+  // ── FORM ──
+  function enviarLead() {
+    const nome = document.getElementById('nome').value.trim();
+    const wpp  = document.getElementById('whatsapp').value.trim();
+    const neg  = document.getElementById('negocio').value;
+    if (!nome || !wpp || !neg) { alert('Preenche tudo pra gente poder te chamar 🙏'); return; }
+    const msg = encodeURIComponent(`Olá! Sou ${nome}. Tenho interesse em: ${neg}. Meu WhatsApp: ${wpp}`);
+    window.open(`https://wa.me/5527988612054?text=${msg}`, '_blank');
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+  }
+
+  // ── REVEAL ──
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        if (e.target.classList.contains('kpi-wrap')) animateCounters();
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.reveal, .reveal-children').forEach(el => io.observe(el));
+
+  // ── COUNT-UP ──
+  function animateCounters() {
+    document.querySelectorAll('.kpi-num').forEach(el => {
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      if (isNaN(target)) return;
+      const dur = 1400, t0 = performance.now();
+      function tick(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(eased * target) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // ── PARALLAX ORBS ──
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        document.querySelectorAll('.orb').forEach((orb, i) => { orb.style.translate = `0 ${y * (0.04 + i * 0.025)}px`; });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  // ── ACTIVE NAV ──
+  const sections = ['topo','servicos','sistemas','processo','depoimentos','faq','sobre','privacidade']
+    .map(id => document.getElementById(id)).filter(Boolean);
+  const sio = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = '#' + e.target.id;
+        document.querySelectorAll('.sidebar-item[href^="#"]').forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => sio.observe(s));
+</script>
+</body>
+</html>
