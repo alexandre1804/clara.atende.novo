@@ -4,15 +4,15 @@ export interface SearchResult {
   snippet: string
 }
 
-interface GoogleApiItem {
+interface SerperItem {
   title: string
   link: string
   snippet?: string
 }
 
-interface GoogleApiResponse {
-  items?: GoogleApiItem[]
-  error?: { message: string; code: number }
+interface SerperResponse {
+  organic?: SerperItem[]
+  error?: string
 }
 
 export async function searchGoogle(
@@ -20,37 +20,42 @@ export async function searchGoogle(
   location: string,
   num: number
 ): Promise<SearchResult[]> {
-  const apiKey = process.env.GOOGLE_API_KEY
-  const cx = process.env.GOOGLE_CX
+  const apiKey = process.env.SERPER_API_KEY
 
-  if (!apiKey || !cx) {
-    throw new Error('Credenciais da Google API não configuradas. Configure GOOGLE_API_KEY e GOOGLE_CX no .env.local')
+  if (!apiKey) {
+    throw new Error('SERPER_API_KEY não configurada no .env.local')
   }
 
-  const searchQuery = `${query} ${location}`
   const results: SearchResult[] = []
-  const requestsNeeded = Math.ceil(Math.min(num, 100) / 10)
+  const pageSize = 10
+  const pages = Math.ceil(Math.min(num, 100) / pageSize)
 
-  for (let i = 0; i < requestsNeeded; i++) {
-    const start = i * 10 + 1
-    const url = new URL('https://www.googleapis.com/customsearch/v1')
-    url.searchParams.set('key', apiKey)
-    url.searchParams.set('cx', cx)
-    url.searchParams.set('q', searchQuery)
-    url.searchParams.set('num', '10')
-    url.searchParams.set('start', String(start))
+  for (let page = 0; page < pages; page++) {
+    const response = await fetch('https://google.serper.dev/search', {
+      method: 'POST',
+      headers: {
+        'X-API-KEY': apiKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        q: `${query} ${location}`,
+        num: pageSize,
+        page: page + 1,
+        gl: 'br',
+        hl: 'pt',
+      }),
+    })
 
-    const response = await fetch(url.toString())
-    const data: GoogleApiResponse = await response.json()
+    const data: SerperResponse = await response.json()
 
     if (!response.ok) {
-      throw new Error(data.error?.message ?? `Google API error: ${response.status}`)
+      throw new Error(data.error ?? `Serper API error: ${response.status}`)
     }
 
-    if (!data.items || data.items.length === 0) break
+    if (!data.organic || data.organic.length === 0) break
 
     results.push(
-      ...data.items.map((item) => ({
+      ...data.organic.map((item) => ({
         title: item.title,
         link: item.link,
         snippet: item.snippet ?? '',
