@@ -660,7 +660,7 @@
   /* ── SOBRE ── */
   .about-card {
     background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
-    padding:48px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center; box-shadow:var(--shadow-sm);
+    padding:48px; display:grid; grid-template-columns:1fr 1.4fr; gap:40px; align-items:center; box-shadow:var(--shadow-sm);
   }
   .about-meta { display:flex; flex-direction:column; gap:14px; }
   .about-meta-row {
@@ -1263,6 +1263,15 @@
     <div class="section-label">Como funciona</div>
     <h2 class="section-title">Do primeiro contato ao<br><em>go-live em 7 dias.</em></h2>
   </div>
+  <div class="photo-banner reveal">
+    <img src="images/img-laptop-work.jpg" alt="Equipe Lorvix trabalhando">
+    <div class="photo-banner-overlay">
+      <div class="photo-banner-text">
+        <h3>Simples do começo ao fim.</h3>
+        <p>Você não precisa entender de tecnologia. A Lorvix cuida de tudo — da configuração ao suporte — para que você só veja o resultado.</p>
+      </div>
+    </div>
+  </div>
   <div class="process-grid reveal-children">
     <div class="process-step">
       <div class="step-num">1</div>
@@ -1410,15 +1419,17 @@
     <h2 class="section-title">Tecnologia feita por quem <em>entende de negócio</em>.</h2>
   </div>
   <div class="about-card">
+    <div class="about-photo">
+      <img src="images/img-phone-app.jpg" alt="Lorvix em ação">
+    </div>
     <div>
       <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:22px;text-wrap:pretty;">
         A Lorvix nasceu de uma frustração real: <strong style="color:var(--text)">pequenos negócios perdem clientes todo dia</strong> por não conseguirem responder no tempo certo, por não terem uma página que converte, por gerenciarem agenda no papel.
       </p>
-      <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;text-wrap:pretty;">
+      <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:24px;text-wrap:pretty;">
         Nossa missão é entregar o oposto: soluções <strong style="color:var(--text)">configuradas, hospedadas e suportadas por nós</strong>, feitas pra quem trabalha no balcão. Você cuida do seu cliente. A tecnologia cuida do resto.
       </p>
-    </div>
-    <div class="about-meta">
+      <div class="about-meta">
       <div class="about-meta-row">
         <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"/></svg></div>
         <div class="txt"><strong>Carlos Alexandre de Araujo</strong>Fundador · Cariacica/ES</div>
@@ -1431,6 +1442,7 @@
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.1-8.7A2 2 0 014 2h3a2 2 0 012 1.7c.1 1 .3 1.9.7 2.8a2 2 0 01-.5 2.1L8 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c.9.4 1.9.6 2.8.7A2 2 0 0122 16.9z"/></svg></div>
         <div class="txt"><strong>WhatsApp</strong><a href="https://wa.me/5527988612054" target="_blank">(27) 98861-2054</a></div>
       </div>
+    </div>
     </div>
   </div>
 </section>
