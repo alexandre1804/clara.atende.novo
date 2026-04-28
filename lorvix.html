@@ -10,35 +10,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #FAF8FF;
-    --bg-2:      #F0EAFF;
-    --bg-3:      #EDE4FF;
+    --bg:        #FFF3E2;
+    --bg-2:      #FFEBCC;
+    --bg-3:      #FFE4B5;
     --surface:   #FFFFFF;
-    --surface-2: #F6F2FF;
-    --border:    #E2D9F3;
-    --border-2:  #C9B8F0;
-    --text:      #1A0F3C;
-    --text-dim:  #4A3B6B;
-    --muted:     #8B79AA;
-    --faint:     #C4B5D6;
+    --surface-2: #FFF8F0;
+    --border:    #E8D5BC;
+    --border-2:  #D4B896;
+    --text:      #0A0A0A;
+    --text-dim:  #3D2417;
+    --muted:     #8B7355;
+    --faint:     #C4A882;
 
-    --purple:       #7C3AED;
-    --purple-mid:   #9333EA;
-    --purple-light: #A78BFA;
-    --purple-pale:  #EDE9FE;
-    --purple-glow:  rgba(124,58,237,0.18);
+    --purple:       #5C0018;
+    --purple-mid:   #7A0022;
+    --purple-light: #9B35FF;
+    --purple-pale:  #FFF0F2;
+    --purple-glow:  rgba(92,0,24,0.18);
 
-    --grad:      linear-gradient(135deg, #7C3AED 0%, #A855F7 100%);
-    --grad-text: linear-gradient(110deg, #7C3AED 0%, #C084FC 100%);
-    --grad-btn:  linear-gradient(135deg, #7C3AED 0%, #9333EA 100%);
-    --grad-soft: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(168,85,247,0.06));
+    --grad:      linear-gradient(135deg, #5C0018 0%, #9B35FF 100%);
+    --grad-text: linear-gradient(110deg, #5C0018 0%, #9B35FF 100%);
+    --grad-btn:  linear-gradient(135deg, #5C0018 0%, #7A0022 100%);
+    --grad-soft: linear-gradient(135deg, rgba(92,0,24,0.08), rgba(155,53,255,0.06));
 
-    --shadow-sm: 0 2px 8px rgba(124,58,237,0.08);
-    --shadow-md: 0 8px 28px rgba(124,58,237,0.12);
-    --shadow-lg: 0 20px 60px rgba(124,58,237,0.16);
+    --shadow-sm: 0 2px 8px rgba(92,0,24,0.08);
+    --shadow-md: 0 8px 28px rgba(92,0,24,0.12);
+    --shadow-lg: 0 20px 60px rgba(92,0,24,0.16);
 
     --sidebar-w:  240px;
-    --sidebar-bg: #13082E;
+    --sidebar-bg: #0A0A0A;
     --radius:     14px;
     --radius-lg:  22px;
     --ease:       cubic-bezier(.22,.61,.36,1);
@@ -67,16 +67,16 @@
     content: '';
     position: absolute; inset: 0;
     background-image:
-      linear-gradient(to right, rgba(124,58,237,0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(124,58,237,0.04) 1px, transparent 1px);
+      linear-gradient(to right, rgba(92,0,24,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(92,0,24,0.04) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
     -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
   }
   .orb { position: absolute; border-radius: 50%; filter: blur(100px); will-change: transform; }
-  .orb-1 { top:-8%; left:-5%; width:560px; height:560px; background: radial-gradient(circle, rgba(167,139,250,0.35), transparent 70%); animation: orbF1 22s ease-in-out infinite; }
-  .orb-2 { top:40%; right:-8%; width:480px; height:480px; background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%); animation: orbF2 28s ease-in-out infinite; }
-  .orb-3 { bottom:-10%; left:30%; width:440px; height:440px; background: radial-gradient(circle, rgba(192,132,252,0.22), transparent 70%); animation: orbF3 32s ease-in-out infinite; }
+  .orb-1 { top:-8%; left:-5%; width:560px; height:560px; background: radial-gradient(circle, rgba(92,0,24,0.22), transparent 70%); animation: orbF1 22s ease-in-out infinite; }
+  .orb-2 { top:40%; right:-8%; width:480px; height:480px; background: radial-gradient(circle, rgba(155,53,255,0.13), transparent 70%); animation: orbF2 28s ease-in-out infinite; }
+  .orb-3 { bottom:-10%; left:30%; width:440px; height:440px; background: radial-gradient(circle, rgba(92,0,24,0.10), transparent 70%); animation: orbF3 32s ease-in-out infinite; }
   @keyframes orbF1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,50px) scale(1.1)} }
   @keyframes orbF2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,40px) scale(0.9)} }
   @keyframes orbF3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-60px) scale(1.1)} }
@@ -660,7 +660,7 @@
   /* ── SOBRE ── */
   .about-card {
     background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg);
-    padding:48px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center; box-shadow:var(--shadow-sm);
+    padding:48px; display:grid; grid-template-columns:1fr 1.4fr; gap:40px; align-items:center; box-shadow:var(--shadow-sm);
   }
   .about-meta { display:flex; flex-direction:column; gap:14px; }
   .about-meta-row {
@@ -760,6 +760,118 @@
 
   @media (prefers-reduced-motion:reduce) {
     *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  }
+
+  /* ── FOTOS: CARDS DE SERVIÇO ── */
+  .service-card-img {
+    position: relative;
+    width: calc(100% + 64px);
+    margin: -36px -32px 28px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    flex-shrink: 0;
+  }
+  .service-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s var(--ease);
+  }
+  .service-card:hover .service-card-img img { transform: scale(1.06); }
+  .service-card-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, var(--surface) 100%);
+  }
+
+  /* ── FOTOS: SISTEMAS (TABS) ── */
+  .sistema-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 44px;
+    align-items: start;
+  }
+  .sistema-photo {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 80px;
+  }
+  .sistema-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 3/4;
+  }
+
+  /* ── FOTOS: BANNER "COMO FUNCIONA" ── */
+  .photo-banner {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    margin-bottom: 64px;
+    box-shadow: var(--shadow-lg);
+  }
+  .photo-banner img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    object-position: center 30%;
+  }
+  .photo-banner-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(92,0,24,0.55) 100%);
+    display: flex; align-items: center; padding: 52px;
+  }
+  .photo-banner-text h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 800; color: #fff;
+    margin-bottom: 12px; letter-spacing: -.02em;
+  }
+  .photo-banner-text p {
+    color: rgba(255,255,255,0.82);
+    font-size: 1.05rem; max-width: 500px; line-height: 1.65;
+  }
+
+  /* ── FOTOS: SOBRE ── */
+  .about-photo {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    min-height: 340px;
+  }
+  .about-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── FOTOS: CTA BG ── */
+  .cta-photo-bg {
+    position: absolute; inset: 0;
+    z-index: 0;
+  }
+  .cta-photo-bg img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    opacity: 0.12;
+  }
+  .cta-card > *:not(.cta-photo-bg) { position: relative; z-index: 1; }
+
+  /* ── RESPONSIVE FOTOS ── */
+  @media (max-width: 1100px) {
+    .sistema-layout { grid-template-columns: 1fr; }
+    .sistema-photo { display: none; }
+    .service-card-img { width: calc(100% + 64px); height: 170px; }
+  }
+  @media (max-width: 768px) {
+    .service-card-img { width: calc(100% + 64px); height: 150px; }
+    .photo-banner { height: 240px; }
+    .photo-banner-overlay { padding: 28px; }
+    .about-photo { min-height: 240px; }
   }
 </style>
 </head>
@@ -950,18 +1062,30 @@
   </div>
   <div class="services-grid reveal-children">
     <a href="#sistemas" onclick="switchTabById('ia')" class="service-card">
+      <div class="service-card-img">
+        <img src="images/img-whatsapp.jpg" alt="Atendimento IA no WhatsApp">
+        <div class="service-card-img-overlay"></div>
+      </div>
       <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 15s1.5 1 4 1 4-1 4-1M12 1v4"/></svg></div>
       <div class="service-title">Atendimento IA 24h</div>
       <p class="service-desc">Uma IA treinada com o DNA do seu negócio responde clientes, agenda horários e envia orçamentos pelo WhatsApp — sem você precisar estar online.</p>
       <span class="service-link">Conhecer a Clara <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
     </a>
     <a href="#sistemas" onclick="switchTabById('landing')" class="service-card">
+      <div class="service-card-img">
+        <img src="images/img-laptop-bright.jpg" alt="Landing Pages Premium">
+        <div class="service-card-img-overlay"></div>
+      </div>
       <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8M12 18v2M3 9h18"/></svg></div>
       <div class="service-title">Landing Pages Premium</div>
       <p class="service-desc">Páginas com copy de alta conversão, design premium e entrega em até 7 dias. Formulário integrado, domínio próprio e hospedagem inclusa.</p>
       <span class="service-link">Solicitar orçamento <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
     </a>
     <a href="#sistemas" onclick="switchTabById('agendamento')" class="service-card">
+      <div class="service-card-img">
+        <img src="images/img-agenda-planner.jpg" alt="Sistema de Agendamento">
+        <div class="service-card-img-overlay"></div>
+      </div>
       <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
       <div class="service-title">Sistema de Agendamento</div>
       <p class="service-desc">Solução completa para clínicas, salões e barbearias: agendamento online, ficha digital, lembretes automáticos e controle na palma da mão.</p>
@@ -994,69 +1118,90 @@
   <!-- ABA IA -->
   <div class="tab-panel active" id="tab-ia">
     <div class="sistema-card" id="ia-section">
-      <div class="sistema-header">
-        <div class="sistema-title">Clara Atende — IA 24h no WhatsApp</div>
-        <span class="badge-disponivel">Disponível agora</span>
+      <div class="sistema-layout">
+        <div>
+          <div class="sistema-header">
+            <div class="sistema-title">Clara Atende — IA 24h no WhatsApp</div>
+            <span class="badge-disponivel">Disponível agora</span>
+          </div>
+          <p class="sistema-desc">Uma atendente virtual <strong>treinada com o DNA do seu negócio</strong>. Responde dúvidas, informa valores, agenda horários, envia orçamentos e só te chama quando o cliente está pronto pra fechar. Enquanto você dorme, ela trabalha.</p>
+          <div class="features-grid">
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Resposta em 3 segundos, 24/7</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agendamento automático integrado</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Envia orçamento com PDF</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Encaminha para humano na hora certa</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>API oficial WhatsApp (sem risco de ban)</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Suporte e ajustes ilimitados 1º mês</div>
+          </div>
+          <a href="https://wa.me/5527988612054?text=Quero%20contratar%20a%20Clara%20Atende%20IA." target="_blank" class="btn-primary">
+            Ativar minha IA agora
+            <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sistema-photo">
+          <img src="images/img-phone-typing.jpg" alt="Atendente IA respondendo no WhatsApp">
+        </div>
       </div>
-      <p class="sistema-desc">Uma atendente virtual <strong>treinada com o DNA do seu negócio</strong>. Responde dúvidas, informa valores, agenda horários, envia orçamentos e só te chama quando o cliente está pronto pra fechar. Enquanto você dorme, ela trabalha.</p>
-      <div class="features-grid">
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Resposta em 3 segundos, 24/7</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agendamento automático integrado</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Envia orçamento com PDF</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Encaminha para humano na hora certa</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>API oficial WhatsApp (sem risco de ban)</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Suporte e ajustes ilimitados 1º mês</div>
-      </div>
-      <a href="https://wa.me/5527988612054?text=Quero%20contratar%20a%20Clara%20Atende%20IA." target="_blank" class="btn-primary">
-        Ativar minha IA agora
-        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
     </div>
   </div>
 
   <!-- ABA LANDING -->
   <div class="tab-panel" id="tab-landing">
     <div class="sistema-card" id="landing-section">
-      <div class="sistema-header">
-        <div class="sistema-title">Landing Pages de Alta Conversão</div>
-        <span class="badge-disponivel">Disponível agora</span>
+      <div class="sistema-layout">
+        <div>
+          <div class="sistema-header">
+            <div class="sistema-title">Landing Pages de Alta Conversão</div>
+            <span class="badge-disponivel">Disponível agora</span>
+          </div>
+          <p class="sistema-desc"><strong>Design premium que transforma visitante em lead</strong> — e lead em cliente. Copy estratégica, estrutura de conversão, formulário integrado, domínio próprio e hospedagem inclusa. Entrega em até 7 dias úteis.</p>
+          <div class="features-grid">
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Copy de alta conversão inclusa</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Design premium personalizado</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Domínio + hospedagem inclusa</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Integração WhatsApp e formulário</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Google Analytics + Pixel Meta</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Entrega em até 7 dias úteis</div>
+          </div>
+          <a href="https://wa.me/5527988612054?text=Quero%20uma%20landing%20page%20profissional%20da%20Lorvix." target="_blank" class="btn-primary">
+            Solicitar minha landing page
+            <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sistema-photo">
+          <img src="images/img-laptop-desk.jpg" alt="Landing page profissional no laptop">
+        </div>
       </div>
-      <p class="sistema-desc"><strong>Design premium que transforma visitante em lead</strong> — e lead em cliente. Copy estratégica, estrutura de conversão, formulário integrado, domínio próprio e hospedagem inclusa. Entrega em até 7 dias úteis.</p>
-      <div class="features-grid">
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Copy de alta conversão inclusa</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Design premium personalizado</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Domínio + hospedagem inclusa</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Integração WhatsApp e formulário</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Google Analytics + Pixel Meta</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Entrega em até 7 dias úteis</div>
-      </div>
-      <a href="https://wa.me/5527988612054?text=Quero%20uma%20landing%20page%20profissional%20da%20Lorvix." target="_blank" class="btn-primary">
-        Solicitar minha landing page
-        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
     </div>
   </div>
 
   <!-- ABA AGENDAMENTO -->
   <div class="tab-panel" id="tab-agendamento">
     <div class="sistema-card" id="agendamento-section">
-      <div class="sistema-header">
-        <div class="sistema-title">Sistema de Agendamento</div>
-        <span class="badge-disponivel">Disponível agora</span>
+      <div class="sistema-layout">
+        <div>
+          <div class="sistema-header">
+            <div class="sistema-title">Sistema de Agendamento</div>
+            <span class="badge-disponivel">Disponível agora</span>
+          </div>
+          <p class="sistema-desc">Para <strong>clínicas, salões de beleza e barbearias</strong> que querem acabar com a agenda no WhatsApp e a caderneta de papel. Agendamento online, confirmações automáticas, ficha digital e gestão completa — no celular ou computador.</p>
+          <div class="features-grid">
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agendamento online 24h</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Confirmação e lembrete automático</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Ficha/anamnese digital do cliente</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agenda por profissional</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Histórico completo do cliente</div>
+            <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Relatório diário de atendimentos</div>
+          </div>
+          <a href="https://wa.me/5527988612054?text=Quero%20o%20sistema%20de%20agendamento%20da%20Lorvix." target="_blank" class="btn-primary">
+            Quero meu sistema de agendamento
+            <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sistema-photo">
+          <img src="images/img-calendar-laptop.jpg" alt="Sistema de agendamento no computador">
+        </div>
       </div>
-      <p class="sistema-desc">Para <strong>clínicas, salões de beleza e barbearias</strong> que querem acabar com a agenda no WhatsApp e a caderneta de papel. Agendamento online, confirmações automáticas, ficha digital e gestão completa — no celular ou computador.</p>
-      <div class="features-grid">
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agendamento online 24h</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Confirmação e lembrete automático</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Ficha/anamnese digital do cliente</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Agenda por profissional</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Histórico completo do cliente</div>
-        <div class="feature-item"><span class="feature-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Relatório diário de atendimentos</div>
-      </div>
-      <a href="https://wa.me/5527988612054?text=Quero%20o%20sistema%20de%20agendamento%20da%20Lorvix." target="_blank" class="btn-primary">
-        Quero meu sistema de agendamento
-        <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
     </div>
   </div>
 </section>
@@ -1118,6 +1263,15 @@
     <div class="section-label">Como funciona</div>
     <h2 class="section-title">Do primeiro contato ao<br><em>go-live em 7 dias.</em></h2>
   </div>
+  <div class="photo-banner reveal">
+    <img src="images/img-laptop-work.jpg" alt="Equipe Lorvix trabalhando">
+    <div class="photo-banner-overlay">
+      <div class="photo-banner-text">
+        <h3>Simples do começo ao fim.</h3>
+        <p>Você não precisa entender de tecnologia. A Lorvix cuida de tudo — da configuração ao suporte — para que você só veja o resultado.</p>
+      </div>
+    </div>
+  </div>
   <div class="process-grid reveal-children">
     <div class="process-step">
       <div class="step-num">1</div>
@@ -1170,6 +1324,9 @@
 <!-- CTA -->
 <section class="cta-section reveal" data-screen-label="07 CTA">
   <div class="cta-card">
+    <div class="cta-photo-bg">
+      <img src="images/img-phone-calendar.jpg" alt="">
+    </div>
     <h2 class="cta-title">Pronta para transformar<br><em>sua presença digital?</em></h2>
     <p class="cta-sub">A Lorvix instala, configura, hospeda e suporta. Você só vê o resultado. Conversa sem compromisso.</p>
     <div class="cta-actions">
@@ -1265,15 +1422,17 @@
     <h2 class="section-title">Tecnologia feita por quem <em>entende de negócio</em>.</h2>
   </div>
   <div class="about-card">
+    <div class="about-photo">
+      <img src="images/img-phone-app.jpg" alt="Lorvix em ação">
+    </div>
     <div>
       <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:22px;text-wrap:pretty;">
         A Lorvix nasceu de uma frustração real: <strong style="color:var(--text)">pequenos negócios perdem clientes todo dia</strong> por não conseguirem responder no tempo certo, por não terem uma página que converte, por gerenciarem agenda no papel.
       </p>
-      <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;text-wrap:pretty;">
+      <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:24px;text-wrap:pretty;">
         Nossa missão é entregar o oposto: soluções <strong style="color:var(--text)">configuradas, hospedadas e suportadas por nós</strong>, feitas pra quem trabalha no balcão. Você cuida do seu cliente. A tecnologia cuida do resto.
       </p>
-    </div>
-    <div class="about-meta">
+      <div class="about-meta">
       <div class="about-meta-row">
         <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"/></svg></div>
         <div class="txt"><strong>Carlos Alexandre de Araujo</strong>Fundador · Cariacica/ES</div>
@@ -1286,6 +1445,7 @@
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.1-8.7A2 2 0 014 2h3a2 2 0 012 1.7c.1 1 .3 1.9.7 2.8a2 2 0 01-.5 2.1L8 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5c.9.4 1.9.6 2.8.7A2 2 0 0122 16.9z"/></svg></div>
         <div class="txt"><strong>WhatsApp</strong><a href="https://wa.me/5527988612054" target="_blank">(27) 98861-2054</a></div>
       </div>
+    </div>
     </div>
   </div>
 </section>
