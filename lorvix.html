@@ -879,6 +879,23 @@
     object-fit: cover;
     display: block;
   }
+  .founder-photo { position: relative; }
+  .founder-photo img { object-position: center top; }
+  .founder-badge {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.60) 70%, transparent 100%);
+    padding: 36px 22px 20px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .founder-badge strong {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: #fff; line-height: 1.2;
+  }
+  .founder-badge span {
+    font-size: 0.8rem; color: rgba(255,255,255,0.65);
+    letter-spacing: 0.01em;
+  }
 
   /* ── FOTOS: CTA BG ── */
   .cta-photo-bg {
@@ -1528,21 +1545,21 @@
     <h2 class="section-title">Tecnologia feita por quem <em>entende de negócio</em>.</h2>
   </div>
   <div class="about-card">
-    <div class="about-photo">
-      <img src="images/img-phone-app.jpg" alt="Lorvix em ação">
+    <div class="about-photo founder-photo">
+      <img src="images/carlos-alexandre-fundador.jpg" alt="Carlos Alexandre de Araujo — Fundador da Lorvix">
+      <div class="founder-badge">
+        <strong>Carlos Alexandre de Araujo</strong>
+        <span>Fundador &amp; Estrategista de Negócios</span>
+      </div>
     </div>
     <div>
       <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:22px;text-wrap:pretty;">
-        A Lorvix nasceu de uma frustração real: <strong style="color:var(--text)">pequenos negócios perdem clientes todo dia</strong> por não conseguirem responder no tempo certo, por não terem uma página que converte, por gerenciarem agenda no papel.
+        Vi de perto negócios incríveis perderem clientes por um motivo simples: <strong style="color:var(--text)">a tecnologia não estava ao alcance de quem precisa dela</strong>. Cara complicada, preço alto, suporte que some. Criei a Lorvix para mudar isso.
       </p>
       <p style="color:var(--text-dim);font-size:1.02rem;line-height:1.85;margin-bottom:24px;text-wrap:pretty;">
-        Nossa missão é entregar o oposto: soluções <strong style="color:var(--text)">configuradas, hospedadas e suportadas por nós</strong>, feitas pra quem trabalha no balcão. Você cuida do seu cliente. A tecnologia cuida do resto.
+        Aqui a gente não vende software e some. A Lorvix <strong style="color:var(--text)">instala, configura, hospeda e suporta</strong> — do primeiro dia até você crescer além do que imaginou. Você cuida do seu cliente. A gente cuida do resto.
       </p>
       <div class="about-meta">
-      <div class="about-meta-row">
-        <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 016-6h4a6 6 0 016 6v2"/></svg></div>
-        <div class="txt"><strong>Carlos Alexandre de Araujo</strong>Fundador · Cariacica/ES</div>
-      </div>
       <div class="about-meta-row">
         <div class="ico"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 7l10 7L22 7"/></svg></div>
         <div class="txt"><strong>E-mail</strong><a href="mailto:contato@lorvix.com.br">contato@lorvix.com.br</a></div>
