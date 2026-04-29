@@ -2,3 +2,18 @@
   from = "/"
   to = "/lorvix.html"
   status = 200
+
+[[redirects]]
+  from = "/demo/bellezaprime"
+  to = "/demo/bellezaprime/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/linktree"
+  to = "/linktree.html"
+  status = 200
+
+[[redirects]]
+  from = "/briefing"
+  to = "/briefing.html"
+  status = 200
