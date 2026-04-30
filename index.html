@@ -986,8 +986,9 @@
   }
   @media (max-width: 768px) {
     .service-card-img { width: calc(100% + 64px); height: 150px; }
-    .photo-banner { height: 240px; }
-    .photo-banner-overlay { padding: 28px; }
+    .photo-banner { height: auto; }
+    .photo-banner > img { position: absolute; inset: 0; height: 100%; }
+    .photo-banner-overlay { position: relative; padding: 32px 24px 36px; align-items: flex-start; min-height: 260px; }
     .about-photo { min-height: 240px; }
     .growth-banner { height: 320px; }
     .growth-overlay { padding: 0 24px; }
