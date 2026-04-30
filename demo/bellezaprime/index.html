@@ -166,16 +166,25 @@ nav.scrolled{box-shadow:0 2px 28px oklch(17% .012 50/.08)}
 .services-head .lead{margin:0 auto}
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:48px}
 .scard{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer}
-.scard img{transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+.scard img{transition:transform .7s cubic-bezier(.25,.46,.45,.94);object-position:center top}
 .scard:hover img{transform:scale(1.07)}
-.scard-overlay{position:absolute;inset:0;background:linear-gradient(to top,oklch(10% .01 55/.96) 0%,oklch(10% .01 55/.55) 45%,oklch(10% .01 55/.15) 100%)}
-.scard-body{position:absolute;bottom:0;left:0;right:0;padding:30px 26px}
-.scard-tag{display:inline-block;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid;padding:4px 10px;margin-bottom:12px}
+.scard-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to top,
+    oklch(10% .01 55/.97) 0%,
+    oklch(10% .01 55/.82) 28%,
+    oklch(10% .01 55/.18) 52%,
+    transparent 72%
+  )
+}
+.scard-body{position:absolute;bottom:0;left:0;right:0;padding:22px 22px 24px}
+.scard-tag{display:inline-block;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;border:1px solid;padding:3px 9px;margin-bottom:9px}
 .scard-tag--gold{color:var(--gold-lt);border-color:var(--gold-lt)}
 .scard-tag--rose{color:oklch(88% .05 10);border-color:oklch(88% .05 10)}
 .scard-tag--sage{color:oklch(88% .05 160);border-color:oklch(88% .05 160)}
-.scard h3{font-size:1.5rem;color:#fff;font-weight:400;margin-bottom:8px}
-.scard p{font-size:.84rem;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:16px}
+.scard h3{font-size:1.35rem;color:#fff;font-weight:400;margin-bottom:6px;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.scard p{font-size:.82rem;color:rgba(255,255,255,.82);line-height:1.55;margin-bottom:12px}
 .scard-cta{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--gold-lt);letter-spacing:.05em;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
 .scard-cta::after{content:'→'}
 .scard:hover .scard-cta{opacity:1;transform:none}
@@ -346,7 +355,9 @@ footer{background:oklch(12% .01 50);padding:72px 56px 36px}
 
   .services{padding:64px 28px}
   .services-grid{grid-template-columns:1fr}
-  .scard{aspect-ratio:16/9}
+  .scard{aspect-ratio:4/3}
+  .scard p{display:none}
+  .scard-body{padding:16px 18px 20px}
 
   .how{padding:64px 28px}
   .how-inner{grid-template-columns:1fr;gap:48px}
