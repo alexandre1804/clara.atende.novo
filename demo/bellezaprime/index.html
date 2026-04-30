@@ -205,10 +205,10 @@ nav.scrolled{box-shadow:0 2px 28px oklch(17% .012 50/.08)}
 .step-content h4{font-size:1.05rem;font-weight:500;margin-bottom:6px}
 .step-content p{font-size:.9rem;color:var(--muted);line-height:1.7}
 .how-img{position:relative;height:580px;overflow:hidden}
-.how-img img{border-radius:0}
-.how-img-badge{position:absolute;bottom:32px;left:-24px;background:var(--white);padding:20px 24px;box-shadow:0 12px 40px oklch(17% .012 50/.12)}
-.how-img-badge strong{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold);display:block;line-height:1}
-.how-img-badge span{font-size:.75rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.how-img img{border-radius:0;object-position:center 15%}
+.how-img-badge{position:absolute;bottom:28px;right:20px;left:auto;background:var(--white);padding:18px 22px;box-shadow:0 12px 40px oklch(17% .012 50/.15);border-radius:4px}
+.how-img-badge strong{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);display:block;line-height:1}
+.how-img-badge span{font-size:.73rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 
 /* ── ABOUT ── */
 .about{display:grid;grid-template-columns:1fr 1fr;padding:0}
@@ -362,7 +362,7 @@ footer{background:oklch(12% .01 50);padding:72px 56px 36px}
   .how{padding:64px 28px}
   .how-inner{grid-template-columns:1fr;gap:48px}
   .how-img{height:340px;order:-1}
-  .how-img-badge{left:16px}
+  .how-img-badge{right:16px;left:auto}
 
   .about{grid-template-columns:1fr}
   .about-img{height:360px}
@@ -458,7 +458,7 @@ footer{background:oklch(12% .01 50);padding:72px 56px 36px}
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg" id="heroBg">
-    <img src="uploads/pexels-alexander-mass-748453803-29648651.jpg" alt="Especialista Belleza Prime" onload="this.closest('.hero-bg').classList.add('loaded')">
+    <img src="uploads/recepcao-clinica.jpg" alt="Recepção Belleza Prime" onload="this.closest('.hero-bg').classList.add('loaded')" style="object-position:center 40%">
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
