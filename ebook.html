@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA no Pequeno Negócio — Venda mais, economize tempo e não fique para trás</title>
+  <meta name="description" content="O guia prático para micro e pequenos empreendedores usarem Inteligência Artificial para vender mais, economizar tempo e crescer. Por apenas R$19.">
+  <meta name="keywords" content="IA no pequeno negócio, inteligência artificial empreendedor, ChatGPT negócio, automação WhatsApp, ebook IA">
+  <meta property="og:title" content="IA no Pequeno Negócio — R$19">
+  <meta property="og:description" content="10 capítulos práticos para você usar IA no seu negócio hoje, sem precisar ser técnico.">
+  <meta property="og:image" content="images/ebook-ia-capa.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --gold: #C9A227;
+      --gold-light: #E8C44A;
+      --gold-dark: #A07D10;
+      --bg: #080808;
+      --bg2: #111111;
+      --bg3: #181818;
+      --border: rgba(201,162,39,0.2);
+      --text: #F0F0F0;
+      --muted: rgba(240,240,240,0.55);
+      --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--gold);
+      color: #000;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .topbar span { opacity: 0.75; font-weight: 500; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 64px 24px 72px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-book {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .hero-book img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 32px 80px rgba(201,162,39,0.25), 0 8px 24px rgba(0,0,0,0.6);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero-badge {
+      position: absolute;
+      top: -12px; right: 0;
+      background: var(--gold);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .hero-content { display: flex; flex-direction: column; gap: 20px; }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(201,162,39,0.12);
+      border: 1px solid var(--border);
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+    .hero-tag::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--gold); }
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .hero-price {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .price-from {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+    .price-value {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: -0.03em;
+    }
+    .price-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .btn-buy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #000;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 18px 32px;
+      border-radius: 14px;
+      text-decoration: none;
+      transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+      box-shadow: 0 8px 32px rgba(201,162,39,0.35);
+      letter-spacing: 0.01em;
+    }
+    .btn-buy:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(201,162,39,0.45); }
+    .btn-buy svg { width:20px; height:20px; flex-shrink:0; }
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .trust-item { display: flex; align-items: center; gap: 5px; }
+    .trust-item svg { width:14px; height:14px; stroke:var(--gold); stroke-width:2; fill:none; flex-shrink:0; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 24px;
+    }
+
+    /* ── SECTION ── */
+    .section { padding: 72px 24px; max-width: 900px; margin: 0 auto; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,162,39,0.1); border: 1px solid var(--border);
+      color: var(--gold); font-size: 0.75rem; font-weight: 700;
+      padding: 5px 14px; border-radius: 20px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800; line-height: 1.2; letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+    .section h2 em { font-style: normal; color: var(--gold); }
+    .section-sub { color: var(--muted); font-size: 1.02rem; line-height: 1.65; max-width: 580px; }
+
+    /* ── PROBLEM ── */
+    .problem-bg { background: var(--bg2); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .problem-item {
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 24px 22px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .problem-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(201,162,39,0.1); border: 1px solid var(--border);
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .problem-icon svg { width:18px; height:18px; stroke:var(--gold); stroke-width:1.8; fill:none; }
+    .problem-item p { font-size: 0.92rem; line-height: 1.55; color: rgba(240,240,240,0.8); }
+
+    /* ── CHAPTERS ── */
+    .chapters-list { margin-top: 40px; display: flex; flex-direction: column; gap: 10px; }
+    .chapter-item {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--bg2); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 18px 20px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .chapter-item:hover { border-color: var(--border); background: var(--bg3); }
+    .chapter-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: #000; font-weight: 800; font-size: 0.82rem;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .chapter-intro .chapter-num {
+      background: rgba(201,162,39,0.15);
+      color: var(--gold);
+      font-size: 0.65rem; letter-spacing: 0.05em; font-weight: 700;
+    }
+    .chapter-label { font-size: 0.68rem; color: var(--gold); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+    .chapter-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+
+    /* ── BENEFITS ── */
+    .benefits-bg { background: var(--bg2); }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .benefit-card {
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 28px 22px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .benefit-card:hover { border-color: var(--border); transform: translateY(-4px); }
+    .benefit-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      background: rgba(201,162,39,0.12); border: 1px solid var(--border);
+      display: grid; place-items: center; margin: 0 auto 16px;
+    }
+    .benefit-icon svg { width:24px; height:24px; stroke:var(--gold); stroke-width:1.6; fill:none; }
+    .benefit-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .benefit-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
+
+    /* ── AUTHOR ── */
+    .author-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .author-photo {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+    .author-photo img { width:100%; display:block; }
+    .author-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 20px;
+      border: 1px solid rgba(201,162,39,0.25);
+      pointer-events: none;
+    }
+    .author-content { display: flex; flex-direction: column; gap: 16px; }
+    .author-name { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+    .author-role { font-size: 0.85rem; color: var(--gold); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+    .author-bio { font-size: 0.97rem; color: rgba(240,240,240,0.75); line-height: 1.7; }
+    .author-stats {
+      display: flex; gap: 24px; flex-wrap: wrap;
+    }
+    .astat strong { display: block; font-size: 1.5rem; font-weight: 800; color: var(--gold); letter-spacing: -0.02em; }
+    .astat span { font-size: 0.78rem; color: var(--muted); }
+
+    /* ── OFFER ── */
+    .offer-bg { background: var(--bg2); }
+    .offer-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px 40px;
+      margin-top: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .offer-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+    }
+    .offer-tag {
+      display: inline-block;
+      background: rgba(201,162,39,0.15); border: 1px solid var(--border);
+      color: var(--gold); font-size: 0.75rem; font-weight: 700;
+      padding: 5px 14px; border-radius: 20px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .offer-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .offer-sub { color: var(--muted); margin-bottom: 28px; font-size: 0.97rem; }
+    .offer-price-block { margin-bottom: 28px; }
+    .offer-price-from { font-size: 0.9rem; color: var(--muted); text-decoration: line-through; margin-bottom: 4px; }
+    .offer-price-value {
+      font-size: 4rem; font-weight: 900; color: var(--gold);
+      letter-spacing: -0.04em; line-height: 1;
+    }
+    .offer-price-note { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }
+    .offer-includes {
+      display: flex; flex-direction: column; gap: 10px;
+      margin: 0 auto 32px; max-width: 380px; text-align: left;
+    }
+    .offer-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+    .offer-item svg { width:16px; height:16px; stroke:var(--gold); stroke-width:2.5; fill:none; flex-shrink:0; }
+    .offer-cta { margin: 0 auto; max-width: 380px; }
+    .offer-cta .btn-buy { width: 100%; font-size: 1.12rem; padding: 20px; }
+    .offer-secure {
+      display: flex; justify-content: center; align-items: center; gap: 6px;
+      margin-top: 14px; font-size: 0.78rem; color: var(--muted);
+    }
+    .offer-secure svg { width:14px; height:14px; stroke:var(--muted); stroke-width:2; fill:none; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 40px; display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--bg2); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item.open { border-color: var(--border); background: var(--bg3); }
+    .faq-btn {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 22px; gap: 16px;
+      font-family: 'Outfit', sans-serif; font-size: 0.97rem;
+      font-weight: 600; color: var(--text); text-align: left;
+    }
+    .faq-arrow {
+      width: 20px; height: 20px; flex-shrink: 0;
+      stroke: var(--gold); stroke-width: 2; fill: none;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease); }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer p { padding: 0 22px 20px; font-size: 0.92rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      background: linear-gradient(135deg, #0E0900 0%, #1A1000 50%, #0E0900 100%);
+      border-top: 1px solid var(--border);
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .final-cta h2 {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      font-weight: 900; letter-spacing: -0.03em;
+      margin-bottom: 16px; line-height: 1.15;
+    }
+    .final-cta h2 em { font-style: normal; color: var(--gold); }
+    .final-cta p { color: var(--muted); font-size: 1.02rem; margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .final-cta .btn-buy { font-size: 1.1rem; padding: 20px 40px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #050505; border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 28px 24px; text-align: center;
+      font-size: 0.78rem; color: rgba(240,240,240,0.25);
+    }
+    footer a { color: rgba(240,240,240,0.35); text-decoration: none; }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .hero { grid-template-columns: 1fr; gap: 36px; padding: 48px 20px 56px; text-align: center; }
+      .hero-book { order: -1; }
+      .hero-book img { max-width: 220px; }
+      .hero-tag { margin: 0 auto; }
+      .hero-price { justify-content: center; }
+      .hero-trust { justify-content: center; flex-wrap: wrap; gap: 10px; }
+      .author-layout { grid-template-columns: 1fr; }
+      .author-photo { max-width: 240px; margin: 0 auto; }
+      .author-stats { gap: 16px; }
+      .offer-card { padding: 32px 22px; }
+      .offer-price-value { font-size: 3rem; }
+      .section { padding: 56px 20px; }
+      .benefits-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 420px) {
+      .benefits-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    🔥 Oferta de lançamento — <span>apenas R$19 no acesso completo</span>
+  </div>
+
+  <!-- HERO -->
+  <section style="background: radial-gradient(ellipse at top, #1A1200 0%, var(--bg) 65%);">
+    <div class="hero">
+      <div class="hero-book reveal">
+        <span class="hero-badge">Novo</span>
+        <img src="images/ebook-ia-capa.jpg" alt="Ebook IA no Pequeno Negócio">
+      </div>
+      <div class="hero-content reveal">
+        <span class="hero-tag">Ebook Digital</span>
+        <h1>Venda mais usando <em>Inteligência Artificial</em> no seu negócio</h1>
+        <p class="hero-sub">10 capítulos práticos para você aplicar IA hoje — mesmo sem ser técnico. Atenda melhor, economize horas e não fique pra trás dos concorrentes.</p>
+        <div class="hero-price">
+          <span class="price-from">R$49</span>
+          <span class="price-value">R$19</span>
+          <span class="price-label">acesso imediato</span>
+        </div>
+        <a href="https://pay.kiwify.com.br/LNAs82b" class="btn-buy" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Quero meu ebook agora
+        </a>
+        <div class="hero-trust">
+          <span class="trust-item">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Compra segura
+          </span>
+          <span class="trust-item">
+            <svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
+            PDF + acesso imediato
+          </span>
+          <span class="trust-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            Leitura em 2h
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROBLEM -->
+  <section class="problem-bg">
+    <div class="section reveal">
+      <span class="section-label">O problema</span>
+      <h2>Enquanto você faz tudo no <em>manual</em>,<br>seus concorrentes já automatizaram.</h2>
+      <p class="section-sub">A IA não é para grandes empresas. É para quem quer parar de perder tempo e clientes.</p>
+      <div class="problem-grid">
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <p>Você responde mensagem uma por uma no WhatsApp — e perde o cliente que não esperou.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          </div>
+          <p>Passa horas criando post, legenda, resposta — tempo que poderia estar no seu negócio.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+          </div>
+          <p>Acha que IA é coisa de técnico ou de empresa grande — e fica para trás sem perceber.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-icon">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <p>Vendas estagnadas — não por falta de produto, mas por falta de presença e agilidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CHAPTERS -->
+  <section>
+    <div class="section reveal">
+      <span class="section-label">O que você vai aprender</span>
+      <h2>10 capítulos diretos ao <em>ponto</em></h2>
+      <p class="section-sub">Sem enrolação. Cada capítulo entrega uma ferramenta, uma estratégia ou um passo que você pode aplicar no mesmo dia.</p>
+      <div class="chapters-list">
+        <div class="chapter-item chapter-intro">
+          <div class="chapter-num">IN</div>
+          <div>
+            <div class="chapter-label">Introdução</div>
+            <div class="chapter-title">O pequeno negócio entrou em uma nova era</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">1</div>
+          <div>
+            <div class="chapter-label">Capítulo 1</div>
+            <div class="chapter-title">O que é inteligência artificial, sem complicação</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">2</div>
+          <div>
+            <div class="chapter-label">Capítulo 2</div>
+            <div class="chapter-title">Por que micro e pequenos empreendedores precisam olhar para isso</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">3</div>
+          <div>
+            <div class="chapter-label">Capítulo 3</div>
+            <div class="chapter-title">Como o ChatGPT pode ajudar no dia a dia do negócio</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">4</div>
+          <div>
+            <div class="chapter-label">Capítulo 4</div>
+            <div class="chapter-title">IA no atendimento: como parar de perder clientes no WhatsApp</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">5</div>
+          <div>
+            <div class="chapter-label">Capítulo 5</div>
+            <div class="chapter-title">Automações simples que economizam tempo</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">6</div>
+          <div>
+            <div class="chapter-label">Capítulo 6</div>
+            <div class="chapter-title">Como usar IA para vender mais</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">7</div>
+          <div>
+            <div class="chapter-label">Capítulo 7</div>
+            <div class="chapter-title">Como usar Canva + ChatGPT para criar conteúdo mais rápido</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">8</div>
+          <div>
+            <div class="chapter-label">Capítulo 8</div>
+            <div class="chapter-title">O risco de ignorar as novas tecnologias</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">9</div>
+          <div>
+            <div class="chapter-label">Capítulo 9</div>
+            <div class="chapter-title">Plano prático de 7 dias para começar com IA</div>
+          </div>
+        </div>
+        <div class="chapter-item">
+          <div class="chapter-num">10</div>
+          <div>
+            <div class="chapter-label">Capítulo 10</div>
+            <div class="chapter-title">Checklist final para o pequeno empreendedor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BENEFITS -->
+  <section class="benefits-bg">
+    <div class="section reveal">
+      <span class="section-label">O que muda</span>
+      <h2>Você sai diferente de como <em>entrou</em></h2>
+      <p class="section-sub">Este não é um ebook teórico. É um guia de ação com resultado direto no seu dia a dia.</p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3>Resposta em segundos</h3>
+          <p>Atenda clientes no WhatsApp 24h sem ficar preso no celular.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          </div>
+          <h3>Horas de volta</h3>
+          <p>Automatize tarefas repetitivas e recupere tempo para o que importa.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/></svg>
+          </div>
+          <h3>Mais vendas</h3>
+          <p>Use IA para criar ofertas, posts e abordagens que convertem.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Sem ficar pra trás</h3>
+          <p>Entenda as ferramentas que seus concorrentes já estão usando.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- AUTHOR -->
+  <section>
+    <div class="section reveal">
+      <span class="section-label">Sobre o autor</span>
+      <div class="author-layout">
+        <div class="author-photo">
+          <img src="images/carlos-araujo-autor.jpg" alt="Carlos A. Araujo">
+        </div>
+        <div class="author-content">
+          <div>
+            <div class="author-role">Autor</div>
+            <div class="author-name">Carlos A. Araujo</div>
+          </div>
+          <p class="author-bio">Empreendedor e especialista em tecnologia aplicada a pequenos negócios. Fundador da Lorvix, plataforma de automação e atendimento com IA para clínicas e negócios locais. Escreveu este ebook para democratizar o acesso à IA — provando que qualquer empreendedor pode usar essas ferramentas hoje, independentemente de ter conhecimento técnico.</p>
+          <div class="author-stats">
+            <div class="astat"><strong>10+</strong><span>anos empreendendo</span></div>
+            <div class="astat"><strong>IA</strong><span>aplicada a negócios reais</span></div>
+            <div class="astat"><strong>100%</strong><span>prático e direto</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OFFER -->
+  <section class="offer-bg">
+    <div class="section reveal">
+      <span class="section-label">Oferta</span>
+      <h2>Acesso completo por <em>menos que um almoço</em></h2>
+      <p class="section-sub">Você não precisa de curso caro nem de consultor. O que você precisa está aqui.</p>
+      <div class="offer-card">
+        <div class="offer-tag">Acesso imediato</div>
+        <div class="offer-title">IA no Pequeno Negócio</div>
+        <p class="offer-sub">O guia completo para empreendedores que querem crescer com tecnologia</p>
+        <div class="offer-price-block">
+          <div class="offer-price-from">De R$49</div>
+          <div class="offer-price-value">R$19</div>
+          <div class="offer-price-note">pagamento único · acesso para sempre</div>
+        </div>
+        <div class="offer-includes">
+          <div class="offer-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>10 capítulos práticos e diretos</div>
+          <div class="offer-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Plano de 7 dias para começar com IA</div>
+          <div class="offer-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Checklist final do pequeno empreendedor</div>
+          <div class="offer-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>PDF com acesso imediato após o pagamento</div>
+          <div class="offer-item"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>Leitura rápida — 2 horas para transformar seu negócio</div>
+        </div>
+        <div class="offer-cta">
+          <a href="https://pay.kiwify.com.br/LNAs82b" class="btn-buy" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Comprar agora por R$19
+          </a>
+          <div class="offer-secure">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Pagamento 100% seguro via Kiwify
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section>
+    <div class="section reveal">
+      <span class="section-label">Dúvidas</span>
+      <h2>Perguntas <em>frequentes</em></h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">
+            Preciso saber de tecnologia para ler este ebook?
+            <svg class="faq-arrow" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+          </button>
+          <div class="faq-answer"><p>Não. O ebook foi escrito exatamente para quem não tem conhecimento técnico. A linguagem é simples, com exemplos do dia a dia de negócios como salões, clínicas, lojas e prestadores de serviço.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">
+            Como recebo o ebook após a compra?
+            <svg class="faq-arrow" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+          </button>
+          <div class="faq-answer"><p>Imediatamente após a confirmação do pagamento, você recebe um e-mail com o link para download do PDF. O acesso é vitalício — você pode baixar quando quiser.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">
+            Funciona para qual tipo de negócio?
+            <svg class="faq-arrow" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+          </button>
+          <div class="faq-answer"><p>Para qualquer micro ou pequeno negócio: salões de beleza, clínicas, lojas, restaurantes, prestadores de serviço, autônomos e profissionais liberais. Se você tem clientes e usa WhatsApp, este ebook é para você.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">
+            O conteúdo é atualizado?
+            <svg class="faq-arrow" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+          </button>
+          <div class="faq-answer"><p>Sim. O ebook foi escrito em 2025 com as ferramentas mais atuais do mercado, incluindo ChatGPT, Canva IA e automações de WhatsApp que você pode usar hoje mesmo.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-btn" onclick="toggleFaq(this)">
+            Por que o preço é tão acessível?
+            <svg class="faq-arrow" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+          </button>
+          <div class="faq-answer"><p>Porque o objetivo é democratizar o acesso à IA para quem mais precisa: o pequeno empreendedor. A ideia é que o preço nunca seja a barreira entre você e o crescimento do seu negócio.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="reveal">
+      <h2>Seu concorrente já está<br><em>usando IA.</em> E você?</h2>
+      <p>Por R$19 você tem acesso ao guia completo para não ficar pra trás. Decisão mais fácil que você vai tomar hoje.</p>
+      <a href="https://pay.kiwify.com.br/LNAs82b" class="btn-buy" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Quero meu ebook por R$19
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Carlos A. Araujo · <a href="https://pay.kiwify.com.br/LNAs82b">IA no Pequeno Negócio</a> · Todos os direitos reservados</p>
+  </footer>
+
+  <script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // FAQ accordion
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
+</body>
+</html>
