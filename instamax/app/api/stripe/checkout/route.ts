@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
     type: type as PurchaseType,
     userId: user.id,
     analysisId: targetAnalysisId,
+    scheduleId,
     metadata: {
-      ...(scheduleId ? { schedule_id: scheduleId } : {}),
       niche: niche ?? '',
       objective: objective ?? '',
     },

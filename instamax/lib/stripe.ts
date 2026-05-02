@@ -32,14 +32,21 @@ export async function createCheckoutSession({
   type,
   userId,
   analysisId,
+  scheduleId,
   metadata = {},
 }: {
   type: PurchaseType
   userId: string
   analysisId?: string
+  scheduleId?: string
   metadata?: Record<string, string>
 }) {
   const price = PRICES[type]
+
+  const successParams = new URLSearchParams({ success: '1', type })
+  if (analysisId) successParams.set('aid', analysisId)
+  if (scheduleId) successParams.set('sid', scheduleId)
+  successParams.set('session_id', '{CHECKOUT_SESSION_ID}')
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -54,12 +61,13 @@ export async function createCheckoutSession({
         quantity: 1,
       },
     ],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=1&type=${type}&session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?${successParams}`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?canceled=1`,
     metadata: {
       user_id: userId,
       type,
       analysis_id: analysisId ?? '',
+      schedule_id: scheduleId ?? '',
       ...metadata,
     },
   })
