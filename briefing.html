@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --cream: #F6F1EB;
-  --cream2: #EDE6DC;
-  --purple: #6B35C8;
-  --purple2: #8B5CF6;
-  --purple-soft: #EDE9FF;
-  --dark: #170F2E;
-  --dark2: #2A1650;
-  --text: #3B2860;
-  --muted: #7A6890;
+  --cream: #FFF3E2;
+  --cream2: #EDE0CB;
+  --purple: #5C0018;
+  --purple2: #9B1040;
+  --purple-soft: #FFF0F2;
+  --dark: #0A0A0A;
+  --dark2: #1A0008;
+  --text: #0A0A0A;
+  --muted: #6B6B6B;
   --white: #FFFFFF;
-  --border: rgba(107,53,200,0.15);
-  --input-bg: #EFEAD8;
+  --border: rgba(92,0,24,0.15);
+  --input-bg: #F5EDE0;
   --error: #EF4444;
   --success: #22C55E;
 }
@@ -351,6 +351,46 @@ body {
   box-shadow: 0 4px 20px rgba(34,197,94,0.3);
 }
 .success-wpp:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,197,94,0.35); }
+
+/* ── FILE UPLOAD ── */
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  background: var(--input-bg);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.upload-area:hover, .upload-area.dragover {
+  border-color: var(--purple);
+  background: var(--purple-soft);
+}
+.upload-area input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.upload-icon { font-size: 2rem; margin-bottom: 8px; }
+.upload-label { font-size: 0.92rem; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+.upload-sub { font-size: 0.78rem; color: var(--muted); }
+.upload-files {
+  margin-top: 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.upload-file-item {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; font-size: 0.82rem;
+  color: var(--dark);
+}
+.upload-file-item span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.upload-file-item button {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 1rem; padding: 0; line-height: 1;
+  flex-shrink: 0;
+}
+.upload-file-item button:hover { color: var(--error); }
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
@@ -934,16 +974,25 @@ body {
       <div class="field">
         <label class="field-label">Você já tem logo?</label>
         <div class="radio-group">
-          <label class="radio-item" onclick="selectRadio(this)">
+          <label class="radio-item" onclick="selectRadio(this); document.getElementById('logo-upload-wrap').style.display='block'">
             <input type="radio" name="lp-logo">
             <div class="radio-dot"></div>
-            <div><div class="radio-label">Sim — vou enviar pelo WhatsApp</div></div>
+            <div><div class="radio-label">Sim — quero enviar agora</div></div>
           </label>
-          <label class="radio-item" onclick="selectRadio(this)">
+          <label class="radio-item" onclick="selectRadio(this); document.getElementById('logo-upload-wrap').style.display='none'">
             <input type="radio" name="lp-logo">
             <div class="radio-dot"></div>
             <div><div class="radio-label">Não tenho logo ainda</div></div>
           </label>
+        </div>
+        <div id="logo-upload-wrap" style="display:none; margin-top:14px">
+          <div class="upload-area" id="logo-upload-area" ondragover="handleDrag(event,this)" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event,'logo-files','logo-upload-area')">
+            <input type="file" id="logo-files" name="logo" accept="image/*,.svg,.pdf,.ai,.eps" multiple onchange="showFiles(this,'logo-file-list')">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-label">Clique ou arraste o arquivo aqui</div>
+            <div class="upload-sub">PNG, JPG, SVG, PDF — até 10 MB</div>
+          </div>
+          <div class="upload-files" id="logo-file-list"></div>
         </div>
       </div>
       <div class="field">
@@ -1010,17 +1059,19 @@ body {
         <input type="text" placeholder="Ex: Seg–Sex 8h–18h · Sáb 8h–12h">
       </div>
       <div class="field">
-        <label class="field-label">Você tem fotos da clínica ou do seu trabalho?</label>
-        <div class="radio-group">
-          <label class="radio-item" onclick="selectRadio(this)">
-            <input type="radio" name="lp-fotos">
+        <label class="field-label">Fotos da clínica ou do seu trabalho</label>
+        <span class="field-hint">Envie aqui — quanto mais fotos reais, mais personalizada fica a página</span>
+        <div class="upload-area" id="fotos-upload-area" ondragover="handleDrag(event,this)" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event,'fotos-files','fotos-upload-area')">
+          <input type="file" id="fotos-files" name="fotos" accept="image/*,video/*" multiple onchange="showFiles(this,'fotos-file-list')">
+          <div class="upload-icon">📸</div>
+          <div class="upload-label">Clique ou arraste as fotos aqui</div>
+          <div class="upload-sub">JPG, PNG, HEIC, MP4 — múltiplos arquivos aceitos · até 10 MB cada</div>
+        </div>
+        <div class="upload-files" id="fotos-file-list"></div>
+        <div style="margin-top:10px">
+          <label class="radio-item" onclick="toggleMulti(this)" style="background:var(--input-bg)">
             <div class="radio-dot"></div>
-            <div><div class="radio-label">Sim — vou enviar pelo WhatsApp</div></div>
-          </label>
-          <label class="radio-item" onclick="selectRadio(this)">
-            <input type="radio" name="lp-fotos">
-            <div class="radio-dot"></div>
-            <div><div class="radio-label">Não tenho — podem usar fotos do banco</div></div>
+            <div><div class="radio-label">Não tenho fotos — podem usar banco de imagens</div></div>
           </label>
         </div>
       </div>
@@ -1157,7 +1208,7 @@ function navSection(svc, dir) {
   const next = s.current + dir;
 
   if (next > s.total) {
-    submitToFormspree(svc);
+    if (svc === 'lp') { submitLP(); } else { submitToFormspree(svc); }
     return;
   }
 
@@ -1210,6 +1261,68 @@ function selectRadio(el) {
     r.closest('.radio-item').classList.remove('selected');
   });
   el.classList.add('selected');
+}
+
+// ── FILE UPLOAD ──
+function showFiles(input, listId) {
+  const list = document.getElementById(listId);
+  list.innerHTML = '';
+  Array.from(input.files).forEach((file, i) => {
+    const item = document.createElement('div');
+    item.className = 'upload-file-item';
+    item.innerHTML = `<span>📄 ${file.name} <small style="color:var(--muted)">(${(file.size/1024).toFixed(0)} KB)</small></span><button onclick="removeFile('${input.id}',${i},'${listId}')" title="Remover">✕</button>`;
+    list.appendChild(item);
+  });
+}
+function removeFile(inputId, index, listId) {
+  const input = document.getElementById(inputId);
+  const dt = new DataTransfer();
+  Array.from(input.files).forEach((f, i) => { if (i !== index) dt.items.add(f); });
+  input.files = dt.files;
+  showFiles(input, listId);
+}
+function handleDrag(e, area) {
+  e.preventDefault(); area.classList.add('dragover');
+}
+function handleDrop(e, inputId, areaId) {
+  e.preventDefault();
+  document.getElementById(areaId).classList.remove('dragover');
+  const input = document.getElementById(inputId);
+  const dt = new DataTransfer();
+  Array.from(input.files).forEach(f => dt.items.add(f));
+  Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+  input.files = dt.files;
+  showFiles(input, inputId === 'logo-files' ? 'logo-file-list' : 'fotos-file-list');
+}
+
+// ── LP SUBMIT COM ARQUIVOS ──
+async function submitLP() {
+  const btn = document.getElementById('lp-next');
+  btn.innerHTML = 'Enviando...'; btn.disabled = true;
+
+  const data = collectData('lp');
+  const formData = new FormData();
+  Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+
+  const logoFiles = document.getElementById('logo-files')?.files;
+  const fotosFiles = document.getElementById('fotos-files')?.files;
+  if (logoFiles) Array.from(logoFiles).forEach(f => formData.append('logo', f));
+  if (fotosFiles) Array.from(fotosFiles).forEach(f => formData.append('fotos', f));
+
+  try {
+    const res = await fetch('https://formspree.io/f/xeevvpkr', {
+      method: 'POST', headers: { 'Accept': 'application/json' }, body: formData
+    });
+    if (res.ok) {
+      document.getElementById('lp-nav').style.display = 'none';
+      document.getElementById('lp-success').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      btn.innerHTML = 'Erro — tente novamente'; btn.disabled = false; btn.style.background = '#EF4444';
+    }
+  } catch(e) {
+    btn.innerHTML = 'Erro — tente novamente'; btn.disabled = false; btn.style.background = '#EF4444';
+  }
 }
 
 // ── CHECKBOX ──
