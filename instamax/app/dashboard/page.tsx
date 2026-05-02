@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import NewAnalysisForm from './_components/NewAnalysisForm'
 import PostPaymentHandler from './_components/PostPaymentHandler'
+import CreditBalance from './_components/CreditBalance'
 import type { InstagramProfile, Analysis } from '@/types'
 
 export default async function DashboardPage({
@@ -73,6 +74,7 @@ export default async function DashboardPage({
             <span className="font-bold tracking-tight">InstaMax</span>
           </Link>
           <div className="flex items-center gap-4">
+            <CreditBalance />
             <span className="text-sm text-white/40 hidden sm:block">{user.email}</span>
             <form action={signOut}>
               <button type="submit" className="text-sm text-white/35 hover:text-white/70 transition-colors">

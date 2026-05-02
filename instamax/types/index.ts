@@ -1,4 +1,42 @@
-export type PurchaseType = 'analysis' | 'schedule_week' | 'schedule_month' | 'image'
+export type PurchaseType = 'analysis' | 'schedule_week' | 'schedule_month' | 'credits_starter' | 'credits_plus' | 'credits_pro'
+
+export interface CreditPack {
+  type: 'credits_starter' | 'credits_plus' | 'credits_pro'
+  label: string
+  credits: number
+  price: number
+  priceFormatted: string
+  perCredit: string
+  highlight?: boolean
+}
+
+export const CREDIT_PACKS: CreditPack[] = [
+  {
+    type: 'credits_starter',
+    label: 'Starter',
+    credits: 8,
+    price: 900,
+    priceFormatted: 'R$9',
+    perCredit: 'R$1,12/imagem',
+  },
+  {
+    type: 'credits_plus',
+    label: 'Plus',
+    credits: 30,
+    price: 2700,
+    priceFormatted: 'R$27',
+    perCredit: 'R$0,90/imagem',
+    highlight: true,
+  },
+  {
+    type: 'credits_pro',
+    label: 'Pro',
+    credits: 60,
+    price: 4500,
+    priceFormatted: 'R$45',
+    perCredit: 'R$0,75/imagem',
+  },
+]
 
 export interface InstagramProfile {
   id: string

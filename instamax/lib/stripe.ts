@@ -5,26 +5,30 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2026-04-22.dahlia' as const,
 })
 
-export const PRICES: Record<PurchaseType, { amount: number; label: string; priceId: string }> = {
+export const PRICES: Record<PurchaseType, { amount: number; label: string }> = {
   analysis: {
     amount: 3900,
-    label: 'Análise de Perfil + Cronograma da Semana',
-    priceId: process.env.STRIPE_PRICE_ANALYSIS!,
+    label: 'Análise de Perfil + Cronograma da Semana + 5 créditos de imagem',
   },
   schedule_week: {
     amount: 1900,
     label: 'Cronograma Semanal',
-    priceId: process.env.STRIPE_PRICE_WEEK!,
   },
   schedule_month: {
     amount: 2900,
     label: 'Cronograma Mensal',
-    priceId: process.env.STRIPE_PRICE_MONTH!,
   },
-  image: {
-    amount: 100,
-    label: 'Geração de Imagem',
-    priceId: process.env.STRIPE_PRICE_IMAGE!,
+  credits_starter: {
+    amount: 900,
+    label: '8 Créditos de Imagem',
+  },
+  credits_plus: {
+    amount: 2700,
+    label: '30 Créditos de Imagem',
+  },
+  credits_pro: {
+    amount: 4500,
+    label: '60 Créditos de Imagem',
   },
 }
 

@@ -3,6 +3,14 @@ import { stripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
 import Stripe from 'stripe'
 
+const CREDIT_AMOUNTS: Record<string, number> = {
+  credits_starter: 8,
+  credits_plus: 30,
+  credits_pro: 60,
+}
+
+const ANALYSIS_BONUS_CREDITS = 5
+
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')!
@@ -34,6 +42,14 @@ export async function POST(req: NextRequest) {
         .update({ payment_id: session.id })
         .eq('id', meta.analysis_id)
         .eq('user_id', meta.user_id)
+
+      // Bônus de créditos inclusos na análise
+      await admin.rpc('add_credits', {
+        p_user_id: meta.user_id,
+        p_amount: ANALYSIS_BONUS_CREDITS,
+        p_type: 'bonus',
+        p_description: `${ANALYSIS_BONUS_CREDITS} créditos bônus inclusos na análise`,
+      })
     }
 
     if (meta.type === 'schedule_week' || meta.type === 'schedule_month') {
@@ -44,8 +60,14 @@ export async function POST(req: NextRequest) {
         .eq('user_id', meta.user_id)
     }
 
-    if (meta.type === 'image') {
-      // Crédito de imagem liberado — processado no frontend após redirect
+    const creditAmount = CREDIT_AMOUNTS[meta.type]
+    if (creditAmount) {
+      await admin.rpc('add_credits', {
+        p_user_id: meta.user_id,
+        p_amount: creditAmount,
+        p_type: 'purchase',
+        p_description: `Compra de ${creditAmount} créditos — ${meta.type}`,
+      })
     }
   }
 

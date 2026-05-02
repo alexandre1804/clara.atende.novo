@@ -21,6 +21,11 @@ export default function PostPaymentHandler({ type, analysisId, scheduleId }: Pro
       triggerAnalysis(analysisId)
     } else if ((type === 'schedule_week' || type === 'schedule_month') && scheduleId) {
       triggerSchedule(scheduleId)
+    } else if (type.startsWith('credits_')) {
+      // Créditos já foram adicionados pelo webhook — só mostrar confirmação
+      setStatus('done')
+      setMessage('Créditos adicionados com sucesso!')
+      setTimeout(() => router.replace('/dashboard'), 2000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -152,6 +157,18 @@ export default function PostPaymentHandler({ type, analysisId, scheduleId }: Pro
     }
     setStatus('error')
     setMessage('Tempo esgotado. Recarregue a página para verificar.')
+  }
+
+  if (status === 'done' && message.includes('créditos')) {
+    return (
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+        <div className="bg-[#111] border border-green-500/30 rounded-2xl p-8 max-w-sm w-full text-center">
+          <div className="text-4xl mb-4">🎨</div>
+          <h3 className="font-bold text-white mb-2">Créditos adicionados!</h3>
+          <p className="text-white/50 text-sm">Seus créditos de imagem já estão disponíveis.</p>
+        </div>
+      </div>
+    )
   }
 
   if (status === 'error') {

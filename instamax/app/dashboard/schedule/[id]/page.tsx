@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import ImageGenButton from './ImageGenButton'
+import CreditBalance from '@/app/dashboard/_components/CreditBalance'
 import type { Schedule, ScheduleData, DaySchedule, ContentItem } from '@/types'
 
 export default async function SchedulePage({
@@ -55,6 +56,7 @@ export default async function SchedulePage({
             <span className="text-sm text-white/60">Cronograma</span>
           </div>
           <div className="flex items-center gap-3">
+            <CreditBalance />
             <Badge className="bg-white/10 text-white/50 border-0 text-xs">
               {data.total_posts} conteúdos · {data.period}
             </Badge>

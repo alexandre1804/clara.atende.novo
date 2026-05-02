@@ -42,7 +42,7 @@ export default function LandingPage() {
             </Button>
           </Link>
         </div>
-        <p className="text-sm text-white/30 mt-5">Cronograma da semana incluso na análise · Sem assinatura</p>
+        <p className="text-sm text-white/30 mt-5">Cronograma da semana incluso · 5 créditos de imagem grátis · Sem assinatura</p>
       </section>
 
       {/* COMO FUNCIONA */}
@@ -110,7 +110,7 @@ export default function LandingPage() {
           ))}
         </div>
         <p className="text-center text-sm text-white/30 mt-6">
-          Imagens geradas por IA → R$1 por imagem · Sem assinatura
+          5 créditos de imagem inclusos na análise · Pacotes a partir de R$9
         </p>
       </section>
 
