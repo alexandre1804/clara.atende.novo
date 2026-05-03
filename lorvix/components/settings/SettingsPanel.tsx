@@ -36,6 +36,21 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
   const [agentInstructions, setAgentInstructions] = useState(
     waConfig?.agent_instructions ?? '',
   )
+  const [agentActive, setAgentActive]   = useState(waConfig?.is_active   ?? false)
+  const [autoBooking, setAutoBooking]   = useState((waConfig as (typeof waConfig & { auto_booking?: boolean }) | null)?.auto_booking ?? false)
+
+  function saveAgentSettings() {
+    if (!waConfig) return
+    startTransition(async () => {
+      const supabase = createClient()
+      await supabase.from('whatsapp_config').update({
+        agent_instructions: agentInstructions,
+        is_active:          agentActive,
+        auto_booking:       autoBooking,
+      }).eq('id', waConfig.id)
+      router.refresh()
+    })
+  }
 
   function saveClinic() {
     startTransition(async () => {
@@ -142,6 +157,37 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
             <WhatsappConnect />
           </div>
 
+          {/* Toggles: ligar agente + agendamento automático */}
+          <div className="border-t border-white/10 pt-5 space-y-3">
+            <p className="text-sm font-semibold text-white">Automação</p>
+
+            <label className="flex items-center justify-between cursor-pointer">
+              <div>
+                <p className="text-sm text-white/80">Agente ativo</p>
+                <p className="text-xs text-white/40">O agente responde mensagens no WhatsApp</p>
+              </div>
+              <button
+                onClick={() => setAgentActive((v) => !v)}
+                className={`w-11 h-6 rounded-full transition-all relative ${agentActive ? 'brand-gradient' : 'bg-white/10'}`}
+              >
+                <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${agentActive ? 'left-[22px]' : 'left-0.5'}`} />
+              </button>
+            </label>
+
+            <label className="flex items-center justify-between cursor-pointer">
+              <div>
+                <p className="text-sm text-white/80">Agendamento automático</p>
+                <p className="text-xs text-white/40">IA pode criar, remarcar e cancelar consultas</p>
+              </div>
+              <button
+                onClick={() => setAutoBooking((v) => !v)}
+                className={`w-11 h-6 rounded-full transition-all relative ${autoBooking ? 'brand-gradient' : 'bg-white/10'}`}
+              >
+                <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${autoBooking ? 'left-[22px]' : 'left-0.5'}`} />
+              </button>
+            </label>
+          </div>
+
           {/* Instruções do agente */}
           <div className="border-t border-white/10 pt-5 space-y-3">
             <div>
@@ -159,15 +205,15 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
             />
             {waConfig ? (
               <button
-                onClick={saveAgentInstructions}
+                onClick={saveAgentSettings}
                 disabled={isPending}
                 className="brand-gradient text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
               >
-                <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar instruções'}
+                <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar configurações'}
               </button>
             ) : (
               <p className="text-xs text-white/30">
-                O agente precisa ser configurado pelo administrador antes de salvar.
+                Conecte o WhatsApp acima para salvar as configurações do agente.
               </p>
             )}
           </div>
