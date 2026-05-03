@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { X, Save, Trash2, Search } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
-import { cn, formatDate } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import type { Appointment, Professional, AppointmentStatus, Patient } from '@/types'
 
 const STATUSES: { value: AppointmentStatus; label: string }[] = [
@@ -31,6 +31,13 @@ export function AppointmentModal({
   const [isPending, startTransition] = useTransition()
   const supabase = createClient()
 
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [])
+
   const defaultDateStr = defaultDate
     ? defaultDate.toISOString().slice(0, 10)
     : new Date().toISOString().slice(0, 10)
@@ -39,20 +46,19 @@ export function AppointmentModal({
     : '09:00'
 
   const [form, setForm] = useState({
-    service:        appointment?.service ?? '',
+    service:         appointment?.service ?? '',
     professional_id: appointment?.professional_id ?? (professionals[0]?.id ?? ''),
-    date:           appointment ? new Date(appointment.start_datetime).toISOString().slice(0, 10) : defaultDateStr,
-    time:           appointment ? new Date(appointment.start_datetime).toTimeString().slice(0, 5) : defaultTimeStr,
-    duration:       appointment
+    date:            appointment ? new Date(appointment.start_datetime).toISOString().slice(0, 10) : defaultDateStr,
+    time:            appointment ? new Date(appointment.start_datetime).toTimeString().slice(0, 5) : defaultTimeStr,
+    duration:        appointment
       ? Math.round((new Date(appointment.end_datetime).getTime() - new Date(appointment.start_datetime).getTime()) / 60000)
       : 30,
-    status:         (appointment?.status ?? 'scheduled') as AppointmentStatus,
-    notes:          appointment?.notes ?? '',
-    price:          appointment?.price ?? '',
-    patientPhone:   '',
-    patientName:    (appointment?.patient as Patient | undefined)?.full_name ?? '',
-    patientId:      appointment?.patient_id ?? '',
+    status:          (appointment?.status ?? 'scheduled') as AppointmentStatus,
+    notes:           appointment?.notes ?? '',
+    price:           appointment?.price ?? '',
+    patientId:       appointment?.patient_id ?? '',
   })
+
   const [patientSearch, setPatientSearch] = useState('')
   const [foundPatient, setFoundPatient] = useState<Patient | null>(
     appointment?.patient ? (appointment.patient as Patient) : null,
@@ -65,25 +71,26 @@ export function AppointmentModal({
 
   async function searchPatient() {
     if (!patientSearch) return
+    const query = patientSearch.replace(/\D/g, '')
     const { data } = await supabase
       .from('patients')
       .select('*')
       .eq('clinic_id', clinicId)
-      .or(`phone.eq.${patientSearch},cpf.eq.${patientSearch}`)
+      .or(`phone.eq.${query},cpf.eq.${query}`)
       .single()
     if (data) {
       setFoundPatient(data as Patient)
-      setForm((prev) => ({ ...prev, patientId: data.id, patientName: data.full_name }))
+      setForm((prev) => ({ ...prev, patientId: data.id }))
       setSearchError('')
     } else {
-      setSearchError('Paciente não encontrado.')
+      setSearchError('Paciente não encontrado. Verifique telefone ou CPF.')
     }
   }
 
   function handleSave() {
     startTransition(async () => {
       const startDt = new Date(`${form.date}T${form.time}:00`)
-      const endDt = new Date(startDt.getTime() + form.duration * 60000)
+      const endDt   = new Date(startDt.getTime() + form.duration * 60000)
 
       const payload = {
         clinic_id:       clinicId,
@@ -112,43 +119,68 @@ export function AppointmentModal({
     if (!appointment) return
     if (!confirm('Cancelar este agendamento?')) return
     startTransition(async () => {
-      await supabase
-        .from('appointments')
-        .update({ status: 'cancelled' })
-        .eq('id', appointment.id)
+      await supabase.from('appointments').update({ status: 'cancelled' }).eq('id', appointment.id)
       router.refresh()
       onClose()
     })
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+      {/* Solid opaque backdrop — no blur, no see-through */}
+      <div
+        className="absolute inset-0"
+        style={{ background: 'rgba(8,4,7,0.92)' }}
+        onClick={onClose}
+      />
 
-      <div className="relative glass-strong rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      {/* Modal card */}
+      <div className="relative glass-strong rounded-t-3xl sm:rounded-2xl w-full sm:max-w-lg max-h-[92dvh] flex flex-col">
+        {/* Drag handle (mobile) */}
+        <div className="sm:hidden flex justify-center pt-3 pb-1 shrink-0">
+          <div className="w-10 h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.18)' }} />
+        </div>
+
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-white/10">
-          <h2 className="font-semibold text-white">
+        <div className="flex items-center justify-between px-5 py-4 shrink-0"
+          style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+          <h2 className="font-bold text-white text-base">
             {appointment ? 'Editar agendamento' : 'Novo agendamento'}
           </h2>
-          <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
-            <X className="w-5 h-5" />
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
+            style={{
+              background: 'linear-gradient(145deg,#2a1a22,#1c1218)',
+              boxShadow: '2px 2px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
+            }}
+          >
+            <X className="w-4 h-4 text-white/60" />
           </button>
         </div>
 
-        <div className="p-5 space-y-4">
-          {/* Patient search */}
-          <div>
-            <label className="block text-xs text-white/50 mb-1.5 font-medium">Paciente</label>
+        {/* Scrollable body */}
+        <div className="overflow-y-auto flex-1 px-5 py-4 space-y-4">
+
+          {/* Patient */}
+          <Field label="Paciente">
             {foundPatient ? (
-              <div className="flex items-center justify-between glass rounded-xl px-3 py-2.5">
+              <div
+                className="flex items-center justify-between px-3 py-2.5 rounded-xl"
+                style={{
+                  background: 'linear-gradient(145deg,#0b0709,#130a0d)',
+                  boxShadow: 'inset 2px 2px 6px rgba(0,0,0,0.65)',
+                  border: '1px solid rgba(0,0,0,0.6)',
+                }}
+              >
                 <div>
-                  <p className="text-sm text-white font-medium">{foundPatient.full_name}</p>
-                  <p className="text-xs text-white/40">{foundPatient.phone}</p>
+                  <p className="text-sm text-white font-semibold">{foundPatient.full_name}</p>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.40)' }}>{foundPatient.phone}</p>
                 </div>
                 <button
                   onClick={() => { setFoundPatient(null); setForm((p) => ({ ...p, patientId: '' })) }}
-                  className="text-white/30 hover:text-white/60"
+                  style={{ color: 'rgba(255,255,255,0.35)' }}
+                  className="hover:text-white/70 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -159,141 +191,128 @@ export function AppointmentModal({
                   value={patientSearch}
                   onChange={(e) => setPatientSearch(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && searchPatient()}
-                  placeholder="Telefone ou CPF do paciente"
-                  className="flex-1 bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50"
+                  placeholder="Telefone ou CPF"
+                  className="flex-1 rounded-xl px-3 py-2.5 text-sm"
                 />
                 <button
                   onClick={searchPatient}
-                  className="glass rounded-xl px-3 py-2.5 text-white/60 hover:text-white transition-all"
+                  className="px-3 py-2.5 rounded-xl transition-all"
+                  style={{
+                    background: 'linear-gradient(145deg,#2a1a22,#1c1218)',
+                    boxShadow: '3px 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
+                    border: '1px solid rgba(0,0,0,0.5)',
+                    color: 'rgba(255,255,255,0.65)',
+                  }}
                 >
                   <Search className="w-4 h-4" />
                 </button>
               </div>
             )}
-            {searchError && <p className="text-xs text-red-400 mt-1">{searchError}</p>}
-          </div>
+            {searchError && <p className="text-xs mt-1" style={{ color: '#FCA5A5' }}>{searchError}</p>}
+          </Field>
 
           {/* Service */}
-          <div>
-            <label className="block text-xs text-white/50 mb-1.5 font-medium">Serviço</label>
+          <Field label="Serviço *">
             <input
               value={form.service}
               onChange={(e) => update('service', e.target.value)}
               placeholder="Ex: Limpeza de pele, Consulta..."
-              className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50"
+              className="w-full rounded-xl px-3 py-2.5 text-sm"
             />
-          </div>
+          </Field>
 
           {/* Professional */}
-          <div>
-            <label className="block text-xs text-white/50 mb-1.5 font-medium">Profissional</label>
+          <Field label="Profissional">
             <select
               value={form.professional_id}
               onChange={(e) => update('professional_id', e.target.value)}
-              className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500/50"
+              className="w-full rounded-xl px-3 py-2.5 text-sm"
             >
               {professionals.map((p) => (
-                <option key={p.id} value={p.id} className="bg-[#1A000A]">{p.name}</option>
+                <option key={p.id} value={p.id} style={{ background: '#1a1015' }}>{p.name}</option>
               ))}
             </select>
-          </div>
+          </Field>
 
           {/* Date + Time + Duration */}
           <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="block text-xs text-white/50 mb-1.5 font-medium">Data</label>
-              <input
-                type="date"
-                value={form.date}
-                onChange={(e) => update('date', e.target.value)}
-                className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500/50 [color-scheme:dark]"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-white/50 mb-1.5 font-medium">Horário</label>
-              <input
-                type="time"
-                value={form.time}
-                onChange={(e) => update('time', e.target.value)}
-                className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500/50 [color-scheme:dark]"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-white/50 mb-1.5 font-medium">Duração (min)</label>
-              <input
-                type="number"
-                value={form.duration}
-                min={15}
-                step={15}
+            <Field label="Data">
+              <input type="date" value={form.date} onChange={(e) => update('date', e.target.value)}
+                className="w-full rounded-xl px-2 py-2.5 text-sm [color-scheme:dark]" />
+            </Field>
+            <Field label="Horário">
+              <input type="time" value={form.time} onChange={(e) => update('time', e.target.value)}
+                className="w-full rounded-xl px-2 py-2.5 text-sm [color-scheme:dark]" />
+            </Field>
+            <Field label="Duração (min)">
+              <input type="number" value={form.duration} min={15} step={15}
                 onChange={(e) => update('duration', Number(e.target.value))}
-                className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500/50"
-              />
-            </div>
+                className="w-full rounded-xl px-2 py-2.5 text-sm" />
+            </Field>
           </div>
 
           {/* Status + Price */}
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs text-white/50 mb-1.5 font-medium">Status</label>
-              <select
-                value={form.status}
-                onChange={(e) => update('status', e.target.value)}
-                className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500/50"
-              >
+            <Field label="Status">
+              <select value={form.status} onChange={(e) => update('status', e.target.value)}
+                className="w-full rounded-xl px-3 py-2.5 text-sm">
                 {STATUSES.map((s) => (
-                  <option key={s.value} value={s.value} className="bg-[#1A000A]">{s.label}</option>
+                  <option key={s.value} value={s.value} style={{ background: '#1a1015' }}>{s.label}</option>
                 ))}
               </select>
-            </div>
-            <div>
-              <label className="block text-xs text-white/50 mb-1.5 font-medium">Valor (R$)</label>
-              <input
-                type="number"
-                value={form.price}
-                min={0}
-                step={0.01}
-                placeholder="0,00"
+            </Field>
+            <Field label="Valor (R$)">
+              <input type="number" value={form.price} min={0} step={0.01} placeholder="0,00"
                 onChange={(e) => update('price', e.target.value)}
-                className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50"
-              />
-            </div>
+                className="w-full rounded-xl px-3 py-2.5 text-sm" />
+            </Field>
           </div>
 
           {/* Notes */}
-          <div>
-            <label className="block text-xs text-white/50 mb-1.5 font-medium">Observações</label>
-            <textarea
-              value={form.notes}
-              onChange={(e) => update('notes', e.target.value)}
-              rows={2}
-              placeholder="Observações internas..."
-              className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50 resize-none"
-            />
-          </div>
+          <Field label="Observações">
+            <textarea value={form.notes} onChange={(e) => update('notes', e.target.value)}
+              rows={2} placeholder="Observações internas..."
+              className="w-full rounded-xl px-3 py-2.5 text-sm resize-none" />
+          </Field>
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-white/10 flex items-center justify-between gap-3">
-          {appointment && (
+        <div
+          className="px-5 py-4 flex items-center justify-between gap-3 shrink-0"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}
+        >
+          {appointment ? (
             <button
               onClick={handleDelete}
               disabled={isPending}
-              className="flex items-center gap-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3 py-2 rounded-lg transition-all"
+              className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-all disabled:opacity-50"
+              style={{ color: '#FCA5A5' }}
             >
               <Trash2 className="w-4 h-4" /> Cancelar
             </button>
-          )}
+          ) : <div />}
+
           <div className="flex gap-2 ml-auto">
             <button
               onClick={onClose}
-              className="glass px-4 py-2 rounded-xl text-sm text-white/60 hover:text-white transition-all"
+              className="px-4 py-2 rounded-xl text-sm font-medium transition-all"
+              style={{
+                background: 'linear-gradient(145deg,#2a1a22,#1c1218)',
+                boxShadow: '3px 3px 9px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
+                border: '1px solid rgba(0,0,0,0.5)',
+                color: 'rgba(255,255,255,0.60)',
+              }}
             >
               Fechar
             </button>
             <button
               onClick={handleSave}
               disabled={isPending || !form.service || !form.professional_id}
-              className="brand-gradient text-white text-sm font-semibold px-4 py-2 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
+              className={cn(
+                'brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2 rounded-xl',
+                'inline-flex items-center gap-2 transition-all',
+                'hover:opacity-90 disabled:opacity-40',
+              )}
             >
               <Save className="w-4 h-4" />
               {isPending ? 'Salvando...' : 'Salvar'}
@@ -301,6 +320,18 @@ export function AppointmentModal({
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide"
+        style={{ color: 'rgba(255,255,255,0.40)' }}>
+        {label}
+      </label>
+      {children}
     </div>
   )
 }
