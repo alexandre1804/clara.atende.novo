@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { Save, Building2, MessageSquare, Bell } from 'lucide-react'
+import { Save, Building2, MessageSquare, Bell, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import type { Clinic, WhatsappConfig, NotificationTemplate } from '@/types'
 import { WhatsappConnect } from './WhatsappConnect'
+import { EquipeTab } from './EquipeTab'
 
 const COLOR_PALETTE = [
   '#5C0018', '#7A0022', '#9B1040', '#2563EB',
@@ -21,7 +22,7 @@ interface Props {
 export function SettingsPanel({ clinic, waConfig, templates }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [tab, setTab] = useState<'clinic' | 'whatsapp' | 'notifications'>('clinic')
+  const [tab, setTab] = useState<'clinic' | 'whatsapp' | 'notifications' | 'equipe'>('clinic')
 
   const [clinicForm, setClinicForm] = useState({
     name: clinic.name,
@@ -60,6 +61,7 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
     { key: 'clinic' as const,        label: 'Clínica',      icon: Building2 },
     { key: 'whatsapp' as const,      label: 'WhatsApp IA',  icon: MessageSquare },
     { key: 'notifications' as const, label: 'Notificações', icon: Bell },
+    { key: 'equipe' as const,        label: 'Equipe',       icon: Users },
   ]
 
   return (
@@ -199,6 +201,9 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
           )}
         </div>
       )}
+
+      {/* Equipe tab */}
+      {tab === 'equipe' && <EquipeTab />}
     </div>
   )
 }

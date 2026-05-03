@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import { Plus, X, Save, Pencil, Power } from 'lucide-react'
+import { useState, useTransition, useRef } from 'react'
+import { Plus, X, Save, Pencil, Power, Camera } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { getInitials } from '@/lib/utils'
@@ -38,17 +38,34 @@ export function ProfessionaisPanel({ professionals, clinicId }: Props) {
   const [selected, setSelected] = useState<Professional | null>(null)
   const [form, setForm] = useState<ProfForm>(EMPTY)
   const [error, setError] = useState('')
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setAvatarFile(file)
+    const reader = new FileReader()
+    reader.onload = (ev) => setAvatarPreview(ev.target?.result as string)
+    reader.readAsDataURL(file)
+  }
 
   function openNew() {
     setSelected(null)
     setForm(EMPTY)
     setError('')
+    setAvatarFile(null)
+    setAvatarPreview(null)
     setShowForm(true)
   }
 
   function openEdit(p: Professional) {
     setSelected(p)
     setForm({ name: p.name, specialty: p.specialty, bio: p.bio ?? '', phone: p.phone ?? '', email: p.email ?? '', color: p.color })
+    setError('')
+    setAvatarFile(null)
+    setAvatarPreview(p.avatar_url ?? null)
     setShowForm(true)
   }
 
@@ -57,7 +74,29 @@ export function ProfessionaisPanel({ professionals, clinicId }: Props) {
     setError('')
     startTransition(async () => {
       const supabase = createClient()
-      const payload = { clinic_id: clinicId, name: form.name, specialty: form.specialty, bio: form.bio || null, phone: form.phone || null, email: form.email || null, color: form.color }
+
+      let avatar_url: string | null = selected?.avatar_url ?? null
+      if (avatarFile) {
+        const ext = avatarFile.name.split('.').pop() ?? 'jpg'
+        const path = `${clinicId}/${selected?.id ?? Date.now()}.${ext}`
+        const { data: uploaded } = await supabase.storage
+          .from('avatars')
+          .upload(path, avatarFile, { contentType: avatarFile.type, upsert: true })
+        if (uploaded) {
+          avatar_url = supabase.storage.from('avatars').getPublicUrl(uploaded.path).data.publicUrl
+        }
+      }
+
+      const payload = {
+        clinic_id: clinicId,
+        name: form.name,
+        specialty: form.specialty,
+        bio: form.bio || null,
+        phone: form.phone || null,
+        email: form.email || null,
+        color: form.color,
+        avatar_url,
+      }
       if (selected) {
         await supabase.from('professionals').update(payload).eq('id', selected.id)
       } else {
@@ -93,9 +132,13 @@ export function ProfessionaisPanel({ professionals, clinicId }: Props) {
           <div key={p.id} className={`glass rounded-2xl p-5 ${!p.is_active ? 'opacity-50' : ''}`}>
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold text-white" style={{ background: p.color }}>
-                  {getInitials(p.name)}
-                </div>
+                {p.avatar_url ? (
+                  <img src={p.avatar_url} alt={p.name} className="w-11 h-11 rounded-xl object-cover shrink-0" />
+                ) : (
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold text-white shrink-0" style={{ background: p.color }}>
+                    {getInitials(p.name)}
+                  </div>
+                )}
                 <div>
                   <p className="text-sm font-semibold text-white">{p.name}</p>
                   <p className="text-xs text-white/50">{p.specialty}</p>
@@ -105,7 +148,7 @@ export function ProfessionaisPanel({ professionals, clinicId }: Props) {
                 <button onClick={() => openEdit(p)} className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all">
                   <Pencil className="w-3.5 h-3.5" />
                 </button>
-                <button onClick={() => toggleActive(p)} className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all">
+                <button onClick={() => toggleActive(p)} className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-all" title={p.is_active ? 'Desativar' : 'Ativar'}>
                   <Power className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -125,6 +168,42 @@ export function ProfessionaisPanel({ professionals, clinicId }: Props) {
               <button onClick={() => setShowForm(false)} className="text-white/40 hover:text-white"><X className="w-5 h-5" /></button>
             </div>
             <div className="p-5 space-y-4">
+
+              {/* Foto */}
+              <div>
+                <label className="block text-xs text-white/50 mb-1.5 font-medium">Foto</label>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-16 h-16 rounded-xl overflow-hidden bg-white/8 border border-white/12 flex items-center justify-center hover:bg-white/15 transition-all shrink-0"
+                  >
+                    {avatarPreview ? (
+                      <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <Camera className="w-5 h-5 text-white/30" />
+                    )}
+                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="text-xs text-white/50 hover:text-white transition-all"
+                    >
+                      {avatarPreview ? 'Trocar foto' : 'Enviar foto'}
+                    </button>
+                    <p className="text-xs text-white/25 mt-0.5">JPG, PNG ou WebP · máx. 2MB</p>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+              </div>
+
               {[
                 { key: 'name', label: 'Nome *', placeholder: 'Dra. Ana Lima' },
                 { key: 'phone', label: 'Telefone', placeholder: '(27) 99999-9999' },
@@ -148,7 +227,7 @@ export function ProfessionaisPanel({ professionals, clinicId }: Props) {
                 <label className="block text-xs text-white/50 mb-1.5 font-medium">Cor na agenda</label>
                 <div className="flex flex-wrap gap-2 mt-1">
                   {COLOR_PALETTE.map((c) => (
-                    <button key={c} onClick={() => setForm((p) => ({ ...p, color: c }))} className={`w-8 h-8 rounded-lg border-2 transition-all ${form.color === c ? 'border-white scale-110' : 'border-transparent hover:border-white/40'}`} style={{ background: c }} />
+                    <button key={c} type="button" onClick={() => setForm((p) => ({ ...p, color: c }))} className={`w-8 h-8 rounded-lg border-2 transition-all ${form.color === c ? 'border-white scale-110' : 'border-transparent hover:border-white/40'}`} style={{ background: c }} />
                   ))}
                 </div>
               </div>

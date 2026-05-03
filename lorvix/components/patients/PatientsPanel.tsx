@@ -87,10 +87,13 @@ export function PatientsPanel({ patients, clinicId }: Props) {
         notes:      form.notes || null,
         clinic_id:  clinicId,
       }
-      if (selected) {
-        await supabase.from('patients').update(payload).eq('id', selected.id)
-      } else {
-        await supabase.from('patients').insert(payload)
+      const { error: dbError } = selected
+        ? await supabase.from('patients').update(payload).eq('id', selected.id)
+        : await supabase.from('patients').insert(payload)
+
+      if (dbError) {
+        setError('Erro ao salvar: ' + dbError.message)
+        return
       }
       router.refresh()
       setShowForm(false)

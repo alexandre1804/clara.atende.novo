@@ -29,7 +29,11 @@ export default async function ClinicLayout({ children }: { children: React.React
     )
   }
 
+  const { primary_color, secondary_color } = clinic as Clinic
+
   return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: `:root{--brand-primary:${primary_color};--brand-secondary:${secondary_color};}` }} />
     <div className="bg-dynamic min-h-screen flex">
       <Sidebar user={user} clinic={clinic as Clinic} />
 
@@ -51,5 +55,6 @@ export default async function ClinicLayout({ children }: { children: React.React
         <main className="p-6">{children}</main>
       </div>
     </div>
+    </>
   )
 }
