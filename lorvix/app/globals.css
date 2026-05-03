@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────
+   LORVIX — Liquid Glass Design System
+   ───────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* Brand palette — wine/burgundy */
+    --brand-950: #1A0008;
+    --brand-900: #2E000E;
+    --brand-800: #4A0016;
+    --brand-700: #5C0018;
+    --brand-600: #7A0022;
+    --brand-500: #9B1040;
+    --brand-400: #C41E5A;
+    --brand-300: #E05080;
+    --brand-200: #F09AB5;
+    --brand-100: #FBDDE8;
+    --brand-50:  #FFF5F8;
+
+    /* Liquid Glass tokens */
+    --glass-white:        rgba(255 255 255 / 0.07);
+    --glass-white-hover:  rgba(255 255 255 / 0.12);
+    --glass-white-active: rgba(255 255 255 / 0.18);
+    --glass-dark:         rgba(0 0 0 / 0.45);
+    --glass-border:       rgba(255 255 255 / 0.14);
+    --glass-border-strong:rgba(255 255 255 / 0.24);
+    --glass-shadow:       0 8px 32px rgba(0 0 0 / 0.45), inset 0 1px 0 rgba(255 255 255 / 0.18);
+    --glass-shadow-sm:    0 4px 16px rgba(0 0 0 / 0.3), inset 0 1px 0 rgba(255 255 255 / 0.12);
+    --glass-shadow-lg:    0 20px 60px rgba(0 0 0 / 0.55), inset 0 1px 0 rgba(255 255 255 / 0.22);
+
+    /* Blur levels */
+    --blur-sm:  blur(8px) saturate(1.4);
+    --blur-md:  blur(20px) saturate(1.8);
+    --blur-lg:  blur(40px) saturate(2);
+    --blur-xl:  blur(60px) saturate(2.2);
+
+    /* Dark background */
+    --bg-base:    #0D0005;
+    --bg-mid:     #14000A;
+    --bg-surface: rgba(255 255 255 / 0.04);
+
+    /* Text on dark */
+    --text-primary:   rgba(255 255 255 / 0.92);
+    --text-secondary: rgba(255 255 255 / 0.60);
+    --text-muted:     rgba(255 255 255 / 0.35);
+    --text-faint:     rgba(255 255 255 / 0.18);
+
+    /* Status colors */
+    --status-scheduled:  #3B82F6;
+    --status-confirmed:  #22C55E;
+    --status-completed:  #8B5CF6;
+    --status-cancelled:  #EF4444;
+    --status-no-show:    #F97316;
+  }
+}
+
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dynamic background — blurred blobs */
+.bg-dynamic {
+  position: relative;
+  isolation: isolate;
+  background: var(--bg-base);
+}
+
+.bg-dynamic::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 5%,  rgba(92 0 24 / 0.50) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 90% at 85% 95%, rgba(155 16 64 / 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(74 0 22 / 0.20) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── Liquid Glass utility classes ── */
+@utility glass {
+  background: var(--glass-white);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+@utility glass-sm {
+  background: var(--glass-white);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-sm);
+}
+
+@utility glass-strong {
+  background: var(--glass-white-active);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--glass-shadow-lg);
+}
+
+@utility glass-dark {
+  background: var(--glass-dark);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: 1px solid rgba(255 255 255 / 0.08);
+  box-shadow: 0 0 0 1px rgba(0 0 0 / 0.3), 0 20px 60px rgba(0 0 0 / 0.6), inset 0 1px 0 rgba(255 255 255 / 0.10);
+}
+
+@utility glass-sidebar {
+  background: rgba(10 0 5 / 0.80);
+  backdrop-filter: var(--blur-xl);
+  -webkit-backdrop-filter: var(--blur-xl);
+  border-right: 1px solid var(--glass-border);
+}
+
+/* ── Brand gradient utilities ── */
+@utility brand-gradient {
+  background: linear-gradient(135deg, var(--brand-700) 0%, var(--brand-500) 100%);
+}
+
+@utility brand-gradient-text {
+  background: linear-gradient(110deg, #FF7BA5 0%, #FF4D88 50%, #C41E5A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility brand-glow {
+  box-shadow:
+    0 0 20px rgba(92 0 24 / 0.6),
+    0 0 60px rgba(92 0 24 / 0.3),
+    0 4px 20px rgba(0 0 0 / 0.4);
+}
+
+/* ── Status badge colors ── */
+@utility status-scheduled  { background: rgba(59 130 246 / 0.15); color: #93C5FD; border: 1px solid rgba(59 130 246 / 0.3); }
+@utility status-confirmed  { background: rgba(34 197 94 / 0.15);  color: #86EFAC; border: 1px solid rgba(34 197 94 / 0.3); }
+@utility status-completed  { background: rgba(139 92 246 / 0.15); color: #C4B5FD; border: 1px solid rgba(139 92 246 / 0.3); }
+@utility status-cancelled  { background: rgba(239 68 68 / 0.15);  color: #FCA5A5; border: 1px solid rgba(239 68 68 / 0.3); }
+@utility status-no_show    { background: rgba(249 115 22 / 0.15); color: #FDBA74; border: 1px solid rgba(249 115 22 / 0.3); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255 255 255 / 0.12); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255 255 255 / 0.22); }
+
+/* ── Selection ── */
+::selection { background: rgba(155 16 64 / 0.35); color: #FFD0E0; }
+
+/* ── Focus ring ── */
+:focus-visible { outline: 2px solid rgba(155 16 64 / 0.7); outline-offset: 2px; border-radius: 4px; }
