@@ -32,12 +32,9 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
     secondary_color: clinic.secondary_color,
   })
 
-  const [waForm, setWaForm] = useState({
-    instance_name: waConfig?.instance_name ?? '',
-    api_url: waConfig?.api_url ?? '',
-    agent_name: waConfig?.agent_name ?? 'Assistente',
-    agent_instructions: waConfig?.agent_instructions ?? '',
-  })
+  const [agentInstructions, setAgentInstructions] = useState(
+    waConfig?.agent_instructions ?? '',
+  )
 
   function saveClinic() {
     startTransition(async () => {
@@ -47,22 +44,21 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
     })
   }
 
-  function saveWhatsapp() {
+  function saveAgentInstructions() {
+    if (!waConfig) return
     startTransition(async () => {
       const supabase = createClient()
-      const payload = { ...waForm, clinic_id: clinic.id }
-      if (waConfig) {
-        await supabase.from('whatsapp_config').update(payload).eq('id', waConfig.id)
-      } else {
-        await supabase.from('whatsapp_config').insert({ ...payload, is_active: true })
-      }
+      await supabase
+        .from('whatsapp_config')
+        .update({ agent_instructions: agentInstructions })
+        .eq('id', waConfig.id)
       router.refresh()
     })
   }
 
   const TABS = [
-    { key: 'clinic' as const, label: 'Clínica', icon: Building2 },
-    { key: 'whatsapp' as const, label: 'WhatsApp IA', icon: MessageSquare },
+    { key: 'clinic' as const,        label: 'Clínica',      icon: Building2 },
+    { key: 'whatsapp' as const,      label: 'WhatsApp IA',  icon: MessageSquare },
     { key: 'notifications' as const, label: 'Notificações', icon: Bell },
   ]
 
@@ -74,7 +70,7 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
       </div>
 
       {/* Tabs */}
-      <div className="glass rounded-xl p-1 flex gap-1 w-fit">
+      <div className="glass rounded-xl p-1 flex gap-1 w-fit flex-wrap">
         {TABS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -92,9 +88,9 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
       {tab === 'clinic' && (
         <div className="glass rounded-2xl p-6 space-y-4 max-w-lg">
           {[
-            { key: 'name', label: 'Nome da clínica' },
-            { key: 'phone', label: 'Telefone' },
-            { key: 'email', label: 'E-mail' },
+            { key: 'name',    label: 'Nome da clínica' },
+            { key: 'phone',   label: 'Telefone' },
+            { key: 'email',   label: 'E-mail' },
             { key: 'address', label: 'Endereço' },
           ].map(({ key, label }) => (
             <div key={key}>
@@ -109,7 +105,7 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
 
           <div>
             <label className="block text-xs text-white/50 mb-2 font-medium">Cor primária</label>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {COLOR_PALETTE.map((c) => (
                 <button
                   key={c}
@@ -133,56 +129,45 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
 
       {/* WhatsApp tab */}
       {tab === 'whatsapp' && (
-        <div className="glass rounded-2xl p-6 space-y-4 max-w-lg">
-          <div className="glass rounded-xl p-4 border border-green-500/20 bg-green-500/5">
-            <p className="text-sm text-green-400 font-medium mb-1">Integração n8n + Evolution API</p>
-            <p className="text-xs text-white/50">
-              Configure sua instância do Evolution API para que o agente IA possa atender no WhatsApp 24h.
-            </p>
-          </div>
+        <div className="glass rounded-2xl p-6 space-y-6 max-w-lg">
 
-          {[
-            { key: 'instance_name', label: 'Nome da instância', placeholder: 'minha-clinica' },
-            { key: 'api_url', label: 'URL do Evolution API', placeholder: 'https://api.evolution.meu-servidor.com' },
-            { key: 'agent_name', label: 'Nome do agente', placeholder: 'Assistente da Clínica' },
-          ].map(({ key, label, placeholder }) => (
-            <div key={key}>
-              <label className="block text-xs text-white/50 mb-1.5 font-medium">{label}</label>
-              <input
-                value={waForm[key as keyof typeof waForm]}
-                onChange={(e) => setWaForm((p) => ({ ...p, [key]: e.target.value }))}
-                placeholder={placeholder}
-                className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50"
-              />
-            </div>
-          ))}
-
+          {/* Conectar WhatsApp */}
           <div>
-            <label className="block text-xs text-white/50 mb-1.5 font-medium">Instruções do agente</label>
-            <textarea
-              value={waForm.agent_instructions}
-              onChange={(e) => setWaForm((p) => ({ ...p, agent_instructions: e.target.value }))}
-              rows={5}
-              placeholder="Você é a assistente virtual da [Clínica]. Seu objetivo é agendar consultas e responder dúvidas sobre horários e serviços. Seja sempre cordial e responda em português."
-              className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50 resize-none"
-            />
-          </div>
-
-          <button
-            onClick={saveWhatsapp}
-            disabled={isPending}
-            className="brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
-          >
-            <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar configurações'}
-          </button>
-
-          {/* Conexão WhatsApp — QR Code */}
-          <div className="border-t border-white/10 pt-5">
-            <p className="text-sm font-semibold text-white mb-1">Conectar WhatsApp</p>
+            <p className="text-sm font-semibold text-white mb-1">Conexão WhatsApp</p>
             <p className="text-xs text-white/40 mb-4">
-              Salve as configurações acima antes de conectar. O QR code expira em 60 segundos.
+              Escaneie o QR code com o WhatsApp da clínica para ativar o atendimento via IA.
             </p>
             <WhatsappConnect />
+          </div>
+
+          {/* Instruções do agente */}
+          <div className="border-t border-white/10 pt-5 space-y-3">
+            <div>
+              <p className="text-sm font-semibold text-white mb-1">Personalidade do agente</p>
+              <p className="text-xs text-white/40">
+                Descreva como o agente deve se apresentar e o que pode fazer.
+              </p>
+            </div>
+            <textarea
+              value={agentInstructions}
+              onChange={(e) => setAgentInstructions(e.target.value)}
+              rows={5}
+              placeholder="Você é a assistente virtual da [Nome da Clínica]. Seu objetivo é agendar consultas, responder dúvidas sobre horários e serviços disponíveis. Seja sempre cordial e responda em português."
+              className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50 resize-none"
+            />
+            {waConfig ? (
+              <button
+                onClick={saveAgentInstructions}
+                disabled={isPending}
+                className="brand-gradient text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
+              >
+                <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar instruções'}
+              </button>
+            ) : (
+              <p className="text-xs text-white/30">
+                O agente precisa ser configurado pelo administrador antes de salvar.
+              </p>
+            )}
           </div>
         </div>
       )}
