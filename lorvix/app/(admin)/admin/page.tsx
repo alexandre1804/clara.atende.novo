@@ -3,6 +3,7 @@ import { formatDate, formatCurrency } from '@/lib/utils'
 import type { Clinic } from '@/types'
 import { Building2, Users, DollarSign, Activity } from 'lucide-react'
 import { Metadata } from 'next'
+import { NovaClinicaModal } from '@/components/admin/NovaClinicaModal'
 
 export const metadata: Metadata = { title: 'Painel Admin — Lorvix' }
 
@@ -31,6 +32,7 @@ export default async function AdminPage() {
         <div>
           <h1 className="text-2xl font-bold brand-gradient-text">Painel Admin — Lorvix</h1>
           <p className="text-white/50 text-sm mt-1">Visão geral das clínicas</p>
+          <div className="mt-3"><NovaClinicaModal /></div>
         </div>
 
         {/* Stats */}
