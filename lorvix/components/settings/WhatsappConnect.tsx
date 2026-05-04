@@ -10,7 +10,7 @@ const STATE_INFO: Record<ConnectionState, { label: string; color: string; icon: 
   open:           { label: 'Conectado',       color: 'text-green-400',  icon: <CheckCircle2 className="w-4 h-4" /> },
   connecting:     { label: 'Aguardando QR...', color: 'text-yellow-400', icon: <Loader2 className="w-4 h-4 animate-spin" /> },
   disconnected:   { label: 'Desconectado',    color: 'text-red-400',    icon: <WifiOff className="w-4 h-4" /> },
-  not_configured: { label: 'Não configurado', color: 'text-white/40',   icon: <WifiOff className="w-4 h-4" /> },
+  not_configured: { label: 'Não conectado',   color: 'text-white/40',   icon: <WifiOff className="w-4 h-4" /> },
   error:          { label: 'Erro de conexão', color: 'text-red-400',    icon: <WifiOff className="w-4 h-4" /> },
 }
 
@@ -112,17 +112,8 @@ export function WhatsappConnect() {
         </div>
       )}
 
-      {/* Não configurado */}
-      {state === 'not_configured' && (
-        <div className="glass rounded-2xl p-5 border border-white/10 text-center">
-          <p className="text-white/50 text-sm">
-            Preencha a <strong className="text-white/70">URL da API</strong> e o <strong className="text-white/70">nome da instância</strong> acima e salve antes de conectar.
-          </p>
-        </div>
-      )}
-
-      {/* Desconectado — botão para gerar QR */}
-      {(state === 'disconnected' || state === 'error') && (
+      {/* Desconectado ou não configurado — botão para gerar QR */}
+      {(state === 'disconnected' || state === 'error' || state === 'not_configured') && (
         <div className="glass rounded-2xl p-5 text-center space-y-4">
           <Smartphone className="w-8 h-8 text-white/30 mx-auto" />
           <div>
