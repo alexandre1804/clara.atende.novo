@@ -44,6 +44,7 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
   )
   const [agentActive, setAgentActive]   = useState(waConfig?.is_active   ?? false)
   const [autoBooking, setAutoBooking]   = useState((waConfig as (typeof waConfig & { auto_booking?: boolean }) | null)?.auto_booking ?? false)
+  const [clinicSaveMsg, setClinicSaveMsg] = useState<string | null>(null)
 
   function saveAgentSettings() {
     if (!waConfig) return
@@ -59,13 +60,24 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
   }
 
   function saveClinic() {
+    setClinicSaveMsg(null)
     startTransition(async () => {
-      const res = await fetch('/api/clinic/settings', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(clinicForm),
-      })
-      if (res.ok) router.refresh()
+      try {
+        const res = await fetch('/api/clinic/settings', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(clinicForm),
+        })
+        if (res.ok) {
+          setClinicSaveMsg('Salvo com sucesso!')
+          router.refresh()
+        } else {
+          const body = await res.json() as { error?: string }
+          setClinicSaveMsg(`Erro ${res.status}: ${body.error ?? 'falha ao salvar'}`)
+        }
+      } catch {
+        setClinicSaveMsg('Erro de rede ao salvar.')
+      }
     })
   }
 
@@ -132,13 +144,20 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
             </div>
           </div>
 
-          <button
-            onClick={saveClinic}
-            disabled={isPending}
-            className="brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
-          >
-            <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar'}
-          </button>
+          <div className="flex items-center gap-3 flex-wrap">
+            <button
+              onClick={saveClinic}
+              disabled={isPending}
+              className="brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
+            >
+              <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar'}
+            </button>
+            {clinicSaveMsg && (
+              <span className={`text-xs font-medium ${clinicSaveMsg.startsWith('Erro') ? 'text-red-400' : 'text-green-400'}`}>
+                {clinicSaveMsg}
+              </span>
+            )}
+          </div>
         </div>
       )}
 

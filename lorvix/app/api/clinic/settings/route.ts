@@ -35,7 +35,10 @@ export async function PATCH(req: NextRequest) {
     })
     .eq('id', user.clinic_id)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('[settings] supabase update error:', error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
 
   return NextResponse.json({ ok: true })
 }
