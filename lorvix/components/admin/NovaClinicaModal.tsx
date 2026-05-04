@@ -48,12 +48,15 @@ export function NovaClinicaModal() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
-      const data = await res.json() as { ok?: boolean; error?: string; slug?: string }
+      const data = await res.json() as { ok?: boolean; error?: string; slug?: string; instanceName?: string; whatsappReady?: boolean }
       if (!res.ok) {
         setError(data.error ?? 'Erro ao criar clínica.')
         return
       }
-      setSuccess(`Clínica criada! Acesso: ${data.slug}.lorvix.com.br/login`)
+      const waNote = data.whatsappReady
+        ? ` • Instância WhatsApp "${data.instanceName}" criada — escaneie o QR nas configurações.`
+        : ' • Configure o WhatsApp nas configurações da clínica.'
+      setSuccess(`Clínica criada! Acesso: ${data.slug}.lorvix.com.br/login${waNote}`)
       setForm({ name: '', slug: '', plan: 'pro', ownerName: '', ownerEmail: '', ownerPassword: '' })
       router.refresh()
     })
