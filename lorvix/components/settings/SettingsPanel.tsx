@@ -13,15 +13,6 @@ const COLOR_PALETTE = [
   '#059669', '#D97706', '#0891B2', '#E05C8A',
 ]
 
-const BG_PALETTE = [
-  { color: '#120b0e', label: 'Vinho'    },
-  { color: '#0b0c14', label: 'Marinho'  },
-  { color: '#0b140d', label: 'Floresta' },
-  { color: '#14120b', label: 'Âmbar'    },
-  { color: '#0f0b14', label: 'Violeta'  },
-  { color: '#0d0d0d', label: 'Neutro'   },
-]
-
 interface Props {
   clinic: Clinic
   waConfig: WhatsappConfig | null
@@ -40,7 +31,6 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
     address: clinic.address ?? '',
     primary_color: clinic.primary_color,
     secondary_color: clinic.secondary_color,
-    bg_color: clinic.bg_color ?? '#120b0e',
   })
 
   const [agentInstructions, setAgentInstructions] = useState(
@@ -131,37 +121,18 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
           ))}
 
           <div>
-            <label className="block text-xs text-white/50 mb-2 font-medium">Cor de destaque</label>
+            <label className="block text-xs text-white/50 mb-2 font-medium">Cor da clínica</label>
+            <p className="text-xs text-white/30 mb-2">Altera botões, destaques e o tom do fundo automaticamente.</p>
             <div className="flex gap-2 flex-wrap">
               {COLOR_PALETTE.map((c) => (
                 <button
                   key={c}
                   onClick={() => setClinicForm((p) => ({ ...p, primary_color: c }))}
-                  className={`w-8 h-8 rounded-lg border-2 transition-all ${clinicForm.primary_color === c ? 'border-white scale-110' : 'border-transparent'}`}
+                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === c ? 'border-white scale-110' : 'border-transparent opacity-70 hover:opacity-100'}`}
                   style={{ background: c }}
                 />
               ))}
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs text-white/50 mb-2 font-medium">Cor do fundo</label>
-            <div className="flex gap-2 flex-wrap">
-              {BG_PALETTE.map(({ color, label }) => (
-                <button
-                  key={color}
-                  title={label}
-                  onClick={() => setClinicForm((p) => ({ ...p, bg_color: color }))}
-                  className={`w-8 h-8 rounded-lg border-2 transition-all relative ${clinicForm.bg_color === color ? 'border-white scale-110' : 'border-white/20'}`}
-                  style={{ background: color }}
-                >
-                  {clinicForm.bg_color === color && (
-                    <span className="absolute inset-0 flex items-center justify-center text-white text-xs">✓</span>
-                  )}
-                </button>
-              ))}
-            </div>
-            <p className="text-xs text-white/30 mt-1.5">Salve e recarregue para ver o resultado.</p>
           </div>
 
           <button
