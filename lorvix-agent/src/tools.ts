@@ -166,7 +166,7 @@ export async function executeTool(
 async function getClinicInfo(clinicId: string): Promise<ToolResult> {
   const [{ data: clinic }, { data: services }, { data: professionals }] = await Promise.all([
     db.from('clinics').select('name, phone, email, address').eq('id', clinicId).single(),
-    db.from('services').select('name, duration_minutes, price, category').eq('clinic_id', clinicId).eq('is_active', true).order('name'),
+    db.from('services').select('name, description, duration_minutes, price, category').eq('clinic_id', clinicId).eq('is_active', true).order('name'),
     db.from('professionals').select('id, name, specialty').eq('clinic_id', clinicId).eq('is_active', true).order('name'),
   ])
   return { success: true, data: { clinic, services, professionals } }
@@ -257,14 +257,23 @@ async function getPatientAppointments(clinicId: string, phone: string): Promise<
 }
 
 async function createAppointment(clinicId: string, args: Record<string, unknown>): Promise<ToolResult> {
-  const phone    = (args.patient_phone as string).replace(/\D/g, '')
-  const name     = args.patient_name as string
-  const service  = args.service as string
-  const date     = args.date as string
-  const time     = args.time as string
-  const profId   = args.professional_id as string | undefined
-  const duration = (args.duration_minutes as number | undefined) ?? 30
-  const notes    = args.notes as string | undefined
+  const phone   = (args.patient_phone as string).replace(/\D/g, '')
+  const name    = args.patient_name as string
+  const service = args.service as string
+  const date    = args.date as string
+  const time    = args.time as string
+  const profId  = args.professional_id as string | undefined
+  const notes   = args.notes as string | undefined
+
+  // Resolve duration from services table; fall back to arg or 30 min
+  let duration = (args.duration_minutes as number | undefined) ?? 30
+  const { data: svc } = await db.from('services')
+    .select('duration_minutes')
+    .eq('clinic_id', clinicId)
+    .ilike('name', service)
+    .eq('is_active', true)
+    .maybeSingle()
+  if (svc?.duration_minutes) duration = svc.duration_minutes as number
 
   // Find or create patient
   let { data: patient } = await db.from('patients').select('id')
