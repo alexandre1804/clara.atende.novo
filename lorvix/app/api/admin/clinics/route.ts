@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   const { error: userErr } = await admin.from('clinic_users').insert({
     id:        authUser.user.id,
     clinic_id: clinic.id,
-    name:      ownerName,
+    full_name: ownerName,
     email:     ownerEmail,
     role:      'owner',
   })
