@@ -8,9 +8,15 @@ import type { Clinic, WhatsappConfig, NotificationTemplate } from '@/types'
 import { WhatsappConnect } from './WhatsappConnect'
 import { EquipeTab } from './EquipeTab'
 
-const COLOR_PALETTE = [
-  '#C8A87A', '#9B1040', '#2563EB', '#7C3AED',
-  '#059669', '#D97706', '#0891B2', '#E05C8A',
+const COLORS = [
+  { primary: '#C8A87A', secondary: '#E8C99A', label: 'Creme'    },
+  { primary: '#C41E5A', secondary: '#E8387A', label: 'Rosa'     },
+  { primary: '#1D4ED8', secondary: '#3B82F6', label: 'Azul'     },
+  { primary: '#6D28D9', secondary: '#8B5CF6', label: 'Violeta'  },
+  { primary: '#047857', secondary: '#10B981', label: 'Verde'    },
+  { primary: '#B45309', secondary: '#D97706', label: 'Âmbar'    },
+  { primary: '#0E7490', secondary: '#06B6D4', label: 'Ciano'    },
+  { primary: '#BE185D', secondary: '#EC4899', label: 'Pink'     },
 ]
 
 interface Props {
@@ -122,14 +128,14 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
 
           <div>
             <label className="block text-xs text-white/50 mb-2 font-medium">Cor da clínica</label>
-            <p className="text-xs text-white/30 mb-2">Altera botões, destaques e o tom do fundo automaticamente.</p>
             <div className="flex gap-2 flex-wrap">
-              {COLOR_PALETTE.map((c) => (
+              {COLORS.map(({ primary, secondary, label }) => (
                 <button
-                  key={c}
-                  onClick={() => setClinicForm((p) => ({ ...p, primary_color: c }))}
-                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === c ? 'border-white scale-110' : 'border-transparent hover:scale-105'}`}
-                  style={{ background: c }}
+                  key={primary}
+                  title={label}
+                  onClick={() => setClinicForm((p) => ({ ...p, primary_color: primary, secondary_color: secondary }))}
+                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === primary ? 'border-white scale-110' : 'border-transparent hover:scale-105'}`}
+                  style={{ background: `linear-gradient(135deg, ${secondary}, ${primary})` }}
                 />
               ))}
             </div>
