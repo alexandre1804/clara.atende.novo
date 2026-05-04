@@ -10,13 +10,13 @@
     --brand-primary:   #5C0018;
     --brand-secondary: #9B1040;
 
-    /* Skeuomorphic surface palette */
-    --skeu-bg:       #120b0e;
-    --skeu-s1:       #1e1318;
-    --skeu-s2:       #271a21;
-    --skeu-s3:       #301f28;
-    --skeu-well:     #0b0709;
-    --skeu-sidebar:  #150d12;
+    /* Skeuomorphic surface palette — all derived from --skeu-bg */
+    --skeu-bg:      #120b0e;
+    --skeu-s1:      color-mix(in srgb, var(--skeu-bg) 96%, white);
+    --skeu-s2:      color-mix(in srgb, var(--skeu-bg) 92%, white);
+    --skeu-s3:      color-mix(in srgb, var(--skeu-bg) 88%, white);
+    --skeu-well:    color-mix(in srgb, var(--skeu-bg) 85%, black);
+    --skeu-sidebar: color-mix(in srgb, var(--skeu-bg) 92%, black);
 
     /* Status colors */
     --status-scheduled:  #3B82F6;
