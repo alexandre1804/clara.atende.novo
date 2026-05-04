@@ -128,7 +128,7 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
                 <button
                   key={c}
                   onClick={() => setClinicForm((p) => ({ ...p, primary_color: c }))}
-                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === c ? 'border-white scale-110' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === c ? 'border-white scale-110' : 'border-transparent hover:scale-105'}`}
                   style={{ background: c }}
                 />
               ))}
