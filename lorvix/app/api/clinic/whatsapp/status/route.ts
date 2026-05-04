@@ -30,11 +30,12 @@ export async function GET() {
   if (!waConfig) return NextResponse.json({ state: 'not_configured' })
 
   const apiKey = process.env.EVOLUTION_API_KEY
-  if (!apiKey) return NextResponse.json({ state: 'not_configured' })
+  const apiUrl = (waConfig.api_url ?? process.env.EVOLUTION_API_URL ?? '').replace(/\/$/, '')
+  if (!apiKey || !apiUrl) return NextResponse.json({ state: 'not_configured' })
 
   try {
     const res = await fetch(
-      `${waConfig.api_url}/instance/connectionState/${waConfig.instance_name}`,
+      `${apiUrl}/instance/connectionState/${waConfig.instance_name}`,
       { headers: { apikey: apiKey }, cache: 'no-store' },
     )
     if (!res.ok) return NextResponse.json({ state: 'disconnected' })
