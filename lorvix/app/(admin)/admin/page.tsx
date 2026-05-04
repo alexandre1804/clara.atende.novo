@@ -5,6 +5,7 @@ import { Building2, Users, DollarSign, Activity } from 'lucide-react'
 import { Metadata } from 'next'
 import { NovaClinicaModal } from '@/components/admin/NovaClinicaModal'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { title: 'Painel Admin — Lorvix' }
 
 export default async function AdminPage() {

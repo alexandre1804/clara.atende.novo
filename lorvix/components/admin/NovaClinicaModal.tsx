@@ -85,13 +85,14 @@ export function NovaClinicaModal() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} autoComplete="off" className="space-y-3">
               {/* Clinic info */}
               <p className="text-xs text-white/40 font-medium uppercase tracking-wide pt-1">Dados da Clínica</p>
 
               <div>
                 <label className="block text-xs text-white/50 mb-1.5">Nome da clínica *</label>
                 <input value={form.name} onChange={handleNameChange} required placeholder="Clínica Dr. Silva"
+                  autoComplete="off"
                   className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50" />
               </div>
 
@@ -99,6 +100,7 @@ export function NovaClinicaModal() {
                 <label className="block text-xs text-white/50 mb-1.5">Slug (subdomínio) *</label>
                 <div className="flex items-center gap-1">
                   <input value={form.slug} onChange={field('slug')} required placeholder="dr-silva"
+                    autoComplete="off"
                     className="flex-1 bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50 font-mono" />
                   <span className="text-xs text-white/30 whitespace-nowrap">.lorvix.com.br</span>
                 </div>
@@ -118,12 +120,14 @@ export function NovaClinicaModal() {
               <div>
                 <label className="block text-xs text-white/50 mb-1.5">Nome completo *</label>
                 <input value={form.ownerName} onChange={field('ownerName')} required placeholder="Dr. João Silva"
+                  autoComplete="off"
                   className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50" />
               </div>
 
               <div>
                 <label className="block text-xs text-white/50 mb-1.5">E-mail *</label>
                 <input type="email" value={form.ownerEmail} onChange={field('ownerEmail')} required placeholder="dono@clinica.com"
+                  autoComplete="off"
                   className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50" />
               </div>
 
@@ -131,6 +135,7 @@ export function NovaClinicaModal() {
                 <label className="block text-xs text-white/50 mb-1.5">Senha inicial *</label>
                 <div className="relative">
                   <input type={showPwd ? 'text' : 'password'} value={form.ownerPassword} onChange={field('ownerPassword')} required minLength={8} placeholder="mín. 8 caracteres"
+                    autoComplete="new-password"
                     className="w-full bg-white/8 border border-white/12 rounded-xl px-3 py-2.5 pr-10 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-pink-500/50" />
                   <button type="button" onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
                     {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
