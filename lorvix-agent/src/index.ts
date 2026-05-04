@@ -19,8 +19,8 @@ app.post('/webhook', (req, res) => {
   // Respond 200 immediately so Evolution doesn't retry
   res.sendStatus(200)
 
-  const payload = req.body as Record<string, unknown>
-  handleIncoming(payload as Parameters<typeof handleIncoming>[0]).catch((err) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleIncoming(req.body as any).catch((err) => {
     console.error('[webhook] Unhandled error:', err)
   })
 })
