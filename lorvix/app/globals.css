@@ -11,12 +11,12 @@
     --brand-secondary: #9B1040;
 
     /* Skeuomorphic surface palette */
-    --skeu-bg:       #120b0e;
-    --skeu-s1:       #1e1318;
-    --skeu-s2:       #271a21;
-    --skeu-s3:       #301f28;
-    --skeu-well:     #0b0709;
-    --skeu-sidebar:  #150d12;
+    --skeu-bg:      #120b0e;
+    --skeu-s1:      #1e1318;
+    --skeu-s2:      #271a21;
+    --skeu-s3:      #301f28;
+    --skeu-well:    #0b0709;
+    --skeu-sidebar: #150d12;
 
     /* Status colors */
     --status-scheduled:  #3B82F6;

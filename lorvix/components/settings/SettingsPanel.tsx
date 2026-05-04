@@ -8,9 +8,15 @@ import type { Clinic, WhatsappConfig, NotificationTemplate } from '@/types'
 import { WhatsappConnect } from './WhatsappConnect'
 import { EquipeTab } from './EquipeTab'
 
-const COLOR_PALETTE = [
-  '#5C0018', '#7A0022', '#9B1040', '#2563EB',
-  '#7C3AED', '#059669', '#D97706', '#0891B2',
+const COLORS = [
+  { primary: '#C8A87A', secondary: '#E8C99A', label: 'Creme'    },
+  { primary: '#C41E5A', secondary: '#E8387A', label: 'Rosa'     },
+  { primary: '#1D4ED8', secondary: '#3B82F6', label: 'Azul'     },
+  { primary: '#6D28D9', secondary: '#8B5CF6', label: 'Violeta'  },
+  { primary: '#047857', secondary: '#10B981', label: 'Verde'    },
+  { primary: '#B45309', secondary: '#D97706', label: 'Âmbar'    },
+  { primary: '#0E7490', secondary: '#06B6D4', label: 'Ciano'    },
+  { primary: '#BE185D', secondary: '#EC4899', label: 'Pink'     },
 ]
 
 interface Props {
@@ -38,6 +44,7 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
   )
   const [agentActive, setAgentActive]   = useState(waConfig?.is_active   ?? false)
   const [autoBooking, setAutoBooking]   = useState((waConfig as (typeof waConfig & { auto_booking?: boolean }) | null)?.auto_booking ?? false)
+  const [clinicSaveMsg, setClinicSaveMsg] = useState<string | null>(null)
 
   function saveAgentSettings() {
     if (!waConfig) return
@@ -53,22 +60,24 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
   }
 
   function saveClinic() {
+    setClinicSaveMsg(null)
     startTransition(async () => {
-      const supabase = createClient()
-      await supabase.from('clinics').update(clinicForm).eq('id', clinic.id)
-      router.refresh()
-    })
-  }
-
-  function saveAgentInstructions() {
-    if (!waConfig) return
-    startTransition(async () => {
-      const supabase = createClient()
-      await supabase
-        .from('whatsapp_config')
-        .update({ agent_instructions: agentInstructions })
-        .eq('id', waConfig.id)
-      router.refresh()
+      try {
+        const res = await fetch('/api/clinic/settings', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(clinicForm),
+        })
+        if (res.ok) {
+          setClinicSaveMsg('Salvo com sucesso!')
+          router.refresh()
+        } else {
+          const body = await res.json() as { error?: string }
+          setClinicSaveMsg(`Erro ${res.status}: ${body.error ?? 'falha ao salvar'}`)
+        }
+      } catch {
+        setClinicSaveMsg('Erro de rede ao salvar.')
+      }
     })
   }
 
@@ -121,26 +130,34 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
           ))}
 
           <div>
-            <label className="block text-xs text-white/50 mb-2 font-medium">Cor primária</label>
+            <label className="block text-xs text-white/50 mb-2 font-medium">Cor da clínica</label>
             <div className="flex gap-2 flex-wrap">
-              {COLOR_PALETTE.map((c) => (
+              {COLORS.map(({ primary, secondary, label }) => (
                 <button
-                  key={c}
-                  onClick={() => setClinicForm((p) => ({ ...p, primary_color: c }))}
-                  className={`w-8 h-8 rounded-lg border-2 transition-all ${clinicForm.primary_color === c ? 'border-white scale-110' : 'border-transparent'}`}
-                  style={{ background: c }}
+                  key={primary}
+                  title={label}
+                  onClick={() => setClinicForm((p) => ({ ...p, primary_color: primary, secondary_color: secondary }))}
+                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === primary ? 'border-white scale-110' : 'border-transparent hover:scale-105'}`}
+                  style={{ background: `linear-gradient(135deg, ${secondary}, ${primary})` }}
                 />
               ))}
             </div>
           </div>
 
-          <button
-            onClick={saveClinic}
-            disabled={isPending}
-            className="brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
-          >
-            <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar'}
-          </button>
+          <div className="flex items-center gap-3 flex-wrap">
+            <button
+              onClick={saveClinic}
+              disabled={isPending}
+              className="brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2.5 rounded-xl inline-flex items-center gap-2 hover:opacity-90 disabled:opacity-50 transition-all"
+            >
+              <Save className="w-4 h-4" /> {isPending ? 'Salvando...' : 'Salvar'}
+            </button>
+            {clinicSaveMsg && (
+              <span className={`text-xs font-medium ${clinicSaveMsg.startsWith('Erro') ? 'text-red-400' : 'text-green-400'}`}>
+                {clinicSaveMsg}
+              </span>
+            )}
+          </div>
         </div>
       )}
 

@@ -13,6 +13,7 @@ export interface Clinic {
   logo_url?: string
   primary_color: string
   secondary_color: string
+  bg_color?: string | null
   phone?: string
   email?: string
   address?: string
