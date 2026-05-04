@@ -60,21 +60,12 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
 
   function saveClinic() {
     startTransition(async () => {
-      const supabase = createClient()
-      await supabase.from('clinics').update(clinicForm).eq('id', clinic.id)
-      router.refresh()
-    })
-  }
-
-  function saveAgentInstructions() {
-    if (!waConfig) return
-    startTransition(async () => {
-      const supabase = createClient()
-      await supabase
-        .from('whatsapp_config')
-        .update({ agent_instructions: agentInstructions })
-        .eq('id', waConfig.id)
-      router.refresh()
+      const res = await fetch('/api/clinic/settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clinicForm),
+      })
+      if (res.ok) router.refresh()
     })
   }
 
