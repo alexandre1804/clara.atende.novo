@@ -5,7 +5,7 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "lorvix-whatsapp",
-        "responseMode": "immediatelyReturnResponse",
+        "responseMode": "onReceived",
         "options": {}
       },
       "id": "node-webhook-001",
