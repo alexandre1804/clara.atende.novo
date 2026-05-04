@@ -4,7 +4,7 @@ module.exports = {
       name: 'lorvix',
       script: 'node_modules/.bin/next',
       args: 'start',
-      cwd: '/var/www/lorvix',
+      cwd: '/root/clara.atende.novo/lorvix',
       instances: 2,
       exec_mode: 'cluster',
       env: {
