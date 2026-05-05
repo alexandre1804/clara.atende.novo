@@ -102,29 +102,29 @@ body {
   border-right: 1px solid rgba(255,255,255,0.06);
 }
 
-/* ── Brand gradient — 3D raised button ── */
+/* ── Brand gradient — usa só a cor de frente (secondary) ── */
 @utility brand-gradient {
   background: linear-gradient(165deg,
-    color-mix(in srgb, var(--brand-secondary) 120%, white) 0%,
-    var(--brand-secondary) 45%,
-    var(--brand-primary) 100%
+    color-mix(in srgb, var(--brand-secondary) 70%, white) 0%,
+    var(--brand-secondary) 50%,
+    color-mix(in srgb, var(--brand-secondary) 80%, black) 100%
   );
   box-shadow:
     0 4px 12px rgba(0,0,0,0.50),
     inset 0 1px 0 rgba(255,255,255,0.18),
     inset 0 -1px 0 rgba(0,0,0,0.35),
     inset 1px 0 0 rgba(255,255,255,0.08);
-  border-top:    1px solid rgba(255,255,255,0.10);
-  border-left:   1px solid rgba(255,255,255,0.07);
-  border-right:  1px solid color-mix(in srgb, var(--brand-primary) 70%, black);
-  border-bottom: 1px solid color-mix(in srgb, var(--brand-primary) 55%, black);
+  border-top:    1px solid rgba(255,255,255,0.12);
+  border-left:   1px solid rgba(255,255,255,0.08);
+  border-right:  1px solid color-mix(in srgb, var(--brand-secondary) 60%, black);
+  border-bottom: 1px solid color-mix(in srgb, var(--brand-secondary) 50%, black);
 }
 
 @utility brand-gradient-text {
   background: linear-gradient(110deg,
     color-mix(in srgb, var(--brand-secondary) 70%, white) 0%,
     var(--brand-secondary) 50%,
-    var(--brand-primary) 100%
+    color-mix(in srgb, var(--brand-secondary) 80%, black) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -133,7 +133,7 @@ body {
 
 @utility brand-glow {
   box-shadow:
-    0 6px 18px color-mix(in srgb, var(--brand-primary) 55%, transparent),
+    0 6px 18px color-mix(in srgb, var(--brand-secondary) 55%, transparent),
     0 2px 6px rgba(0,0,0,0.5),
     inset 0 1px 0 rgba(255,255,255,0.18),
     inset 0 -1px 0 rgba(0,0,0,0.35);
