@@ -229,7 +229,11 @@ export function CalendarView({ appointments, professionals, clinicId, userRole }
                 {weekDays.map((day) => {
                   const isToday = day.toDateString() === today.toDateString()
                   return (
-                    <div key={day.toISOString()} className="py-3 text-center">
+                    <button
+                      key={day.toISOString()}
+                      onClick={() => { setCurrentDate(day); setView('day') }}
+                      className="py-3 text-center hover:bg-white/5 transition-colors w-full"
+                    >
                       <div className="text-xs text-white/40 uppercase">
                         {day.toLocaleDateString('pt-BR', { weekday: 'short' })}
                       </div>
@@ -239,7 +243,7 @@ export function CalendarView({ appointments, professionals, clinicId, userRole }
                       )}>
                         {day.getDate()}
                       </div>
-                    </div>
+                    </button>
                   )
                 })}
               </div>

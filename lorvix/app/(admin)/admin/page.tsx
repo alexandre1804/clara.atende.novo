@@ -4,6 +4,7 @@ import type { Clinic } from '@/types'
 import { Building2, Users, DollarSign, Activity } from 'lucide-react'
 import { Metadata } from 'next'
 import { NovaClinicaModal } from '@/components/admin/NovaClinicaModal'
+import { AgentPromptModal } from '@/components/admin/AgentPromptModal'
 
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { title: 'Painel Admin — Lorvix' }
@@ -11,10 +12,15 @@ export const metadata: Metadata = { title: 'Painel Admin — Lorvix' }
 export default async function AdminPage() {
   const supabase = createAdminClient()
 
-  const [{ data: clinics }, { count: totalUsers }] = await Promise.all([
+  const [{ data: clinics }, { count: totalUsers }, { data: waConfigs }] = await Promise.all([
     supabase.from('clinics').select('*').order('created_at', { ascending: false }),
     supabase.from('clinic_users').select('*', { count: 'exact', head: true }),
+    supabase.from('whatsapp_config').select('clinic_id, agent_instructions'),
   ])
+
+  const waMap = new Map(
+    (waConfigs ?? []).map((w) => [w.clinic_id as string, (w.agent_instructions as string) ?? ''])
+  )
 
   const list = (clinics ?? []) as Clinic[]
   const active   = list.filter((c) => c.is_active).length
@@ -61,7 +67,7 @@ export default async function AdminPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/5 text-left">
-                  {['Clínica', 'Slug', 'Plano', 'Status', 'Cadastro'].map((h) => (
+                  {['Clínica', 'Slug', 'Plano', 'Status', 'Cadastro', 'Agente IA'].map((h) => (
                     <th key={h} className="px-5 py-3 text-xs text-white/40 font-medium">{h}</th>
                   ))}
                 </tr>
@@ -80,6 +86,13 @@ export default async function AdminPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3 text-white/40 text-xs">{formatDate(c.created_at)}</td>
+                    <td className="px-5 py-3">
+                      <AgentPromptModal
+                        clinicId={c.id}
+                        clinicName={c.name}
+                        currentInstructions={waMap.get(c.id) ?? ''}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
