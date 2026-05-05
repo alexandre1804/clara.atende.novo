@@ -8,21 +8,36 @@ import type { Clinic, WhatsappConfig, NotificationTemplate } from '@/types'
 import { WhatsappConnect } from './WhatsappConnect'
 import { EquipeTab } from './EquipeTab'
 
-const PALETTE = [
-  { value: '#FFFFFF', label: 'Branco'    },
-  { value: '#111111', label: 'Preto'     },
-  { value: '#5C0018', label: 'Bordô'     },
-  { value: '#C41E5A', label: 'Carmim'    },
-  { value: '#BE185D', label: 'Pink'      },
-  { value: '#DC2626', label: 'Vermelho'  },
-  { value: '#EA580C', label: 'Laranja'   },
-  { value: '#B45309', label: 'Âmbar'     },
-  { value: '#C8A87A', label: 'Creme'     },
-  { value: '#047857', label: 'Verde'     },
-  { value: '#0E7490', label: 'Ciano'     },
-  { value: '#1D4ED8', label: 'Azul'      },
-  { value: '#6D28D9', label: 'Violeta'   },
-  { value: '#9333EA', label: 'Roxo'      },
+// Paleta de fundo: cores escuras/saturadas que funcionam bem em dark theme
+const BG_PALETTE = [
+  { value: '#111111', label: 'Preto'    },
+  { value: '#1C1C1E', label: 'Grafite'  },
+  { value: '#5C0018', label: 'Bordô'    },
+  { value: '#7C2D12', label: 'Marrom'   },
+  { value: '#78350F', label: 'Âmbar'    },
+  { value: '#14532D', label: 'Verde'    },
+  { value: '#164E63', label: 'Ciano'    },
+  { value: '#1E3A8A', label: 'Azul'     },
+  { value: '#4C1D95', label: 'Violeta'  },
+  { value: '#701A75', label: 'Roxo'     },
+  { value: '#831843', label: 'Pink'     },
+  { value: '#7F1D1D', label: 'Vermelho' },
+]
+
+// Paleta de frente: cores vivas para botões e destaques (inclui branco e preto)
+const FG_PALETTE = [
+  { value: '#FFFFFF', label: 'Branco'   },
+  { value: '#111111', label: 'Preto'    },
+  { value: '#C41E5A', label: 'Carmim'   },
+  { value: '#BE185D', label: 'Pink'     },
+  { value: '#DC2626', label: 'Vermelho' },
+  { value: '#EA580C', label: 'Laranja'  },
+  { value: '#D97706', label: 'Âmbar'    },
+  { value: '#059669', label: 'Verde'    },
+  { value: '#0891B2', label: 'Ciano'    },
+  { value: '#2563EB', label: 'Azul'     },
+  { value: '#7C3AED', label: 'Violeta'  },
+  { value: '#9333EA', label: 'Roxo'     },
 ]
 
 interface Props {
@@ -134,15 +149,15 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
           {/* Cor de fundo */}
           <div>
             <label className="block text-xs text-white/50 mb-1 font-medium">Cor de fundo</label>
-            <p className="text-xs text-white/30 mb-2">Base das superfícies — cards, sidebar, fundo</p>
+            <p className="text-xs text-white/30 mb-2">Tom das superfícies — cards, sidebar, fundo</p>
             <div className="flex gap-2 flex-wrap">
-              {PALETTE.map(({ value, label }) => (
+              {BG_PALETTE.map(({ value, label }) => (
                 <button
                   key={`bg-${value}`}
                   title={label}
                   onClick={() => setClinicForm((p) => ({ ...p, primary_color: value }))}
-                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === value ? 'border-white scale-110' : 'border-transparent hover:scale-105'}`}
-                  style={{ background: value, boxShadow: value === '#FFFFFF' ? 'inset 0 0 0 1px rgba(255,255,255,0.3)' : undefined }}
+                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.primary_color === value ? 'border-white scale-110' : 'border-white/10 hover:scale-105'}`}
+                  style={{ background: value }}
                 />
               ))}
             </div>
@@ -154,13 +169,13 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
             <label className="block text-xs text-white/50 mb-1 font-medium">Cor de frente</label>
             <p className="text-xs text-white/30 mb-2">Botões, itens ativos e destaques</p>
             <div className="flex gap-2 flex-wrap">
-              {PALETTE.map(({ value, label }) => (
+              {FG_PALETTE.map(({ value, label }) => (
                 <button
                   key={`fg-${value}`}
                   title={label}
                   onClick={() => setClinicForm((p) => ({ ...p, secondary_color: value }))}
-                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.secondary_color === value ? 'border-white scale-110' : 'border-transparent hover:scale-105'}`}
-                  style={{ background: value, boxShadow: value === '#FFFFFF' ? 'inset 0 0 0 1px rgba(255,255,255,0.3)' : undefined }}
+                  className={`w-9 h-9 rounded-xl border-2 transition-all ${clinicForm.secondary_color === value ? 'border-white scale-110' : 'border-white/10 hover:scale-105'}`}
+                  style={{ background: value }}
                 />
               ))}
             </div>
@@ -168,13 +183,13 @@ export function SettingsPanel({ clinic, waConfig, templates }: Props) {
           </div>
 
           {/* Preview */}
-          <div className="flex items-center gap-3 p-3 rounded-xl border border-white/8" style={{ background: `color-mix(in srgb, ${clinicForm.primary_color} 20%, #111)` }}>
+          <div className="flex items-center gap-3 p-3 rounded-xl border border-white/8" style={{ background: `color-mix(in srgb, ${clinicForm.primary_color} 55%, #0e0e0e)` }}>
             <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: clinicForm.secondary_color }}>
               {clinic.name.slice(0, 2).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-white/70 font-medium truncate">{clinic.name}</p>
-              <p className="text-[10px] text-white/35">Preview das cores</p>
+              <p className="text-xs text-white/80 font-medium truncate">{clinic.name}</p>
+              <p className="text-[10px] text-white/40">Preview das cores</p>
             </div>
             <div className="px-3 py-1 rounded-lg text-xs font-semibold text-white" style={{ background: clinicForm.secondary_color }}>
               Botão

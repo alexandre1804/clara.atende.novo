@@ -94,10 +94,9 @@ export function Sidebar({ user, clinic }: SidebarProps) {
                 onClick={() => setOpen(false)}
                 className={cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-                  active
-                    ? 'brand-gradient text-white shadow-[0_0_20px_rgba(92,0,24,0.4)]'
-                    : 'text-white/55 hover:text-white hover:bg-white/8',
+                  active ? 'brand-gradient text-white' : 'text-white/55 hover:text-white hover:bg-white/8',
                 )}
+                style={active ? { boxShadow: '0 0 18px color-mix(in srgb, var(--brand-secondary) 45%, transparent)' } : undefined}
               >
                 <item.icon className="w-4.5 h-4.5 shrink-0" />
                 {item.label}

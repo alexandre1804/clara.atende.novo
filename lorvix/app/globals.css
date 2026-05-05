@@ -10,13 +10,13 @@
     --brand-primary:   #5C0018;
     --brand-secondary: #9B1040;
 
-    /* Surface palette — auto-derived from brand color so the material IS the color */
-    --skeu-bg:      color-mix(in srgb, var(--brand-primary) 18%, #080808);
-    --skeu-s1:      color-mix(in srgb, var(--brand-primary) 22%, #181818);
-    --skeu-s2:      color-mix(in srgb, var(--brand-primary) 28%, #202020);
-    --skeu-s3:      color-mix(in srgb, var(--brand-primary) 35%, #282828);
-    --skeu-well:    color-mix(in srgb, var(--brand-primary)  8%, #050505);
-    --skeu-sidebar: color-mix(in srgb, var(--brand-primary) 40%, #0e0e0e);
+    /* Surface palette — cor de fundo IS o material (percentagens altas = cor visível) */
+    --skeu-bg:      color-mix(in srgb, var(--brand-primary) 40%, #050505);
+    --skeu-s1:      color-mix(in srgb, var(--brand-primary) 50%, #0e0e0e);
+    --skeu-s2:      color-mix(in srgb, var(--brand-primary) 55%, #141414);
+    --skeu-s3:      color-mix(in srgb, var(--brand-primary) 60%, #1a1a1a);
+    --skeu-well:    color-mix(in srgb, var(--brand-primary) 25%, #030303);
+    --skeu-sidebar: color-mix(in srgb, var(--brand-primary) 65%, #080808);
 
     /* Status colors */
     --status-scheduled:  #3B82F6;
