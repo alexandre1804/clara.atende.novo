@@ -7,7 +7,7 @@ import { cn, getInitials } from '@/lib/utils'
 import type { ClinicUser, Clinic } from '@/types'
 import {
   CalendarCheck, Users, UserSquare2,
-  Settings, LogOut, Menu, X, LayoutList,
+  Settings, LogOut, Menu, X, LayoutList, Clock,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -16,6 +16,7 @@ const navItems = [
   { href: '/pacientes',     label: 'Pacientes',     icon: Users },
   { href: '/profissionais', label: 'Profissionais', icon: UserSquare2 },
   { href: '/servicos',      label: 'Serviços',      icon: LayoutList },
+  { href: '/horarios',      label: 'Horários',      icon: Clock },
   { href: '/configuracoes', label: 'Configurações', icon: Settings },
 ]
 
