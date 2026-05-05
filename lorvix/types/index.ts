@@ -52,7 +52,7 @@ export interface Professional {
 export interface Availability {
   id: string
   clinic_id: string
-  professional_id: string
+  professional_id: string | null
   day_of_week: 0 | 1 | 2 | 3 | 4 | 5 | 6
   start_time: string
   end_time: string
