@@ -63,6 +63,9 @@ export function Sidebar({ user, clinic }: SidebarProps) {
           open ? 'translate-x-0' : '-translate-x-full',
         )}
       >
+        {/* Brand accent strip */}
+        <div className="h-1 brand-gradient" />
+
         {/* Clinic header */}
         <div className="px-4 py-5 border-b border-white/10">
           <div className="flex items-center gap-3">

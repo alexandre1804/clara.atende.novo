@@ -52,8 +52,9 @@ body {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 100% 55% at 15% 0%,  color-mix(in srgb, var(--brand-primary)  22%, transparent) 0%, transparent 60%),
-    radial-gradient(ellipse 70%  80% at 85% 100%, color-mix(in srgb, var(--brand-secondary) 14%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 55% at 15% 0%,  color-mix(in srgb, var(--brand-primary)   45%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 70%  80% at 85% 100%, color-mix(in srgb, var(--brand-secondary) 30%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 60%  40% at 50%  50%, color-mix(in srgb, var(--brand-primary)   10%, transparent) 0%, transparent 70%),
     repeating-linear-gradient(
       -45deg,
       transparent       0px,
@@ -67,26 +68,33 @@ body {
 
 /* ── Skeuomorphic raised surface (replaces glass) ── */
 @utility glass {
-  background: linear-gradient(155deg, var(--skeu-s2) 0%, var(--skeu-s1) 55%, var(--skeu-s2) 100%);
+  background: linear-gradient(155deg,
+    color-mix(in srgb, var(--brand-primary) 10%, var(--skeu-s2)) 0%,
+    var(--skeu-s1) 55%,
+    color-mix(in srgb, var(--brand-secondary) 7%, var(--skeu-s2)) 100%
+  );
   box-shadow:
     6px 6px 16px rgba(0,0,0,0.55),
     -1px -1px 4px rgba(255,255,255,0.04),
     inset 0 1px 0 rgba(255,255,255,0.08),
     inset 0 -1px 0 rgba(0,0,0,0.25);
-  border-top:    1px solid rgba(255,255,255,0.08);
-  border-left:   1px solid rgba(255,255,255,0.05);
+  border-top:    1px solid color-mix(in srgb, var(--brand-secondary) 30%, rgba(255,255,255,0.08));
+  border-left:   1px solid color-mix(in srgb, var(--brand-primary)   15%, rgba(255,255,255,0.05));
   border-right:  1px solid rgba(0,0,0,0.45);
   border-bottom: 1px solid rgba(0,0,0,0.50);
 }
 
 /* Small raised chip */
 @utility glass-sm {
-  background: linear-gradient(155deg, var(--skeu-s2) 0%, var(--skeu-s1) 100%);
+  background: linear-gradient(155deg,
+    color-mix(in srgb, var(--brand-primary) 8%, var(--skeu-s2)) 0%,
+    var(--skeu-s1) 100%
+  );
   box-shadow:
     3px 3px 9px rgba(0,0,0,0.50),
     -1px -1px 3px rgba(255,255,255,0.04),
     inset 0 1px 0 rgba(255,255,255,0.07);
-  border-top:    1px solid rgba(255,255,255,0.07);
+  border-top:    1px solid color-mix(in srgb, var(--brand-secondary) 25%, rgba(255,255,255,0.07));
   border-left:   1px solid rgba(255,255,255,0.04);
   border-right:  1px solid rgba(0,0,0,0.40);
   border-bottom: 1px solid rgba(0,0,0,0.45);
@@ -117,9 +125,13 @@ body {
 
 /* Sidebar panel */
 @utility glass-sidebar {
-  background: linear-gradient(180deg, var(--skeu-sidebar) 0%, #0f0810 100%);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--brand-primary) 18%, var(--skeu-sidebar)) 0%,
+    color-mix(in srgb, var(--brand-primary) 10%, #0f0810) 60%,
+    #0f0810 100%
+  );
   box-shadow: 4px 0 24px rgba(0,0,0,0.65);
-  border-right: 1px solid rgba(0,0,0,0.65);
+  border-right: 1px solid color-mix(in srgb, var(--brand-primary) 30%, rgba(0,0,0,0.65));
 }
 
 /* ── Brand gradient — 3D raised button ── */
@@ -141,7 +153,11 @@ body {
 }
 
 @utility brand-gradient-text {
-  background: linear-gradient(110deg, #FF7BA5 0%, #FF4D88 50%, #C41E5A 100%);
+  background: linear-gradient(110deg,
+    color-mix(in srgb, var(--brand-secondary) 70%, white) 0%,
+    var(--brand-secondary) 50%,
+    var(--brand-primary) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
