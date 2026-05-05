@@ -64,6 +64,8 @@ export function AppointmentModal({
     appointment?.patient ? (appointment.patient as Patient) : null,
   )
   const [searchError, setSearchError] = useState('')
+  const [newPatientMode, setNewPatientMode] = useState(false)
+  const [newPatient, setNewPatient] = useState({ full_name: '', phone: '', cpf: '' })
 
   function update(field: string, value: string | number) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -82,19 +84,52 @@ export function AppointmentModal({
       setFoundPatient(data as Patient)
       setForm((prev) => ({ ...prev, patientId: data.id }))
       setSearchError('')
+      setNewPatientMode(false)
     } else {
-      setSearchError('Paciente não encontrado. Verifique telefone ou CPF.')
+      setSearchError('Paciente não encontrado.')
     }
+  }
+
+  function startNewPatient() {
+    const digits = patientSearch.replace(/\D/g, '')
+    setNewPatient({
+      full_name: '',
+      phone: digits.length <= 11 ? digits : '',
+      cpf: digits.length === 11 ? digits : '',
+    })
+    setNewPatientMode(true)
+    setSearchError('')
+  }
+
+  function cancelNewPatient() {
+    setNewPatientMode(false)
+    setNewPatient({ full_name: '', phone: '', cpf: '' })
   }
 
   function handleSave() {
     startTransition(async () => {
+      let patientId = form.patientId || null
+
+      if (newPatientMode && newPatient.full_name) {
+        const { data: created } = await supabase
+          .from('patients')
+          .insert({
+            clinic_id: clinicId,
+            full_name: newPatient.full_name,
+            phone:     newPatient.phone || null,
+            cpf:       newPatient.cpf   || null,
+          })
+          .select('id')
+          .single()
+        if (created) patientId = created.id
+      }
+
       const startDt = new Date(`${form.date}T${form.time}:00`)
       const endDt   = new Date(startDt.getTime() + form.duration * 60000)
 
       const payload = {
         clinic_id:       clinicId,
-        patient_id:      form.patientId || null,
+        patient_id:      patientId,
         professional_id: form.professional_id,
         service:         form.service,
         start_datetime:  startDt.toISOString(),
@@ -185,30 +220,83 @@ export function AppointmentModal({
                   <X className="w-4 h-4" />
                 </button>
               </div>
-            ) : (
-              <div className="flex gap-2">
-                <input
-                  value={patientSearch}
-                  onChange={(e) => setPatientSearch(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && searchPatient()}
-                  placeholder="Telefone ou CPF"
-                  className="flex-1 rounded-xl px-3 py-2.5 text-sm"
-                />
-                <button
-                  onClick={searchPatient}
-                  className="px-3 py-2.5 rounded-xl transition-all"
+            ) : newPatientMode ? (
+              <div className="space-y-2">
+                <div
+                  className="p-3 rounded-xl space-y-2"
                   style={{
-                    background: 'linear-gradient(145deg,#2a1a22,#1c1218)',
-                    boxShadow: '3px 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
-                    border: '1px solid rgba(0,0,0,0.5)',
-                    color: 'rgba(255,255,255,0.65)',
+                    background: 'linear-gradient(145deg,#0b0709,#130a0d)',
+                    boxShadow: 'inset 2px 2px 6px rgba(0,0,0,0.65)',
+                    border: '1px solid rgba(0,0,0,0.6)',
                   }}
                 >
-                  <Search className="w-4 h-4" />
+                  <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.50)' }}>
+                    Novo paciente
+                  </p>
+                  <input
+                    value={newPatient.full_name}
+                    onChange={(e) => setNewPatient((p) => ({ ...p, full_name: e.target.value }))}
+                    placeholder="Nome completo *"
+                    className="w-full rounded-xl px-3 py-2 text-sm"
+                  />
+                  <input
+                    value={newPatient.phone}
+                    onChange={(e) => setNewPatient((p) => ({ ...p, phone: e.target.value }))}
+                    placeholder="Telefone"
+                    className="w-full rounded-xl px-3 py-2 text-sm"
+                  />
+                  <input
+                    value={newPatient.cpf}
+                    onChange={(e) => setNewPatient((p) => ({ ...p, cpf: e.target.value }))}
+                    placeholder="CPF"
+                    className="w-full rounded-xl px-3 py-2 text-sm"
+                  />
+                </div>
+                <button
+                  onClick={cancelNewPatient}
+                  className="text-xs transition-colors"
+                  style={{ color: 'rgba(255,255,255,0.35)' }}
+                >
+                  Voltar para busca
                 </button>
               </div>
+            ) : (
+              <div className="space-y-1">
+                <div className="flex gap-2">
+                  <input
+                    value={patientSearch}
+                    onChange={(e) => setPatientSearch(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && searchPatient()}
+                    placeholder="Telefone ou CPF"
+                    className="flex-1 rounded-xl px-3 py-2.5 text-sm"
+                  />
+                  <button
+                    onClick={searchPatient}
+                    className="px-3 py-2.5 rounded-xl transition-all"
+                    style={{
+                      background: 'linear-gradient(145deg,#2a1a22,#1c1218)',
+                      boxShadow: '3px 3px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
+                      border: '1px solid rgba(0,0,0,0.5)',
+                      color: 'rgba(255,255,255,0.65)',
+                    }}
+                  >
+                    <Search className="w-4 h-4" />
+                  </button>
+                </div>
+                {searchError && (
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs" style={{ color: '#FCA5A5' }}>{searchError}</p>
+                    <button
+                      onClick={startNewPatient}
+                      className="text-xs font-semibold transition-colors"
+                      style={{ color: 'rgba(255,255,255,0.55)' }}
+                    >
+                      + Cadastrar novo
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
-            {searchError && <p className="text-xs mt-1" style={{ color: '#FCA5A5' }}>{searchError}</p>}
           </Field>
 
           {/* Service */}
@@ -307,7 +395,7 @@ export function AppointmentModal({
             </button>
             <button
               onClick={handleSave}
-              disabled={isPending || !form.service || !form.professional_id}
+              disabled={isPending || !form.service || !form.professional_id || (newPatientMode && !newPatient.full_name)}
               className={cn(
                 'brand-gradient brand-glow text-white text-sm font-semibold px-4 py-2 rounded-xl',
                 'inline-flex items-center gap-2 transition-all',
