@@ -7,17 +7,18 @@ import { cn, getInitials } from '@/lib/utils'
 import type { ClinicUser, Clinic } from '@/types'
 import {
   CalendarCheck, Users, UserSquare2,
-  Settings, LogOut, Menu, X, LayoutList, Clock,
+  Settings, LogOut, Menu, X, LayoutList, Clock, LayoutDashboard,
 } from 'lucide-react'
 import { useState } from 'react'
 
 const navItems = [
-  { href: '/agenda',        label: 'Agenda',        icon: CalendarCheck },
-  { href: '/pacientes',     label: 'Pacientes',     icon: Users },
-  { href: '/profissionais', label: 'Profissionais', icon: UserSquare2 },
-  { href: '/servicos',      label: 'Serviços',      icon: LayoutList },
-  { href: '/horarios',      label: 'Horários',      icon: Clock },
-  { href: '/configuracoes', label: 'Configurações', icon: Settings },
+  { href: '/dashboard',    label: 'Dashboard',     icon: LayoutDashboard },
+  { href: '/agenda',       label: 'Agenda',        icon: CalendarCheck },
+  { href: '/pacientes',    label: 'Pacientes',     icon: Users },
+  { href: '/profissionais',label: 'Profissionais', icon: UserSquare2 },
+  { href: '/servicos',     label: 'Serviços',      icon: LayoutList },
+  { href: '/horarios',     label: 'Horários',      icon: Clock },
+  { href: '/configuracoes',label: 'Configurações', icon: Settings },
 ]
 
 interface SidebarProps {
